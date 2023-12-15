@@ -1,0 +1,139 @@
+Description: >
+
+  Based on the below project by Sascha Möllering <smoell@amazon.de>.
+  https://github.com/aws-samples/reactive-refarch-cloudformation/tree/master
+  
+  The S3 bucket and ECR artifact repo will need to be created beforehand.   
+  
+  This template deploys a VPC, with a pair of public and private subnets spread 
+  across two Availabilty Zones. It deploys an Internet Gateway, with a default 
+  route on the public subnets. It deploys a pair of NAT Gateways (one in each AZ), 
+  and default routes for them in the private subnets. 
+  
+  The deployment is done through CodeDeploy integrated with Github Actions.
+
+  It deploys a service in ECS (in Fargate mode) from Docker images published in 
+  Amazon ECR. In addition, a DynamoDB table is created.
+
+Parameters:
+  S3Bucket:
+    Type: String
+    Default: 'michael-portfolio-us-east-1'
+  GithubRepoName:
+    Type: String
+    Default: 'mfedirko/michael-website-portfolio'
+  OpenIdThumbprint:
+    Type: String
+    Default: '6938fd4d98bab03faadb97b34396831e3780aea1'
+  BackendServiceName:
+    Type: String
+    Default: 'michael-portfolio-api'
+
+Resources:
+  # A VPC with 2 sets of public and private subnets
+  VPC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://s3.amazonaws.com/${Bucket}/infrastructure/vpc.yaml'
+        - Bucket: !Ref S3Bucket
+      Parameters:
+        EnvironmentName:    !Ref AWS::StackName
+        VpcCIDR:            10.192.0.0/16
+        PublicSubnet1CIDR:  10.192.10.0/24
+        PublicSubnet2CIDR:  10.192.11.0/24
+        PrivateSubnet1CIDR: 10.192.20.0/24
+        PrivateSubnet2CIDR: 10.192.21.0/24
+
+  # Security groups for the ALB and ECS host
+  SecurityGroups:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://s3.amazonaws.com/${Bucket}/infrastructure/security-groups.yaml'
+        - Bucket: !Ref S3Bucket
+      Parameters:
+        EnvironmentName: !Ref AWS::StackName
+        VPC: !GetAtt VPC.Outputs.VPC
+
+  # ALB to expose the ECS service
+  ALB:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://s3.amazonaws.com/${Bucket}/infrastructure/load-balancers.yaml'
+        - Bucket: !Ref S3Bucket
+      Parameters:
+        EnvironmentName: !Ref AWS::StackName
+        VPC: !GetAtt VPC.Outputs.VPC
+        Subnets: !GetAtt VPC.Outputs.PublicSubnets
+        SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
+
+  # ECS cluster with IAM roles (the ECS service and task def are deployed separately under BackendApp)
+  ECS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://s3.amazonaws.com/${Bucket}/infrastructure/ecs-cluster.yaml'
+        - Bucket: !Ref S3Bucket
+      Parameters:
+        EnvironmentName: !Ref AWS::StackName
+        VPC: !GetAtt VPC.Outputs.VPC
+        SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
+        Subnets: !GetAtt VPC.Outputs.PrivateSubnets
+
+  # A DynamoDB table
+  DynamoDB:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://s3.amazonaws.com/${Bucket}/infrastructure/dynamodb.yaml'
+        - Bucket: !Ref S3Bucket
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        EnvironmentName: !Ref AWS::StackName
+
+  # ECS service for backend app, task definition, auto-scaling
+  BackendApp:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://s3.amazonaws.com/${Bucket}/services/server-backend/service.yaml'
+        - Bucket: !Ref S3Bucket
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        Subnets: !GetAtt VPC.Outputs.PrivateSubnets
+        SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
+        Cluster: !GetAtt ECS.Outputs.Cluster
+        DesiredCount: 2
+        Listener: !GetAtt ALB.Outputs.ListenerBlue
+        TargetGroup: !GetAtt ALB.Outputs.TargetGroupBlue
+        ECSTaskExecutionRole: !GetAtt ECS.Outputs.TaskExecutionRole
+        TaskRole: !GetAtt ECS.Outputs.TaskRole
+        ServiceName: !Ref BackendServiceName
+        ECRImage: !Sub
+          - '${Account}.dkr.ecr.us-east-1.amazonaws.com/michael-portfolio-backend:latest'
+          - Account: ${AWS::AccountId}
+
+  # CodeDeploy blue/green and Github Actions
+  CodeDeploy:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://s3.amazonaws.com/${Bucket}/infrastructure/codedeploy.yaml'
+        - Bucket: !Ref S3Bucket
+      Parameters:
+        ThumbprintList: !Ref OpenIdThumbprint
+        GithubRepoName: !Ref GithubRepoName
+        WebappDeploymentBucket: !Ref S3Bucket
+        ECSClusterName: !GetAtt ECS.Outputs.Cluster.ClusterName
+        ECSServiceName: !GetAtt BackendApp.Outputs.ServiceName
+        ListenerBlueArn: !GetAtt ALB.Outputs.ListenerBlue.Arn
+        ListenerGreenArn: !GetAtt ALB.Outputs.ListenerGreen.Arn
+        TargetGroupBlueName: !GetAtt ALB.Outputs.TargetGroupBlue.Name
+        TargetGroupGreenName: !GetAtt ALB.Outputs.TargetGroupGreen.Name
+
+Outputs:
+  BackendAppUrl:
+    Description: The URL endpoint for the backend service
+    Value: !GetAtt ALB.Outputs.LoadBalancerUrl
