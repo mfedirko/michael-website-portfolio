@@ -131,7 +131,6 @@ Resources:
         ECSClusterName: !GetAtt ECS.Outputs.Cluster
         ECSServiceName: !GetAtt BackendApp.Outputs.ServiceName
         ListenerBlueArn: !GetAtt ALB.Outputs.ListenerBlue
-        ListenerGreenArn: !GetAtt ALB.Outputs.ListenerGreen
         TargetGroupBlueName: !GetAtt ALB.Outputs.TargetGroupBlueName
         TargetGroupGreenName: !GetAtt ALB.Outputs.TargetGroupGreenName
 
