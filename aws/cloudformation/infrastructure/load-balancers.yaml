@@ -33,7 +33,7 @@ Resources:
         - Key: Name
           Value: !Ref EnvironmentName
 
-  LoadBalancerListenerBlue:
+  LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       LoadBalancerArn: !Ref LoadBalancer
@@ -41,31 +41,23 @@ Resources:
       Protocol: HTTP
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref TargetGroupBlue
+          TargetGroupArn: !Ref TargetGroup
 
   LoadBalancerListenerRule:
     Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
-    DependsOn: LoadBalancerListenerBlue
+    DependsOn: LoadBalancerListener
     Properties:
       Actions:
         - Type: forward
-          TargetGroupArn: !Ref TargetGroupBlue
+          TargetGroupArn: !Ref TargetGroup
       Conditions:
         - Field: path-pattern
           Values:
             - /
-      ListenerArn: !Ref LoadBalancerListenerBlue
+      ListenerArn: !Ref LoadBalancerListener
       Priority: 1
 
-  TargetGroupBlue:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      VpcId: !Ref VPC
-      Port: 80
-      Protocol: HTTP
-      TargetType: ip
-
-  TargetGroupGreen:
+  TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       VpcId: !Ref VPC
@@ -82,22 +74,10 @@ Outputs:
     Description: The URL of the ALB
     Value: !GetAtt LoadBalancer.DNSName
 
-  ListenerBlue:
-    Description: A reference to a blue port 80 listener
-    Value: !Ref LoadBalancerListenerBlue
+  Listener:
+    Description: A reference to a port 80 listener
+    Value: !Ref LoadBalancerListener
 
-  TargetGroupBlue:
-    Description: A reference to the blue target group
-    Value: !Ref TargetGroupBlue
-
-  TargetGroupGreen:
-    Description: A reference to the green target group
-    Value: !Ref TargetGroupGreen
-
-  TargetGroupBlueName:
-    Description: The name of the blue target group
-    Value: !GetAtt TargetGroupBlue.TargetGroupName
-
-  TargetGroupGreenName:
-    Description: The name of the green target group
-    Value: !GetAtt TargetGroupGreen.TargetGroupName
+  TargetGroup:
+    Description: A reference to the target group
+    Value: !Ref TargetGroup

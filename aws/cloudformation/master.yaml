@@ -112,8 +112,8 @@ Resources:
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
         Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 2
-        Listener: !GetAtt ALB.Outputs.ListenerBlue
-        TargetGroup: !GetAtt ALB.Outputs.TargetGroupBlue
+        Listener: !GetAtt ALB.Outputs.Listener
+        TargetGroup: !GetAtt ALB.Outputs.TargetGroup
         ECSTaskExecutionRole: !GetAtt ECS.Outputs.TaskExecutionRole
         TaskRole: !GetAtt ECS.Outputs.TaskRole
         ServiceName: !Ref BackendServiceName
