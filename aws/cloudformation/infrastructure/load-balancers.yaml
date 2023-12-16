@@ -64,7 +64,7 @@ Resources:
       Port: 8080
       Protocol: HTTP
       TargetType: ip
-      HealthCheckIntervalSeconds: 20
+      HealthCheckIntervalSeconds: 40
       HealthCheckPath: '/'
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5

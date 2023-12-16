@@ -102,7 +102,7 @@ Resources:
             Interval: 20
             Retries: 5
             Timeout: 5
-            StartPeriod: 30
+            StartPeriod: 90
           PortMappings:
             - ContainerPort: !Ref ContainerPort
           Environment:
