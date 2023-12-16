@@ -53,7 +53,7 @@ Resources:
       Conditions:
         - Field: path-pattern
           Values:
-            - /
+            - '*'
       ListenerArn: !Ref LoadBalancerListener
       Priority: 1
 
@@ -64,6 +64,15 @@ Resources:
       Port: 80
       Protocol: HTTP
       TargetType: ip
+      HealthCheckIntervalSeconds: 6
+      HealthCheckPath: '/'
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 120
 
 Outputs:
   LoadBalancer:

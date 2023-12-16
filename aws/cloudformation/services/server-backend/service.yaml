@@ -97,12 +97,12 @@ Resources:
           Image: !Ref ECRImage
           Memory: 1024
           Cpu: 256
-#          HealthCheck:
-#            Command: [ "CMD-SHELL", "curl -f http://localhost:8080/health/check || exit 1" ]
-#            Interval: 30
-#            Retries: 5
-#            Timeout: 10
-#            StartPeriod: 30
+          HealthCheck:
+            Command: [ "CMD-SHELL", "curl -f http://localhost:8080/ || exit 1" ]
+            Interval: 15
+            Retries: 5
+            Timeout: 10
+            StartPeriod: 30
           PortMappings:
             - ContainerPort: !Ref ContainerPort
           Environment:
@@ -149,7 +149,7 @@ Resources:
   CPUPAlarmScaleUp:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      EvaluationPeriods: '1'
+      EvaluationPeriods: '3'
       Statistic: Average
       Threshold: '75'
       AlarmDescription: Alarm if CPU is > 75%
