@@ -27,8 +27,6 @@ Parameters:
     Type: String
   ListenerBlueArn:
     Type: String
-  ListenerGreenArn:
-    Type: String
 Resources:
   WebappDeploymentRole:
     Type: AWS::IAM::Role
@@ -138,9 +136,6 @@ Resources:
             TargetGroups:
               - Name: !Ref TargetGroupBlueName
               - Name: !Ref TargetGroupGreenName
-            TestTrafficRoute:
-              ListenerArns:
-                - !Ref ListenerGreenArn
       DeploymentStyle:
         DeploymentOption: WITH_TRAFFIC_CONTROL
         DeploymentType: BLUE_GREEN

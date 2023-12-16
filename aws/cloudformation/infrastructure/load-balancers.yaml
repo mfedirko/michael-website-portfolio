@@ -43,15 +43,19 @@ Resources:
         - Type: forward
           TargetGroupArn: !Ref TargetGroupBlue
 
-  LoadBalancerListenerGreen:
-    Type: AWS::ElasticLoadBalancingV2::Listener
+  LoadBalancerListenerRule:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    DependsOn: LoadBalancerListenerBlue
     Properties:
-      LoadBalancerArn: !Ref LoadBalancer
-      Port: 10080
-      Protocol: HTTP
-      DefaultActions:
+      Actions:
         - Type: forward
           TargetGroupArn: !Ref TargetGroupBlue
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /
+      ListenerArn: !Ref LoadBalancerListenerBlue
+      Priority: 1
 
   TargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -81,10 +85,6 @@ Outputs:
   ListenerBlue:
     Description: A reference to a blue port 80 listener
     Value: !Ref LoadBalancerListenerBlue
-
-  ListenerGreen:
-    Description: A reference to a green port 10080 listener
-    Value: !Ref LoadBalancerListenerGreen
 
   TargetGroupBlue:
     Description: A reference to the blue target group
