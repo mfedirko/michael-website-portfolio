@@ -49,6 +49,10 @@ Parameters:
     Description: The ECR image URL
     Type: String
 
+  GitCommit:
+    Description: The git commit hash
+    Type: String
+
 Resources:
 
   Service:
@@ -60,8 +64,6 @@ Resources:
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 75
-      DeploymentController:
-        Type: CODE_DEPLOY
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
       ServiceName: !Ref ServiceName
@@ -75,6 +77,9 @@ Resources:
           SecurityGroups:
             - !Ref SecurityGroup
           Subnets: !Ref Subnets
+      Tags:
+        - Key: GitCommit
+          Value: !Ref GitCommit
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition

@@ -32,6 +32,8 @@ Parameters:
   BackendServiceName:
     Type: String
     Default: 'michael-portfolio-api'
+  GitCommit:
+    Type: String
 
 Resources:
   # A VPC with 2 sets of public and private subnets
@@ -116,7 +118,7 @@ Resources:
         TaskRole: !GetAtt ECS.Outputs.TaskRole
         ServiceName: !Ref BackendServiceName
         ECRImage: !Sub '${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/michael-portfolio-backend:latest'
-
+        GitCommit: !Ref GitCommit
 
 Outputs:
   BackendAppUrl:
