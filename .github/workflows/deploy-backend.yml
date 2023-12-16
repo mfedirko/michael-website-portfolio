@@ -36,10 +36,9 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: michael-portfolio-backend
-          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker build -t $REGISTRY/$REPOSITORY .
+          docker push $REGISTRY/$REPOSITORY
         
   deploy:
     needs: build
@@ -55,6 +54,8 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
         aws-region: ${{ env.AWS_REGION }}
-    - run: |
+    - name: Deploy Cloudformation
+      run: |
         echo "Deploying branch ${{ env.GITHUB_REF }} to ${{ github.event.inputs.environment }}"
+        aws s3 cp aws/cloudformation s3://${{ env.S3BUCKET }}/ --recursive
         aws cloudformation update-stack --stack-name ${{ env.CFN_STACK }} --template-url https://${{ env.S3BUCKET }}.s3.amazonaws.com/master.yaml
