@@ -98,7 +98,7 @@ Resources:
           Memory: 1024
           Cpu: 256
           HealthCheck:
-            Command: [ "CMD-SHELL", "curl -f http://localhost:8080/ || exit 1" ]
+            Command: [ "CMD-SHELL", "curl -f http://localhost/ || exit 1" ]
             Interval: 20
             Retries: 5
             Timeout: 5
