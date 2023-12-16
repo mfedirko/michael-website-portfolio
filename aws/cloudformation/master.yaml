@@ -119,7 +119,7 @@ Resources:
         ServiceName: !Ref BackendServiceName
         ECRImage: !Sub
           - '${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/michael-portfolio-backend:${Version}'
-          - Version: ${GitCommit}
+          - Version: !Ref GitCommit
         GitCommit: !Ref GitCommit
 
 Outputs:
