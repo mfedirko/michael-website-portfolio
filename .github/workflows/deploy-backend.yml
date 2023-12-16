@@ -61,4 +61,4 @@ jobs:
         echo "Deploying branch ${{ env.GITHUB_REF }} to ${{ github.event.inputs.environment }}"
         commit_hash=`git rev-parse HEAD`
         aws s3 cp aws/cloudformation s3://${{ env.S3BUCKET }}/ --recursive
-        aws cloudformation deploy --stack-name ${{ env.CFN_STACK }} --template-url https://${{ env.S3BUCKET }}.s3.amazonaws.com/master.yaml --parameters "ParameterKey=GitCommit,ParameterValue=$commit_hash"
+        aws cloudformation deploy --stack-name ${{ env.CFN_STACK }} --template-file aws/cloudformation/master.yaml --s3-bucket ${{ env.S3BUCKET }} --parameter-overrides "GitCommit=$commit_hash"
