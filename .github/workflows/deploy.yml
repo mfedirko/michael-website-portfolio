@@ -28,7 +28,8 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to AWS ECR
-        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
