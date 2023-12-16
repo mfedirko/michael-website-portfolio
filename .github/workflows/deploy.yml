@@ -7,6 +7,7 @@ env:
   applicationfolder: server-backend
   AWS_REGION: us-east-1
   S3BUCKET: michael-portfolio-us-east-1
+  CFN_STACK: michael-portfolio
 
 
 jobs:
@@ -22,8 +23,8 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
-          role-session-name: GitHub-Action-Role
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to AWS ECR
@@ -55,10 +56,9 @@ jobs:
     - uses: actions/checkout@v2
     - uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
-        role-session-name: GitHub-Action-Role
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
         aws-region: ${{ env.AWS_REGION }}
     - run: |
         echo "Deploying branch ${{ env.GITHUB_REF }} to ${{ github.event.inputs.environment }}"
-        commit_hash=`git rev-parse HEAD`
-        aws deploy create-deployment --application-name MichaelWebsite --deployment-group-name MichaelWebsiteDG --github-location repository=$GITHUB_REPOSITORY,commitId=$commit_hash --ignore-application-stop-failures
+        aws cloudformation update-stack --stack-name ${{ env.CFN_STACK }} --template-url https://${{ env.S3BUCKET }}.s3.amazonaws.com/master.yaml

@@ -117,22 +117,6 @@ Resources:
         ServiceName: !Ref BackendServiceName
         ECRImage: !Sub '${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/michael-portfolio-backend:latest'
 
-  # CodeDeploy blue/green and Github Actions
-  CodeDeploy:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub
-        - 'https://s3.amazonaws.com/${Bucket}/infrastructure/codedeploy.yaml'
-        - Bucket: !Ref S3Bucket
-      Parameters:
-        ThumbprintList: !Ref OpenIdThumbprint
-        GithubRepoName: !Ref GithubRepoName
-        WebappDeploymentBucket: !Ref S3Bucket
-        ECSClusterName: !GetAtt ECS.Outputs.Cluster
-        ECSServiceName: !GetAtt BackendApp.Outputs.ServiceName
-        ListenerBlueArn: !GetAtt ALB.Outputs.ListenerBlue
-        TargetGroupBlueName: !GetAtt ALB.Outputs.TargetGroupBlueName
-        TargetGroupGreenName: !GetAtt ALB.Outputs.TargetGroupGreenName
 
 Outputs:
   BackendAppUrl:
