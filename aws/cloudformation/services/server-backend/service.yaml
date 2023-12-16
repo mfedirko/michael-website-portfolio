@@ -81,7 +81,7 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities: ["FARGATE"]
       Memory: 1024
-      Cpu: 1024
+      Cpu: 256
       ExecutionRoleArn: !Ref ECSTaskExecutionRole
       TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
@@ -89,7 +89,7 @@ Resources:
           Essential: true
           Image: !Ref ECRImage
           Memory: 1024
-          Cpu: 1024
+          Cpu: 256
 #          HealthCheck:
 #            Command: [ "CMD-SHELL", "curl -f http://localhost:8080/health/check || exit 1" ]
 #            Interval: 30

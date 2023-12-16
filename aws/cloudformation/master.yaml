@@ -3,7 +3,11 @@ Description: >
   Based on the below project by Sascha Möllering <smoell@amazon.de>.
   https://github.com/aws-samples/reactive-refarch-cloudformation/tree/master
   
-  The S3 bucket and ECR artifact repo will need to be created beforehand.   
+  Before running this stack, we will need to first:
+  1) create the S3 bucket
+  2) create the ECR repo
+  3) upload this and all nested stacks to the S3 bucket
+  4) build the server-backend Docker image and upload it to ECR
   
   This template deploys a VPC, with a pair of public and private subnets spread 
   across two Availabilty Zones. It deploys an Internet Gateway, with a default 
@@ -111,9 +115,7 @@ Resources:
         ECSTaskExecutionRole: !GetAtt ECS.Outputs.TaskExecutionRole
         TaskRole: !GetAtt ECS.Outputs.TaskRole
         ServiceName: !Ref BackendServiceName
-        ECRImage: !Sub
-          - '${Account}.dkr.ecr.us-east-1.amazonaws.com/michael-portfolio-backend:latest'
-          - Account: ${AWS::AccountId}
+        ECRImage: !Sub '${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/michael-portfolio-backend:latest'
 
   # CodeDeploy blue/green and Github Actions
   CodeDeploy:
@@ -128,8 +130,8 @@ Resources:
         WebappDeploymentBucket: !Ref S3Bucket
         ECSClusterName: !GetAtt ECS.Outputs.Cluster.ClusterName
         ECSServiceName: !GetAtt BackendApp.Outputs.ServiceName
-        ListenerBlueArn: !GetAtt ALB.Outputs.ListenerBlue.Arn
-        ListenerGreenArn: !GetAtt ALB.Outputs.ListenerGreen.Arn
+        ListenerBlueArn: !GetAtt ALB.Outputs.ListenerBlue
+        ListenerGreenArn: !GetAtt ALB.Outputs.ListenerGreen
         TargetGroupBlueName: !GetAtt ALB.Outputs.TargetGroupBlue.Name
         TargetGroupGreenName: !GetAtt ALB.Outputs.TargetGroupGreen.Name
 
