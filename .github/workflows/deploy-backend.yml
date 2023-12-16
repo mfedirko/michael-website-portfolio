@@ -37,8 +37,10 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: michael-portfolio-backend
         run: |
-          docker build -t $REGISTRY/$REPOSITORY .
-          docker push $REGISTRY/$REPOSITORY
+          version=`git rev-parse HEAD`
+          docker build -t $REGISTRY/$REPOSITORY:$version .
+          docker push $REGISTRY/$REPOSITORY:$version
+          
         
   deploy:
     needs: build

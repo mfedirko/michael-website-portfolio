@@ -117,7 +117,9 @@ Resources:
         ECSTaskExecutionRole: !GetAtt ECS.Outputs.TaskExecutionRole
         TaskRole: !GetAtt ECS.Outputs.TaskRole
         ServiceName: !Ref BackendServiceName
-        ECRImage: !Sub '${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/michael-portfolio-backend:latest'
+        ECRImage: !Sub
+          - '${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/michael-portfolio-backend:${Version}'
+          - Version: ${GitCommit}
         GitCommit: !Ref GitCommit
 
 Outputs:
