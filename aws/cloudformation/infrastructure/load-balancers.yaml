@@ -64,10 +64,10 @@ Resources:
       Port: 80
       Protocol: HTTP
       TargetType: ip
-      HealthCheckIntervalSeconds: 6
+      HealthCheckIntervalSeconds: 20
       HealthCheckPath: '/'
       HealthCheckProtocol: HTTP
-      HealthCheckTimeoutSeconds: 10
+      HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
       TargetGroupAttributes:

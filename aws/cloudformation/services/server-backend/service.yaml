@@ -99,9 +99,9 @@ Resources:
           Cpu: 256
           HealthCheck:
             Command: [ "CMD-SHELL", "curl -f http://localhost:8080/ || exit 1" ]
-            Interval: 15
+            Interval: 20
             Retries: 5
-            Timeout: 10
+            Timeout: 5
             StartPeriod: 30
           PortMappings:
             - ContainerPort: !Ref ContainerPort
