@@ -93,3 +93,11 @@ Outputs:
   TargetGroupGreen:
     Description: A reference to the green target group
     Value: !Ref TargetGroupGreen
+
+  TargetGroupBlueName:
+    Description: The name of the blue target group
+    Value: !GetAtt TargetGroupBlue.TargetGroupName
+
+  TargetGroupGreenName:
+    Description: The name of the green target group
+    Value: !GetAtt TargetGroupGreen.TargetGroupName

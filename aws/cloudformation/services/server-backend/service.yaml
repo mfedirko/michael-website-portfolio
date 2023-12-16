@@ -60,6 +60,8 @@ Resources:
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 75
+      DeploymentController:
+        Type: CODE_DEPLOY
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
       ServiceName: !Ref ServiceName
@@ -193,3 +195,7 @@ Resources:
                 Action: ['application-autoscaling:*', 'cloudwatch:DescribeAlarms', 'cloudwatch:PutMetricAlarm',
                          'ecs:DescribeServices', 'ecs:UpdateService']
                 Resource: '*'
+
+Outputs:
+  ServiceName:
+    Value: !Ref ServiceName

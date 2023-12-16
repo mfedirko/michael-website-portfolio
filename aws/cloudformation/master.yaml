@@ -128,12 +128,12 @@ Resources:
         ThumbprintList: !Ref OpenIdThumbprint
         GithubRepoName: !Ref GithubRepoName
         WebappDeploymentBucket: !Ref S3Bucket
-        ECSClusterName: !GetAtt ECS.Outputs.Cluster.ClusterName
+        ECSClusterName: !GetAtt ECS.Outputs.Cluster
         ECSServiceName: !GetAtt BackendApp.Outputs.ServiceName
         ListenerBlueArn: !GetAtt ALB.Outputs.ListenerBlue
         ListenerGreenArn: !GetAtt ALB.Outputs.ListenerGreen
-        TargetGroupBlueName: !GetAtt ALB.Outputs.TargetGroupBlue.Name
-        TargetGroupGreenName: !GetAtt ALB.Outputs.TargetGroupGreen.Name
+        TargetGroupBlueName: !GetAtt ALB.Outputs.TargetGroupBlueName
+        TargetGroupGreenName: !GetAtt ALB.Outputs.TargetGroupGreenName
 
 Outputs:
   BackendAppUrl:
