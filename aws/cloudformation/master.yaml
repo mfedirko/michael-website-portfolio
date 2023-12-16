@@ -33,6 +33,7 @@ Parameters:
     Type: String
     Default: 'michael-portfolio-api'
   GitCommit:
+    Description: ECR image tag we want to deploy, which will match the git commit hash
     Type: String
 
 Resources:
