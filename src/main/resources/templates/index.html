@@ -15,7 +15,7 @@
                         <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#experience">This Website</a>
+                        <a class="nav-link" href="#skills">Skills</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#interests">Interests</a>
@@ -25,7 +25,12 @@
                     </li>
                     <li>
                         <a href="https://github.com/mfedirko/michael-website-portfolio" target="_blank">
-                            <img id="github-logo" alt="Github" src="/images/github-mark-white.svg"/>
+                            <img class="social" id="github-logo" alt="Github" src="/images/github-mark-white.svg"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/michael-fedirko-80a22377/" target="_blank">
+                            <img class="social" id="linkedin-logo" alt="LinkedIn" src="/images/In-White-26.png"/>
                         </a>
                     </li>
                 </ul>
@@ -36,21 +41,15 @@
         <div data-bs-spy="scroll" data-bs-target="#navbar-top"
                 data-bs-method="auto" data-bs-offset="0" class="scrollspy" tabindex="0">
             <div id="welcome" class="scrolling-anchor">.</div>
-            <div class="d-flex justify-content-center">
-                <div>
-                    <h1 id="welcomeHeading" class="section-heading">Nice to meet you!</h1>
-                    <p class="lead">I'm Michael Fedirko, a full-stack developer.</p>
-                    <img alt="Personal Photo" style="height: 500px; width: 500px" src="/images/personal-photo-art.jpg"/>
-                </div>
-            </div>
+            <div id="welcomeContent" th:insert="~{fragments/welcome.html :: content}"></div>
 
             <div id="about" class="scrolling-anchor">.</div>
             <h4 id="aboutHeading" class="section-heading">About Me</h4>
             <div id="aboutContent" th:insert="~{fragments/about.html :: content}"></div>
 
-            <div id="experience" class="scrolling-anchor">.</div>
-            <h4 id="experienceHeading" class="section-heading">This Website</h4>
-            <div id="experienceContent" th:insert="~{fragments/experience.html :: content}"></div>
+            <div id="skills" class="scrolling-anchor">.</div>
+            <h4 id="skillsHeading" class="section-heading">Skills</h4>
+            <div id="skillsContent" th:insert="~{fragments/skills.html :: content}"></div>
 
             <div id="interests" class="scrolling-anchor">.</div>
             <h4 id="interestsHeading" class="section-heading">Interests</h4>
