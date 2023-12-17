@@ -1,20 +1,64 @@
-<!doctype html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:insert="~{fragments/common-layout.html :: header}">
-    <title>Home</title>
+    <title>Michael Fedirko Portfolio</title>
 </head>
 <body>
     <header>
-        <nav class="nav nav-tabs">
-            <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#message" href="#">Message</a>
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#test" href="#">Test</a>
+        <nav id="navbar-top" class="navbar navbar-dark fixed-top bg-dark px-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#welcome">Michael Fedirko</a>
+                <a id="view-resume" class="btn btn-outline-success offset-md-2" target="_blank" href="/docs/Michael_Fedirko_Resume.pdf">Resume</a>
+
+                <ul class="nav nav-pills">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#experience">This Website</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#interests">Interests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/mfedirko/michael-website-portfolio" target="_blank">
+                            <img id="github-logo" alt="Github" src="/images/github-mark-white.svg"/>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </header>
     <main>
-        <br />
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="message" role="tabpanel" th:insert="~{fragments/message.html :: message-form}"></div>
-            <div class="tab-pane fade" id="test" role="tabpanel" th:insert="~{fragments/message.html :: test}"></div>
+        <div data-bs-spy="scroll" data-bs-target="#navbar-top"
+                data-bs-method="auto" data-bs-offset="0" class="scrollspy" tabindex="0">
+            <div id="welcome" class="scrolling-anchor">.</div>
+            <div class="d-flex justify-content-center">
+                <div>
+                    <h1 id="welcomeHeading" class="section-heading">Nice to meet you!</h1>
+                    <p class="lead">I'm Michael Fedirko, a full-stack developer.</p>
+                    <img alt="Personal Photo" style="height: 500px; width: 500px" src="/images/personal-photo-art.jpg"/>
+                </div>
+            </div>
+
+            <div id="about" class="scrolling-anchor">.</div>
+            <h4 id="aboutHeading" class="section-heading">About Me</h4>
+            <div id="aboutContent" th:insert="~{fragments/about.html :: content}"></div>
+
+            <div id="experience" class="scrolling-anchor">.</div>
+            <h4 id="experienceHeading" class="section-heading">This Website</h4>
+            <div id="experienceContent" th:insert="~{fragments/experience.html :: content}"></div>
+
+            <div id="interests" class="scrolling-anchor">.</div>
+            <h4 id="interestsHeading" class="section-heading">Interests</h4>
+            <div id="interestsContent" th:insert="~{fragments/interests.html :: content}"></div>
+
+            <div id="contact" class="scrolling-anchor">.</div>
+            <h4 id="contactHeading" class="section-heading">Contact Me</h4>
+            <div id="messageContent" th:insert="~{fragments/contactme.html :: message-form}"></div>
         </div>
     </main>
 </body>
