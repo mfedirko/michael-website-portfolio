@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
-RUN ./mvnw dependency:resolve
 COPY src ./src
+RUN mkdir -p ./target
+RUN ./mvnw clean package
+RUN mv ./target/*.jar ./application.jar
 
-CMD ["./mvnw", "spring-boot:run"]
+CMD ["java", "-jar", "application.jar"]
