@@ -20,6 +20,9 @@ Parameters:
     Description: Select the Security Group to apply to the Application Load Balancer
     Type: AWS::EC2::SecurityGroup::Id
 
+  ContainerPort:
+    Type: Number
+
 Resources:
 
   LoadBalancer:
@@ -61,10 +64,10 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       VpcId: !Ref VPC
-      Port: 8080
+      Port: !Ref ContainerPort
       Protocol: HTTP
       TargetType: ip
-      HealthCheckIntervalSeconds: 40
+      HealthCheckIntervalSeconds: 15
       HealthCheckPath: '/'
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5

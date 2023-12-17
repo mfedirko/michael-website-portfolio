@@ -26,7 +26,6 @@ Parameters:
   ContainerPort:
     Description: Port mapping to be created on the ECS service and task definition.
     Type: Number
-    Default: 8080
 
   Listener:
     Description: The Application Load Balancer listener to register with
@@ -97,12 +96,6 @@ Resources:
           Image: !Ref ECRImage
           Memory: 1024
           Cpu: 256
-          HealthCheck:
-            Command: [ "CMD-SHELL", "curl -f http://localhost:8080/ || exit 1" ]
-            Interval: 20
-            Retries: 5
-            Timeout: 5
-            StartPeriod: 90
           PortMappings:
             - ContainerPort: !Ref ContainerPort
           Environment:
@@ -121,6 +114,9 @@ Resources:
       LogGroupName: !Ref AWS::StackName
       RetentionInDays: 7
 
+  #########################################################
+  #########           AUTO-SCALING                #########
+  #########################################################
   ServiceScalingTarget:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     DependsOn: Service
@@ -197,8 +193,12 @@ Resources:
           PolicyDocument:
             Statement:
               - Effect: Allow
-                Action: ['application-autoscaling:*', 'cloudwatch:DescribeAlarms', 'cloudwatch:PutMetricAlarm',
-                         'ecs:DescribeServices', 'ecs:UpdateService']
+                Action:
+                  - 'application-autoscaling:*'
+                  - 'cloudwatch:DescribeAlarms'
+                  - 'cloudwatch:PutMetricAlarm'
+                  - 'ecs:DescribeServices'
+                  - 'ecs:UpdateService'
                 Resource: '*'
 
 Outputs:

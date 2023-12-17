@@ -48,6 +48,7 @@ Resources:
                 "Statement": [{
                     "Effect": "Allow",
                     "Action": [
+                        "ec2:AuthorizeSecurityGroupIngress",
                         "ec2:AttachNetworkInterface",
                         "ec2:CreateNetworkInterface",
                         "ec2:CreateNetworkInterfacePermission",
