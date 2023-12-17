@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <form class="container" th:fragment="message-form">
+        <div id="auth" hx-trigger="load" hx-get="/user">
+            Unauthenticated
+        </div>
+        <div id="greeting">Placeholder</div>
+        <input id="name" name="value" type="text" />
+        <button class="btn btn-primary" hx-post="/greet" hx-target="#greeting">Greet</button>
+    </form>
+
+    <div class="container" th:fragment="test">
+        <div id="hello"></div>
+        <div id="world"></div>
+        <button class="btn btn-primary" hx-get="/test" hx-swap="none">Fetch</button>
+        <button class="btn btn-primary" hx-get="/notify" hx-swap="none">Notify!</button>
+    </div>
+</body>
+</html>
