@@ -1,0 +1,29 @@
+.nav-link:not(.active) {
+    color: $white !important;
+}
+.nav-link.active {
+    color: $gray-100 !important;
+}
+
+
+main {
+    margin-top: 25px;
+    margin-left: 55px;
+    margin-right: 55px;
+}
+.section-heading:not(#welcome) {
+    margin-top: 150px;
+}
+.scrolling-anchor {
+    margin-bottom: 30px;
+    font-size: 0;
+}
+
+#github-logo {
+    height: 50px;
+    width: 50px;
+}
+
+.bg-dark .nav-link {
+    color: white !important;
+}
