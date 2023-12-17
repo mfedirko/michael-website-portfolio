@@ -200,7 +200,6 @@ Resources:
   DynamoDBEndpoint:
     Type: AWS::EC2::VPCEndpoint
     Properties:
-      VpcEndpointType: "Gateway"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
