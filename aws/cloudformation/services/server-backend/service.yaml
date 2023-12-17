@@ -63,6 +63,7 @@ Resources:
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 75
+      HealthCheckGracePeriodSeconds: 90
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
       ServiceName: !Ref ServiceName
