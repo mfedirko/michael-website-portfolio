@@ -1,10 +1,9 @@
-name: Build and Deploy Backend
+name: Build and Deploy
 
 on:
   workflow_dispatch: {}
 
 env:
-  applicationfolder: server-backend
   AWS_REGION: us-east-1
   S3BUCKET: michael-portfolio-us-east-1
   CFN_STACK: michael-portfolio
@@ -32,7 +31,6 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push docker image to Amazon ECR
-        working-directory: ${{ env.applicationfolder }}
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: michael-portfolio-backend
