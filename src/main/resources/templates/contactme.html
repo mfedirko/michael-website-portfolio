@@ -3,13 +3,16 @@
 <head th:insert="~{fragments/common-layout.html :: header}">
     <title>Contact Me</title>
 </head>
-<body>
+<body hx-ext="loading-states">
     <header>
         <nav th:replace="~{fragments/common-layout.html :: navbar}"></nav>
     </header>
     <main>
         <div class="contact-container container">
-            <form id="message-form" th:object="${contactForm}">
+            <form id="message-form"
+                  hx-post="/contact" hx-swap="outerHTML" hx-target="body"
+                  data-loading-delay="200"
+                  th:object="${contactForm}">
                 <h1 class="section-heading">Contact Me</h1>
                 <div class="form-group">
                     <label for="fullName">Name</label>
@@ -30,7 +33,9 @@
                      data-sitekey="6LfInTUpAAAAAGJw88yqetnsYzLmdosrO7l4mXMv">
                 </div>
                 <p class="small" th:if="${#fields.hasErrors('recaptcha')}" th:errorclass="error" th:errors="*{recaptcha}" />
-                <button class="btn btn-primary" hx-post="/contact" hx-swap="outerHTML" hx-target="body">Submit</button>
+                <button data-loading-disable type="submit" class="btn btn-primary" >
+                    Submit<span data-loading>&nbsp;Processing....</span>
+                </button>
             </form>
         </div>
     </main>

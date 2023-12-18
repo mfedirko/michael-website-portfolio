@@ -31,3 +31,7 @@ main {
 .bg-dark .nav-link {
     color: white !important;
 }
+
+[data-loading] {
+  display: none;
+}
