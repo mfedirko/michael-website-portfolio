@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/common-layout.html :: header}">
+    <title>Contact Me</title>
+</head>
+<body>
+    <header>
+        <nav th:replace="~{fragments/common-layout.html :: navbar}"></nav>
+    </header>
+    <main>
+        <div id="contact-container" class="container">
+            <form id="message-form" th:object="${contactForm}">
+                <h1 class="section-heading">Contact Me</h1>
+                <div class="form-group">
+                    <label for="fullName">Name</label>
+                    <input id="fullName" class="form-control" th:field="*{fullName}" type="text" placeholder="Your Name" />
+                    <p class="small" th:if="${#fields.hasErrors('fullName')}" th:errorclass="error" th:errors="*{fullName}" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" class="form-control" th:field="*{email}" type="email" placeholder="youremail@email.com" />
+                    <p class="small" th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}" />
+                </div>
+                <div class="form-group">
+                    <label for="messageBody">Message</label>
+                    <textarea id="messageBody" class="form-control" th:field="*{messageBody}" placeholder="Your message here"></textarea>
+                    <p class="small" th:if="${#fields.hasErrors('messageBody')}" th:errorclass="error" th:errors="*{messageBody}" />
+                </div>
+                <button class="btn btn-primary" hx-post="/contact" hx-swap="outerHTML" hx-target="body">Submit</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

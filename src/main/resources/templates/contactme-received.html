@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/common-layout.html :: header}">
+    <title>Greeting</title>
+</head>
+<body>
+<header>
+    <nav th:replace="~{fragments/common-layout.html :: navbar}"></nav>
+</header>
+<main>
+    <div id="contact-received" class="container section-heading">
+        <p>Thank you for reaching out, <span th:text="${name}"></span>.</p>
+        <p>I will review your message and get back to you.</p>
+
+        <button class="btn btn-primary" hx-get="/contact" hx-swap="outerHTML" hx-target="body">Contact Again</button>
+    </div>
+</main>
+</body>
+</html>

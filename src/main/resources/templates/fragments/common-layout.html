@@ -23,4 +23,40 @@
 		import 'htmx';
 	</script>
 </head>
+<body>
+    <nav th:fragment="navbar" id="navbar-top" class="navbar navbar-dark fixed-top bg-dark px-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#welcome">Michael Fedirko</a>
+            <a id="view-resume" class="btn btn-outline-success offset-md-2" target="_blank" href="/docs/Michael_Fedirko_Resume.pdf">Resume</a>
+
+            <ul class="nav nav-pills">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/#skills">Skills</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/#interests">Interests</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/#learning">Learning</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact</a>
+                </li>
+                <li>
+                    <a href="https://github.com/mfedirko/michael-website-portfolio" target="_blank">
+                        <img class="social" id="github-logo" alt="Github" src="/images/github-mark-white.svg"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.linkedin.com/in/michael-fedirko-80a22377/" target="_blank">
+                        <img class="social" id="linkedin-logo" alt="LinkedIn" src="/images/In-White-26.png"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
 </html>
