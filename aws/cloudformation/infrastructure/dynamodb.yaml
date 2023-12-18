@@ -21,9 +21,13 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
+        - AttributeName: "creation_timestamp"
+          AttributeType: "N"
       KeySchema:
         - AttributeName: "id"
           KeyType: "HASH"
+        - AttributeName: "creation_timestamp"
+          KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: "3"
         WriteCapacityUnits: "3"
