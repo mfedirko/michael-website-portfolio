@@ -20,7 +20,7 @@ Resources:
     Properties:
       AttributeDefinitions:
         - AttributeName: "id"
-          AttributeType: "S"
+          AttributeType: "N"
         - AttributeName: "creation_timestamp"
           AttributeType: "N"
       KeySchema:
@@ -31,7 +31,7 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: "3"
         WriteCapacityUnits: "3"
-      TableName: "Contact-Request"
+      TableName: "Contact-Requests"
 
 Outputs:
 
