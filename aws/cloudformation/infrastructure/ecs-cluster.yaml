@@ -126,8 +126,10 @@ Resources:
                     "Action": [
                         "xray:PutTraceSegments",
                         "xray:PutTelemetryRecords",
-                        "ssm:GetParameters",
-                        "kms:Decrypt"
+                        "dynamodb:PutItem",
+                        "dynamodb:Query",
+                        "dynamodb:Scan",
+                        "dynamodb:DescribeTable"
                     ],
                     "Resource": "*"
                 }]
