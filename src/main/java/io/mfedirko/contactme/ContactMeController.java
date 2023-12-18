@@ -21,7 +21,7 @@ public class ContactMeController {
 
     @GetMapping
     public String getPage(ModelMap modelMap) {
-        modelMap.addAttribute("contactForm", new ContactForm("", "", ""));
+        modelMap.addAttribute("contactForm", new ContactForm("","", "", ""));
         return CONTACTME_FORM;
     }
 

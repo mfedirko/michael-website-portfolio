@@ -102,6 +102,9 @@ Resources:
           Environment:
             - Name: REGION
               Value: !Ref AWS::Region
+          Secrets:
+            - Name: RECAPTCHA_SECRETKEY
+              ValueFrom: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/RECAPTCHA_SECRETKEY"
           LogConfiguration:
             LogDriver: awslogs
             Options:

@@ -26,9 +26,15 @@
                     <textarea id="messageBody" class="form-control" th:field="*{messageBody}" placeholder="Your message here"></textarea>
                     <p class="small" th:if="${#fields.hasErrors('messageBody')}" th:errorclass="error" th:errors="*{messageBody}" />
                 </div>
+                <div class="g-recaptcha"
+                     data-sitekey="6LfInTUpAAAAAGJw88yqetnsYzLmdosrO7l4mXMv">
+                </div>
+                <p class="small" th:if="${#fields.hasErrors('recaptcha')}" th:errorclass="error" th:errors="*{recaptcha}" />
                 <button class="btn btn-primary" hx-post="/contact" hx-swap="outerHTML" hx-target="body">Submit</button>
             </form>
         </div>
     </main>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>
