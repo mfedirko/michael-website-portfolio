@@ -15,30 +15,22 @@ Parameters:
 
 Resources:
 
-  DynamoDBTable:
+  ContactRequestsTable:
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
-        -
-          AttributeName: "id"
+        - AttributeName: "id"
           AttributeType: "S"
-        -
-          AttributeName: "customer_id"
-          AttributeType: "N"
       KeySchema:
-        -
-          AttributeName: "id"
+        - AttributeName: "id"
           KeyType: "HASH"
-        -
-          AttributeName: "customer_id"
-          KeyType: "RANGE"
       ProvisionedThroughput:
-        ReadCapacityUnits: "5"
-        WriteCapacityUnits: "5"
-      TableName: !Sub ${EnvironmentName}-ProgramTable-${AWS::Region}
+        ReadCapacityUnits: "3"
+        WriteCapacityUnits: "3"
+      TableName: "Contact-Requests"
 
 Outputs:
 
-  DynamoDBTable:
-    Description: A reference to the DynamoDB table containing all generated events
-    Value: !Ref DynamoDBTable
+  ContactRequestsTable:
+    Description: A reference to the DynamoDB table Contact-Requests
+    Value: !Ref ContactRequestsTable
