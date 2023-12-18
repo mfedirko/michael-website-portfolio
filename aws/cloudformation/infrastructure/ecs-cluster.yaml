@@ -94,7 +94,9 @@ Resources:
                         "ecr:BatchGetImage",
                         "ecr:GetAuthorizationToken",
                         "logs:CreateLogStream",
-                        "logs:PutLogEvents"
+                        "logs:PutLogEvents",
+                        "ssm:GetParameters",
+                        "kms:Decrypt"
                     ],
                     "Resource": "*"
                 }]
