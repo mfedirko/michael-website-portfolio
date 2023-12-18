@@ -26,3 +26,7 @@ to deploy into [AWS ECS using Cloudformation](./aws/cloudformation/master.yaml)
 Thank you to the following open source projects and authors. 
 Their guides and examples were a great help while working on this project. 
 - [Sascha Möllering - AWS Samples](https://github.com/aws-samples/reactive-refarch-cloudformation/tree/master)
+
+## Feature Backlog
+- Improve mobile compatibility
+- LinkedIn sign-in
