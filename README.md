@@ -37,7 +37,17 @@ This is a full-stack developer portfolio and the source code for https://michael
 1. Run the main class `src/main/java/io.mfedirko/Application.java`
    1. **VM Options:** `-Dspring.profiles.active=local -Dspring.devtools.restart.enabled=true`
 2. Restart and live reload should be triggered by recompiling/rebuilding Java classes and by saving static files 
-([docs](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools.livereload)) 
+([docs](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools.livereload))
+
+## Screenshots
+
+![Home page top](./docs/images/home-page.png)
+
+![Home page middle](./docs/images/home-page-middle.png)
+
+![Contact form](./docs/images/contact-form.png)
+
+![Admin contact history](./docs/images/admin-contact-history.png)
 
 ## Acknowledgements
 Thank you to the following open source projects and authors. 
