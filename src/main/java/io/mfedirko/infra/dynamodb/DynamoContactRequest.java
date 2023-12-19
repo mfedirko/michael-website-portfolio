@@ -1,4 +1,4 @@
-package io.mfedirko.infra;
+package io.mfedirko.infra.dynamodb;
 
 
 import io.mfedirko.contactme.ContactForm;

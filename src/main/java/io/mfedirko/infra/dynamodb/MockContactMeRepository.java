@@ -1,4 +1,4 @@
-package io.mfedirko.infra;
+package io.mfedirko.infra.dynamodb;
 
 import io.mfedirko.contactme.ContactForm;
 import io.mfedirko.contactme.ContactHistory;
@@ -22,12 +22,17 @@ public class MockContactMeRepository implements ContactMeRepository {
     }
 
     @Override
-    public List<ContactHistory> findContactHistoryByTimestampRange(Instant from, Instant to) {
+    public List<ContactHistory> findAllContactHistory() {
         return requests.stream().map(form -> ContactHistory.builder()
-                    .fullName(form.getFullName())
-                    .email(form.getEmail())
-                    .messageBody(form.getMessageBody())
-                    .build())
+                        .fullName(form.getFullName())
+                        .email(form.getEmail())
+                        .messageBody(form.getMessageBody())
+                        .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ContactHistory> findContactHistoryByTimestampRange(Instant from, Instant to) {
+        return findAllContactHistory();
     }
 }
