@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/common-layout.html :: header}">
+    <title>Michael Fedirko - Admin</title>
+</head>
+<body>
+<header>
+    <nav th:replace="~{admin/fragments/admin-nav.html :: navbar}"></nav>
+</header>
+<main>
+    <div data-bs-spy="scroll" data-bs-target="#navbar-admin"
+            data-bs-method="auto" data-bs-offset="0" class="scrollspy" tabindex="0">
+        <div id="contacthistory" class="scrolling-anchor">.</div>
+        <h4 id="contacthistoryHeading" class="section-heading">Contact History</h4>
+        <div id="contacthistoryContent" hx-get="/admin/contacts" hx-trigger="load" hx-target="this"></div>
+    </div>
+</main>
+</body>
+</html>
