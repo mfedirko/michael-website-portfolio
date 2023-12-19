@@ -1,4 +1,4 @@
-This is a full-stack developer portfolio and the source code for [my website](link tbd).
+This is a full-stack developer portfolio and the source code for https://michaelfedirko.com.
 
 ## Local Development
 #### Initial Setup
@@ -7,7 +7,7 @@ This is a full-stack developer portfolio and the source code for [my website](li
 3. Install [Node.js and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 #### Development
-1. Run the main class `src/main/java/com/helloworld/BackendApplication.java`
+1. Run the main class `src/main/java/io.mfedirko/Application.java`
    1. **VM Options:** `-Dspring.profiles.active=local -Dspring.devtools.restart.enabled=true`
 2. Restart and live reload should be triggered by recompiling/rebuilding Java classes and by saving static files 
 ([docs](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools.livereload)) 
@@ -29,4 +29,5 @@ Their guides and examples were a great help while working on this project.
 
 ## Feature Backlog
 - Improve mobile compatibility
-- LinkedIn sign-in
+- Blog posts
+- Notes
