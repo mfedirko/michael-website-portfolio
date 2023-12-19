@@ -23,8 +23,7 @@ Parameters:
   ContainerPort:
     Type: Number
 
-  SslCertArn:
-    Type: String
+
 
 Resources:
 
@@ -47,7 +46,8 @@ Resources:
       Protocol: 'HTTPS'
       SslPolicy: 'ELBSecurityPolicy-FS-1-2-Res-2020-10'
       Certificates:
-        - CertificateArn: !Ref SslCertArn
+        - CertificateArn: !Sub 'arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/9ff497eb-27c7-4d8f-ba1a-cbc116a0da39'
+        - CertificateArn: !Sub 'arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/28d180a3-2f1f-4a1b-96c1-54bcfbb8c244'
       DefaultActions:
         - Type: forward
           TargetGroupArn: !Ref TargetGroup
