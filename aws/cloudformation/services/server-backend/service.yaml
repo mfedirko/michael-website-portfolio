@@ -105,6 +105,10 @@ Resources:
           Secrets:
             - Name: RECAPTCHA_SECRETKEY
               ValueFrom: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/RECAPTCHA_SECRETKEY"
+            - Name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENTID
+              ValueFrom: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/GITHUB_OAUTH_CLIENT_ID"
+            - Name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENTSECRET
+              ValueFrom: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/GITHUB_OAUTH_CLIENT_SECRET"
           LogConfiguration:
             LogDriver: awslogs
             Options:
