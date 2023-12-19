@@ -23,8 +23,8 @@ public class AdminOauthUserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        log.info("User logged in with OAuth: {}", (Object)oAuth2User.getAttribute("name"));
-        return new DefaultOAuth2User(getAuthorities(oAuth2User), oAuth2User.getAttributes(), "name");
+        log.info("User logged in with OAuth: {}", (Object)oAuth2User.getAttribute("login"));
+        return new DefaultOAuth2User(getAuthorities(oAuth2User), oAuth2User.getAttributes(), "login");
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(OAuth2User oAuth2User) {
