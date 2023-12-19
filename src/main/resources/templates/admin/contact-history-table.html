@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<h5 class="section-heading text-center" th:text="${#dates.format(startDate, 'yyyy/MM/dd') + ' to ' + #dates.format(endDate, 'yyyy/MM/dd')}"></h5>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Timestamp</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Message</th>
+        </tr>
+        </thead>
+        <tbody>
+                <tr th:each="contact : ${history}">
+                    <td th:text="${contact.creationTimestamp}"></td>
+                    <td th:text="${contact.fullName}"></td>
+                    <td th:text="${contact.email}"></td>
+                    <td th:text="${contact.messageBody}"></td>
+                </tr>
+        </tbody>
+    </table>
+</div>
+
+<th:block th:utext="${'<div hx-get=&quot;/admin/contacts?page=' + nextPage + '&quot;&nbsp;
+            hx-trigger=&quot;revealed&quot;&nbsp;
+            hx-swap=&quot;afterend&quot;&nbsp;class=&quot;d-no&quot;>.</div>'}">
+</th:block>
