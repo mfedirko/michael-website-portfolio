@@ -16,6 +16,7 @@ import java.util.Collection;
 @Service
 @Slf4j
 public class AdminOauthUserService extends DefaultOAuth2UserService {
+    // only one site admin
     public static final String SITE_ADMIN_LOGIN = "mfedirko";
     public static final String SITE_ADMIN_HTML_URL = "https://github.com/mfedirko";
     public static final String ADMIN_ROLE = "ADMIN";
