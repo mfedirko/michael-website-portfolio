@@ -1,11 +1,9 @@
 package io.mfedirko.contactme;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ContactMeRepository {
     void save(ContactForm form);
-
-    List<ContactHistory> findAllContactHistory();
-    List<ContactHistory> findContactHistoryByTimestampRange(Instant from, Instant to);
+    List<ContactHistory> findContactHistoryByDateRange(LocalDate from, LocalDate to);
 }

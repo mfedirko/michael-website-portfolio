@@ -10,7 +10,9 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @DynamoDbBean
 @Data
@@ -18,14 +20,14 @@ import java.time.ZoneId;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DynamoContactRequest {
-    public static final String TABLE = "Contact-Requests";
+    public static final String TABLE = "Contact-Request";
     public static final String ID = "id";
     public static final String CREATION_TIMESTAMP = "creation_timestamp";
     public static final String FULL_NAME = "full_name";
     public static final String EMAIL = "email";
     public static final String MESSAGE_BODY = "message_body";
 
-    private Long id;
+    private String id;
     private Long creationTimestampMillis; // unix epoch timestamp in milliseconds
     private String fullName;
     private String email;
@@ -33,7 +35,7 @@ public class DynamoContactRequest {
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute(ID)
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -59,13 +61,12 @@ public class DynamoContactRequest {
     }
 
     public static DynamoContactRequest from(ContactForm form) {
-        final Instant now = Instant.now();
         return DynamoContactRequest.builder()
                 .fullName(form.getFullName())
                 .email(form.getEmail())
                 .messageBody(form.getMessageBody())
-                .id(toPartitionKey(now))
-                .creationTimestampMillis(toSortKey(now))
+                .id(toPartitionKey(LocalDate.now()))
+                .creationTimestampMillis(toSortKey(Instant.now()))
                 .build();
     }
 
@@ -73,8 +74,8 @@ public class DynamoContactRequest {
         return now.toEpochMilli();
     }
 
-    public static long toPartitionKey(Instant now) { // partition by day
-        return now.getEpochSecond() / (60 * 60 * 24);
+    public static String toPartitionKey(LocalDate now) { // partition by day
+        return now.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     public ContactHistory toContactHistory() {

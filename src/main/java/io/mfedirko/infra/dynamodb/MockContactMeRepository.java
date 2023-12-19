@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,6 @@ public class MockContactMeRepository implements ContactMeRepository {
         requests.add(form);
     }
 
-    @Override
     public List<ContactHistory> findAllContactHistory() {
         return requests.stream().map(form -> ContactHistory.builder()
                         .fullName(form.getFullName())
@@ -32,7 +32,7 @@ public class MockContactMeRepository implements ContactMeRepository {
     }
 
     @Override
-    public List<ContactHistory> findContactHistoryByTimestampRange(Instant from, Instant to) {
+    public List<ContactHistory> findContactHistoryByDateRange(LocalDate from, LocalDate to) {
         return findAllContactHistory();
     }
 }

@@ -7,8 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.Instant;
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @Controller
@@ -18,10 +21,18 @@ public class ContactsAdminController {
     private final ContactMeRepository contactMeRepository;
 
     @GetMapping
-    public String getContactListPage(ModelMap modelMap) {
-        List<ContactHistory> contactHistory = contactMeRepository.findContactHistoryByTimestampRange(
-                Instant.now().minusSeconds(60 * 60 * 24 * 7), Instant.now());
+    public String getContactListPage(@RequestParam("page") int page, ModelMap modelMap) {
+        LocalDate startDate = ContactsPagination.getStartofRange(page);
+        LocalDate endDate = ContactsPagination.getEndofRange(page);
+        List<ContactHistory> contactHistory = contactMeRepository.findContactHistoryByDateRange(startDate, endDate);
         modelMap.addAttribute("history", contactHistory);
-        return "admin/contact-history";
+        modelMap.addAttribute("startDate", toDate(startDate));
+        modelMap.addAttribute("endDate", toDate(endDate));
+        modelMap.addAttribute("nextPage", page + 1);
+        return "admin/contact-history-table";
+    }
+
+    private static Date toDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }
