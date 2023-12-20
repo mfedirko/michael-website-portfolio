@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
+import java.time.Clock;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
+
+import static io.mfedirko.admin.DateHelper.*;
 
 @Controller
 @RequestMapping("/admin/contacts")
@@ -22,17 +24,15 @@ public class ContactsAdminController {
 
     @GetMapping
     public String getContactListPage(@RequestParam("page") int page, ModelMap modelMap) {
-        LocalDate startDate = ContactsPagination.getStartofRange(page);
-        LocalDate endDate = ContactsPagination.getEndofRange(page);
-        List<ContactHistory> contactHistory = contactMeRepository.findContactHistoryByDateRange(startDate, endDate);
+        LocalDate date = toLocalDate(page, Clock.systemDefaultZone());
+        LocalDate endDate = date.plusDays(1);
+        List<ContactHistory> contactHistory = contactMeRepository.findContactHistoryByDate(date);
         modelMap.addAttribute("history", contactHistory);
-        modelMap.addAttribute("startDate", toDate(startDate));
+        modelMap.addAttribute("startDate", toDate(date));
         modelMap.addAttribute("endDate", toDate(endDate));
         modelMap.addAttribute("nextPage", page + 1);
         return "admin/contact-history-table";
     }
 
-    private static Date toDate(LocalDate localDate) {
-        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    }
+
 }

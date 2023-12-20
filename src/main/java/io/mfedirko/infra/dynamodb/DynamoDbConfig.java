@@ -20,9 +20,9 @@ public class DynamoDbConfig {
     }
 
     @Bean
-    public DynamoDbEnhancedClient dynamoDbEnhancedClient() {
+    public DynamoDbEnhancedClient dynamoDbEnhancedClient(DynamoDbClient dynamoDbClient) {
         return DynamoDbEnhancedClient.builder()
-                .dynamoDbClient(dynamoDbClient())
+                .dynamoDbClient(dynamoDbClient)
                 .build();
     }
 

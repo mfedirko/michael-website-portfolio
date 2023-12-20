@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class MockContactMeRepository implements ContactMeRepository {
     }
 
     @Override
-    public List<ContactHistory> findContactHistoryByDateRange(LocalDate from, LocalDate to) {
+    public List<ContactHistory> findContactHistoryByDate(LocalDate from) {
         return findAllContactHistory();
     }
 }

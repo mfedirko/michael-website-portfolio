@@ -1,5 +1,6 @@
 package io.mfedirko.infra.dynamodb;
 
+import io.mfedirko.admin.DateHelper;
 import io.mfedirko.contactme.ContactForm;
 import io.mfedirko.contactme.ContactHistory;
 import io.mfedirko.contactme.ContactMeRepository;
@@ -7,21 +8,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
-import software.amazon.awssdk.enhanced.dynamodb.Expression;
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.*;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import static io.mfedirko.admin.DateHelper.TZ_UTC;
 import static io.mfedirko.infra.dynamodb.DynamoContactRequest.*;
 import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.sortBetween;
+import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.sortGreaterThanOrEqualTo;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,25 +36,35 @@ public class DynamoDbContactMeRepository implements ContactMeRepository {
     }
 
     @Override
-    public List<ContactHistory> findContactHistoryByDateRange(LocalDate from, LocalDate to) {
-        Objects.requireNonNull(from, "From timestamp must be non-null");
-        Objects.requireNonNull(to, "To timestamp must be non-null");
+    public List<ContactHistory> findContactHistoryByDate(LocalDate date) {
+        Objects.requireNonNull(date, "Date must be non-null");
 
-        PageIterable<DynamoContactRequest> result = getTable().scan(k -> k.filterExpression(Expression.builder()
-                .expression("#id BETWEEN :from AND :to")
-                .putExpressionName("#id", ID)
-                .putExpressionValue(":from", AttributeValue.fromS(toPartitionKey(from)))
-                .putExpressionValue(":to", AttributeValue.fromS(toPartitionKey(to)))
-                .build()));
+        PageIterable<DynamoContactRequest> result = getTable().query(k -> k.scanIndexForward(false)
+                .queryConditional(sortBetween(
+                        toKey(DateHelper.toUtcStartRange(date)),
+                        toKey(DateHelper.toUtcEndRange(date))))
+                .build());
         if (result == null) {
-            log.warn("DynamoDB returned null for findContactHistoryByTimestampRange {}-{}", from, to);
+            log.warn("DynamoDB returned null for date {}", date);
             return Collections.emptyList();
         }
-        return result.items().stream().map(DynamoContactRequest::toContactHistory)
-                .sorted(Comparator.comparing(ContactHistory::getCreationTimestamp).reversed())
+        return result.items().stream()
+                .map(DynamoContactRequest::toContactHistory)
                 .toList();
     }
     public DynamoDbTable<DynamoContactRequest> getTable() {
         return enhancedClient.table(DynamoContactRequest.TABLE, TableSchema.fromBean(DynamoContactRequest.class));
+    }
+
+    private static Key toKey(LocalDateTime date) {
+        return Key.builder()
+                .partitionValue(toPartitionKey(date.toLocalDate()))
+                .sortValue(toSortKey(date))
+                .build();
+    }
+
+    private static long toSortKey(LocalDateTime date) {
+        Instant instant = date.atZone(ZoneId.of("UTC")).toInstant();
+        return DynamoContactRequest.toSortKey(instant);
     }
 }

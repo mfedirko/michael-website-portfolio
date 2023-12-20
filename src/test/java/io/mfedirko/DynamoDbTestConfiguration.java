@@ -1,0 +1,66 @@
+package io.mfedirko;
+
+import io.mfedirko.contactme.fixture.DynamoContactRequests;
+import io.mfedirko.infra.dynamodb.DynamoContactRequest;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.TestPropertySource;
+import org.testcontainers.containers.Network;
+import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.utility.DockerImageName;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.profiles.ProfileFile;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
+
+@TestConfiguration
+@TestPropertySource
+@Import(DynamoDbTestConfiguration.LocalStackConfiguration.class)
+public class DynamoDbTestConfiguration {
+    @Autowired
+    private DynamoDbEnhancedClient dynamoDb;
+
+
+    @PostConstruct
+    public void initContactRequestsTable() {
+        DynamoDbTable<DynamoContactRequest> contactRequestsTable = dynamoDb.table(DynamoContactRequest.TABLE, TableSchema.fromBean(DynamoContactRequest.class));
+        contactRequestsTable.createTable(table -> table
+                .provisionedThroughput(prov -> prov.readCapacityUnits(1L).writeCapacityUnits(1L)));
+
+        DynamoContactRequests.CONTACT_REQUESTS_DATA.forEach(contactRequestsTable::putItem);
+    }
+
+    @TestConfiguration
+    public static class LocalStackConfiguration {
+        static LocalStackContainer localStack =
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.0.4.1.nodejs18"))
+                        .withServices(DYNAMODB)
+                        .withNetworkAliases("localstack")
+                        .withNetwork(Network.builder().createNetworkCmdModifier(cmd -> cmd.withName("test-net")).build());
+
+        static {
+            localStack.start();
+        }
+
+        @Bean
+        @Primary
+        public DynamoDbClient dynamoDbClientTest() {
+            return DynamoDbClient.builder()
+                    .region(Region.US_EAST_1)
+                    .endpointOverride(localStack.getEndpointOverride(DYNAMODB))
+                    .credentialsProvider(DefaultCredentialsProvider.create())
+                    .build();
+        }
+    }
+}

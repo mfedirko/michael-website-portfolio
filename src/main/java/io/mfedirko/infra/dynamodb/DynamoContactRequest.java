@@ -11,8 +11,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+
+import static io.mfedirko.admin.DateHelper.TZ_LOCAL;
+import static io.mfedirko.admin.DateHelper.inLocalTimeZone;
 
 @DynamoDbBean
 @Data
@@ -74,8 +76,8 @@ public class DynamoContactRequest {
         return now.toEpochMilli();
     }
 
-    public static String toPartitionKey(LocalDate now) { // partition by day
-        return now.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    public static String toPartitionKey(LocalDate now) { // partition by day (in local time zone)
+        return inLocalTimeZone(now).format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     public ContactHistory toContactHistory() {
@@ -85,7 +87,7 @@ public class DynamoContactRequest {
                 .messageBody(messageBody)
                 .creationTimestamp(creationTimestampMillis == null
                         ? null
-                        : Instant.ofEpochMilli(creationTimestampMillis).atZone(ZoneId.systemDefault()).toLocalDateTime())
+                        : Instant.ofEpochMilli(creationTimestampMillis).atZone(TZ_LOCAL).toLocalDateTime())
                 .build();
     }
 }
