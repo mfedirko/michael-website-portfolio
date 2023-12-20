@@ -15,7 +15,7 @@
         </thead>
         <tbody>
                 <tr th:each="contact : ${history}">
-                    <td th:text="${contact.creationTimestamp}"></td>
+                    <td th:text="${contact.creationTimestamp + ' CT'}"></td>
                     <td th:text="${contact.fullName}"></td>
                     <td th:text="${contact.email}"></td>
                     <td th:text="${contact.messageBody}"></td>
