@@ -40,7 +40,7 @@ main {
     margin-top: 150px;
 }
 
-.container {
+.container:not(.center) {
   margin-left: 0!important;
   margin-right: 0!important;
 }
