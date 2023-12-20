@@ -3,43 +3,36 @@
 <head th:insert="~{fragments/common-layout.html :: header}">
     <title>Contact Me</title>
 </head>
-<body hx-ext="loading-states">
-    <header>
-        <nav th:replace="~{fragments/common-layout.html :: navbar}"></nav>
-    </header>
-    <main>
-        <div class="contact-container container">
-            <form id="message-form"
-                  hx-post="/contact" hx-swap="outerHTML" hx-target="body"
-                  data-loading-delay="200"
-                  th:object="${contactForm}">
-                <h1 class="section-heading">Contact Me</h1>
-                <div class="form-group">
-                    <label for="fullName">Name</label>
-                    <input id="fullName" class="form-control" th:field="*{fullName}" type="text" placeholder="Your Name" />
-                    <p class="small" th:if="${#fields.hasErrors('fullName')}" th:errorclass="error" th:errors="*{fullName}" />
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" class="form-control" th:field="*{email}" type="email" placeholder="youremail@email.com" />
-                    <p class="small" th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}" />
-                </div>
-                <div class="form-group">
-                    <label for="messageBody">Message</label>
-                    <textarea id="messageBody" class="form-control" th:field="*{messageBody}" placeholder="Your message here"></textarea>
-                    <p class="small" th:if="${#fields.hasErrors('messageBody')}" th:errorclass="error" th:errors="*{messageBody}" />
-                </div>
-                <div class="g-recaptcha"
-                     data-sitekey="6LfInTUpAAAAAGJw88yqetnsYzLmdosrO7l4mXMv">
-                </div>
-                <p class="small" th:if="${#fields.hasErrors('recaptcha')}" th:errorclass="error" th:errors="*{recaptcha}" />
-                <button data-loading-disable type="submit" class="btn btn-primary" >
-                    Submit<span data-loading>&nbsp;Processing....</span>
-                </button>
-            </form>
-        </div>
-    </main>
-
+<body>
+    <div hx-ext="loading-states" class="container" id="contact-body">
+        <form id="message-form"
+              hx-post="/contact" hx-swap="outerHTML" hx-target="#contact-body"
+              data-loading-delay="200"
+              th:object="${contactForm}">
+            <div class="form-group">
+                <label for="fullName">Name</label>
+                <input id="fullName" class="form-control" th:field="*{fullName}" type="text" placeholder="Your Name" />
+                <p class="small" th:if="${#fields.hasErrors('fullName')}" th:errorclass="error" th:errors="*{fullName}" />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" class="form-control" th:field="*{email}" type="email" placeholder="youremail@email.com" />
+                <p class="small" th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}" />
+            </div>
+            <div class="form-group">
+                <label for="messageBody">Message</label>
+                <textarea id="messageBody" class="form-control" th:field="*{messageBody}" placeholder="Your message here"></textarea>
+                <p class="small" th:if="${#fields.hasErrors('messageBody')}" th:errorclass="error" th:errors="*{messageBody}" />
+            </div>
+            <div class="g-recaptcha"
+                 data-sitekey="6LfInTUpAAAAAGJw88yqetnsYzLmdosrO7l4mXMv">
+            </div>
+            <p class="small" th:if="${#fields.hasErrors('recaptcha')}" th:errorclass="error" th:errors="*{recaptcha}" />
+            <button data-loading-disable type="submit" class="btn btn-primary" >
+                Submit<span data-loading>&nbsp;Processing....</span>
+            </button>
+        </form>
+    </div>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>
