@@ -24,7 +24,8 @@
     </table>
 </div>
 
-<th:block th:utext="${'<div hx-get=&quot;/admin/contacts?page=' + nextPage + '&quot;&nbsp;
-            hx-trigger=&quot;revealed&quot;&nbsp;
-            hx-swap=&quot;afterend&quot;&nbsp;class=&quot;d-no&quot;>.</div>'}">
-</th:block>
+<div th:hx-get="${'/admin/contacts?page=' + nextPage}" hx-trigger="revealed"
+     hx-swap="afterend" class="d-no">
+    .
+</div>
+
