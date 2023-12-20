@@ -1,6 +1,6 @@
-package io.mfedirko.infra.dynamodb;
+package io.mfedirko.common.infra.dynamodb;
 
-import io.mfedirko.admin.DateHelper;
+import io.mfedirko.common.util.DateHelper;
 import io.mfedirko.contactme.ContactForm;
 import io.mfedirko.contactme.ContactHistory;
 import io.mfedirko.contactme.ContactMeRepository;
@@ -16,8 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static io.mfedirko.admin.DateHelper.TZ_UTC;
-import static io.mfedirko.infra.dynamodb.DynamoContactRequest.*;
 import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.sortBetween;
 import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.sortGreaterThanOrEqualTo;
 
@@ -41,8 +39,8 @@ public class DynamoDbContactMeRepository implements ContactMeRepository {
 
         PageIterable<DynamoContactRequest> result = getTable().query(k -> k.scanIndexForward(false)
                 .queryConditional(sortBetween(
-                        toKey(DateHelper.toUtcStartRange(date)),
-                        toKey(DateHelper.toUtcEndRange(date))))
+                        toKey(DateHelper.toUtcStartOfDay(date)),
+                        toKey(DateHelper.toUtcEndOfDay(date))))
                 .build());
         if (result == null) {
             log.warn("DynamoDB returned null for date {}", date);
@@ -58,7 +56,7 @@ public class DynamoDbContactMeRepository implements ContactMeRepository {
 
     private static Key toKey(LocalDateTime date) {
         return Key.builder()
-                .partitionValue(toPartitionKey(date.toLocalDate()))
+                .partitionValue(DynamoContactRequest.toPartitionKey(date.toLocalDate()))
                 .sortValue(toSortKey(date))
                 .build();
     }

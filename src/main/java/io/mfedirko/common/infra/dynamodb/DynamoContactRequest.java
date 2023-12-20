@@ -1,4 +1,4 @@
-package io.mfedirko.infra.dynamodb;
+package io.mfedirko.common.infra.dynamodb;
 
 
 import io.mfedirko.contactme.ContactForm;
@@ -13,8 +13,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static io.mfedirko.admin.DateHelper.TZ_LOCAL;
-import static io.mfedirko.admin.DateHelper.inLocalTimeZone;
+import static io.mfedirko.common.util.DateHelper.TZ_LOCAL;
+import static io.mfedirko.common.util.DateHelper.inLocalTimeZone;
 
 @DynamoDbBean
 @Data

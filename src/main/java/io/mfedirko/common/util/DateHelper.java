@@ -1,4 +1,4 @@
-package io.mfedirko.admin;
+package io.mfedirko.common.util;
 
 import lombok.experimental.UtilityClass;
 
@@ -17,12 +17,12 @@ public class DateHelper {
         return LocalDate.now(clock).minusDays(page - 1);
     }
 
-    public static LocalDateTime toUtcStartRange(LocalDate date) {
+    public static LocalDateTime toUtcStartOfDay(LocalDate date) {
         return date.atStartOfDay(TZ_LOCAL)
                 .withZoneSameInstant(TZ_UTC).toLocalDateTime();
     }
 
-    public static LocalDateTime toUtcEndRange(LocalDate date) {
+    public static LocalDateTime toUtcEndOfDay(LocalDate date) {
         return date.atTime(23,59,59).atZone(TZ_LOCAL)
                 .withZoneSameInstant(TZ_UTC).toLocalDateTime();
     }

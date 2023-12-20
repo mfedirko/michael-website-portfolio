@@ -1,4 +1,4 @@
-package io.mfedirko.infra.security;
+package io.mfedirko.common.infra.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
-import static io.mfedirko.infra.security.AdminOauthUserService.ADMIN_ROLE;
+import static io.mfedirko.common.infra.security.AdminOauthUserService.ADMIN_ROLE;
 
 @Configuration
 @Slf4j

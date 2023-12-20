@@ -1,4 +1,4 @@
-package io.mfedirko.contactme.fixture;
+package io.mfedirko.fixture;
 
 import io.mfedirko.contactme.ContactForm;
 

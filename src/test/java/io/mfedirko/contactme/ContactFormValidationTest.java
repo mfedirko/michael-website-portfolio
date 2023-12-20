@@ -1,6 +1,6 @@
 package io.mfedirko.contactme;
 
-import io.mfedirko.infra.RecaptchaClient;
+import io.mfedirko.common.infra.RecaptchaClient;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.assertj.core.api.Condition;
@@ -13,7 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Collection;
 import java.util.Set;
 
-import static io.mfedirko.contactme.fixture.ContactForms.aContactForm;
+import static io.mfedirko.fixture.ContactForms.aContactForm;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest

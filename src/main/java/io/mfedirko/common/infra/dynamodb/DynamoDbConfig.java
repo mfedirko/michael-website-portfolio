@@ -1,4 +1,4 @@
-package io.mfedirko.infra.dynamodb;
+package io.mfedirko.common.infra.dynamodb;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

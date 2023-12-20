@@ -1,4 +1,4 @@
-package io.mfedirko.infra.security;
+package io.mfedirko.common.infra.security;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

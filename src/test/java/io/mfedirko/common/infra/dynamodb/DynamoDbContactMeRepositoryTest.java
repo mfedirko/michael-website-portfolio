@@ -1,10 +1,7 @@
-package io.mfedirko.infra.dynamodb;
+package io.mfedirko.common.infra.dynamodb;
 
-import io.mfedirko.admin.DateHelper;
-import io.mfedirko.contactme.ContactForm;
 import io.mfedirko.contactme.ContactHistory;
 import io.mfedirko.DynamoDbTestConfiguration;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,13 +15,12 @@ import org.springframework.context.annotation.Import;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static io.mfedirko.contactme.fixture.ContactForms.aContactForm;
+import static io.mfedirko.fixture.ContactForms.aContactForm;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest

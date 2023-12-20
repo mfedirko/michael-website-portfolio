@@ -1,11 +1,9 @@
-package io.mfedirko.contactme.fixture;
+package io.mfedirko.fixture;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mfedirko.infra.dynamodb.DynamoContactRequest;
+import io.mfedirko.common.infra.dynamodb.DynamoContactRequest;
 import lombok.experimental.UtilityClass;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.regex.Pattern;

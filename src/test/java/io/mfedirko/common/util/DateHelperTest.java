@@ -1,5 +1,6 @@
-package io.mfedirko.admin;
+package io.mfedirko.common.util;
 
+import io.mfedirko.common.util.DateHelper;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -31,7 +32,7 @@ class DateHelperTest {
             "2023-01-01,2023-01-01T06:00:00"
     })
     void toUtcStartRange(LocalDate input, LocalDateTime expected) {
-        LocalDateTime ldt = DateHelper.toUtcStartRange(input);
+        LocalDateTime ldt = DateHelper.toUtcStartOfDay(input);
 
         assertEquals(expected, ldt);
     }
@@ -44,7 +45,7 @@ class DateHelperTest {
             "2023-01-01,2023-01-02T05:59:59"
     })
     void toUtcEndRange(LocalDate input, LocalDateTime expected) {
-        LocalDateTime ldt = DateHelper.toUtcEndRange(input);
+        LocalDateTime ldt = DateHelper.toUtcEndOfDay(input);
 
         assertEquals(expected, ldt);
     }
