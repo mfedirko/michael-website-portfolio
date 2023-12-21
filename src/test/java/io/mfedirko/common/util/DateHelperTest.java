@@ -1,6 +1,5 @@
 package io.mfedirko.common.util;
 
-import io.mfedirko.common.util.DateHelper;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -19,7 +18,7 @@ class DateHelperTest {
         "366,2022-05-18"
     })
     void toLocalDatePage(int page, LocalDate expected) {
-        LocalDate localDate = DateHelper.toLocalDate(page, MAY_18_2023_CST);
+        LocalDate localDate = DateHelper.toLocalDatePageByDay(page, MAY_18_2023_CST);
 
         assertEquals(expected, localDate);
     }

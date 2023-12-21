@@ -1,7 +1,9 @@
 package io.mfedirko;
 
+import io.mfedirko.common.infra.dynamodb.DynamoLesson;
 import io.mfedirko.fixture.DynamoContactRequests;
 import io.mfedirko.common.infra.dynamodb.DynamoContactRequest;
+import io.mfedirko.fixture.DynamoLessons;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -19,6 +21,8 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
+import java.util.Collection;
+
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
 
 @TestConfiguration
@@ -30,12 +34,25 @@ public class DynamoDbTestConfiguration {
 
 
     @PostConstruct
-    public void initContactRequestsTable() {
-        DynamoDbTable<DynamoContactRequest> contactRequestsTable = dynamoDb.table(DynamoContactRequest.TABLE, TableSchema.fromBean(DynamoContactRequest.class));
-        contactRequestsTable.createTable(table -> table
+    public void initTables() {
+        initContactRequests();
+        initLessonsTable();
+    }
+
+    private void initLessonsTable() {
+        initDynamoTable(DynamoLesson.class, DynamoLesson.TABLE, DynamoLessons.DATA);
+    }
+
+    private void initContactRequests() {
+        initDynamoTable(DynamoContactRequest.class, DynamoContactRequest.TABLE, DynamoContactRequests.DATA);
+    }
+
+    private <T> void initDynamoTable(Class<T> clazz, String name, Collection<T> data) {
+        DynamoDbTable<T> table = dynamoDb.table(name, TableSchema.fromBean(clazz));
+        table.createTable(t -> t
                 .provisionedThroughput(prov -> prov.readCapacityUnits(1L).writeCapacityUnits(1L)));
 
-        DynamoContactRequests.CONTACT_REQUESTS_DATA.forEach(contactRequestsTable::putItem);
+        data.forEach(table::putItem);
     }
 
     @TestConfiguration
