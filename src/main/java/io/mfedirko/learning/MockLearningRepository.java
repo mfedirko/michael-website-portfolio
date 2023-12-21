@@ -55,8 +55,8 @@ public class MockLearningRepository implements LearningRepository {
     }
 
     @Override
-    public void createLesson(CreateLessonForm lesson) {
-
+    public long createLesson(CreateLessonForm lesson) {
+        return 0L;
     }
 
     @Override

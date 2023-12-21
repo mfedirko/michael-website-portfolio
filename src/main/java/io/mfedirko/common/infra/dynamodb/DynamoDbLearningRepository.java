@@ -28,6 +28,7 @@ import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.so
 @Slf4j
 public class DynamoDbLearningRepository implements LearningRepository {
     private final DynamoDbEnhancedClient enhancedClient;
+    private final DynamoLessonMapper lessonMapper;
 
     @Override
     public List<Lesson> findLessons(LocalDate date) {
@@ -37,20 +38,22 @@ public class DynamoDbLearningRepository implements LearningRepository {
                         toKey(DateHelper.toUtcEndOfYear(date))))
                 .build());
         return result.items().stream()
-                .map(DynamoLesson::toLesson)
+                .map(lessonMapper::toLesson)
                 .toList();
     }
 
     @Override
     public Lesson getLesson(long creationTimeMillis) {
         return Optional.ofNullable(getTable().getItem(toKey(creationTimeMillis)))
-                .map(DynamoLesson::toLesson)
+                .map(lessonMapper::toLesson)
                 .orElseThrow(() -> new IllegalArgumentException("No lesson exists with creationTimestampMillis " + creationTimeMillis));
     }
 
     @Override
-    public void createLesson(CreateLessonForm req) {
-        getTable().putItem(DynamoLesson.fromCreateRequest(req));
+    public long createLesson(CreateLessonForm req) {
+        DynamoLesson item = DynamoLesson.fromCreateRequest(req);
+        getTable().putItem(item);
+        return item.getCreationTimestampMillis();
     }
 
     @Override

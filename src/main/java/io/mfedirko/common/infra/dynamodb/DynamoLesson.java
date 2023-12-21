@@ -76,17 +76,6 @@ public class DynamoLesson {
         return description;
     }
 
-    public Lesson toLesson() {
-        return Lesson.builder()
-                .description(description)
-                .title(title)
-                .category(category)
-                .author(author)
-                .creationTimestampMillis(creationTimestampMillis)
-                .creationTimestamp(DateHelper.unixMillisToLocalDateTime(creationTimestampMillis))
-                .build();
-    }
-
     public static DynamoLesson fromUpdateRequest(UpdateLessonForm lesson, long creationTimestampMillis) {
         LocalDate localDate = LocalDate.ofInstant(
                 Instant.ofEpochMilli(creationTimestampMillis),

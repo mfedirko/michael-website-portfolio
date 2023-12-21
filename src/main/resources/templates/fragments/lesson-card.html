@@ -10,7 +10,7 @@
             <span th:text="${lesson.author}"></span>
             <span th:text="${lesson.creationTimestamp + ' CT'}"></span>
         </p>
-        <p class="card-text" th:text="${lesson.description}"></p>
+        <p class="card-text"><span th:utext="${lesson.parsedDescription}"></span></p>
         <a class="btn btn-primary"
            sec:authorize="hasAuthority('ADMIN')"
            th:hx-get="${'/admin/learning/update-form/' + lesson.creationTimestampMillis}"

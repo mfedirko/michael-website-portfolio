@@ -18,4 +18,5 @@ public class Lesson {
     String category;
     String title;
     String description;
+    String parsedDescription;
 }

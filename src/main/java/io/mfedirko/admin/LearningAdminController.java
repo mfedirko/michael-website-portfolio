@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class LearningAdminController {
     public static final String CREATE_LESSON = "admin/create-lesson";
-    public static final String CREATE_LESSON_SUCCESS = "admin/create-lesson-success";
     public static final String UPDATE_LESSON = "admin/update-lesson";
     public static final String LESSON_CARD = "fragments/lesson-card";
     private final LearningRepository repository;
@@ -32,8 +31,10 @@ public class LearningAdminController {
         if (errors.hasErrors()) {
             return CREATE_LESSON;
         }
-        repository.createLesson(createLessonForm);
-        return CREATE_LESSON_SUCCESS;
+        long id = repository.createLesson(createLessonForm);
+        Lesson lesson = repository.getLesson(id);
+        modelMap.addAttribute("lesson", lesson);
+        return LESSON_CARD;
     }
 
     @GetMapping("/update-form/{id}")
