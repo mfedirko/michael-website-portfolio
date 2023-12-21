@@ -5,7 +5,7 @@
     <a class="my-5 btn btn-primary"
        th:if="${nextPage == 2}"
         sec:authorize="hasAuthority('ADMIN')"
-        hx-get="/admin/learning/create-form" hx-swap="outerHTML" hx-target="this">
+        hx-get="/admin/learning/create-form" hx-swap="afterend" hx-target="this">
         Create New
     </a>
     <th:block th:each="lesson : ${lessons}" th:insert="~{fragments/lesson-card.html :: card(${lesson})}"></th:block>
