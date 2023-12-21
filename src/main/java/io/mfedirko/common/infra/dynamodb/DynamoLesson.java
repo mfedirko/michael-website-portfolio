@@ -76,15 +76,16 @@ public class DynamoLesson {
         return description;
     }
 
-    public static DynamoLesson fromUpdateRequest(UpdateLessonForm lesson, long creationTimestampMillis) {
+    public static DynamoLesson fromUpdateRequest(UpdateLessonForm update, Lesson original, long creationTimestampMillis) {
         LocalDate localDate = LocalDate.ofInstant(
                 Instant.ofEpochMilli(creationTimestampMillis),
                 TZ_UTC);
 
         return DynamoLesson.builder()
-                .description(lesson.getDescription())
-                .title(lesson.getTitle())
-                .category(lesson.getCategory())
+                .author(original.getAuthor())
+                .description(Optional.ofNullable(update.getDescription()).orElse(original.getDescription()))
+                .title(Optional.ofNullable(update.getTitle()).orElse(original.getTitle()))
+                .category(Optional.ofNullable(update.getCategory()).orElse(original.getCategory()))
                 .id(toPartitionKey(localDate))
                 .creationTimestampMillis(creationTimestampMillis)
                 .build();

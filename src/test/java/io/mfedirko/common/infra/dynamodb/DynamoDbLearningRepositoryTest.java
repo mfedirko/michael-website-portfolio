@@ -50,6 +50,28 @@ class DynamoDbLearningRepositoryTest {
         }
 
         @Test
+        void updateMergesOldFields() {
+            LocalDate date = LocalDate.of(2023, 1, 1);
+            Lesson lesson = repository.findLessons(date)
+                    .get(0);
+            Assertions.assertThat(lesson.getAuthor()).isNotEmpty();
+
+            UpdateLessonForm updateForm = UpdateLessonForm.builder()
+                    .title("MY NEW TITLE of lessoin")
+                    .build();
+
+            repository.updateLesson(updateForm, lesson.getCreationTimestampMillis());
+
+            List<Lesson> lessons = repository.findLessons(date);
+            Assertions.assertThat(lessons)
+                    .filteredOn(l -> l.getCreationTimestamp().equals(lesson.getCreationTimestamp()))
+                    .hasSize(1)
+                    .allSatisfy(l -> Assertions.assertThat(l).hasNoNullFieldsOrProperties()
+                            .hasFieldOrPropertyWithValue("title", updateForm.getTitle()));
+        }
+
+
+        @Test
         void deleteLesson() {
             LocalDate date = LocalDate.of(2023, 1, 1);
             Lesson lesson = repository.findLessons(date)

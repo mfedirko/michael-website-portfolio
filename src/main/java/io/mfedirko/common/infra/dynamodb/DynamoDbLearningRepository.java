@@ -58,7 +58,8 @@ public class DynamoDbLearningRepository implements LearningRepository {
 
     @Override
     public void updateLesson(UpdateLessonForm req, long creationTimestampMillis) {
-        getTable().updateItem(DynamoLesson.fromUpdateRequest(req, creationTimestampMillis));
+        Lesson original = getLesson(creationTimestampMillis);
+        getTable().updateItem(DynamoLesson.fromUpdateRequest(req, original, creationTimestampMillis));
     }
 
     @Override
