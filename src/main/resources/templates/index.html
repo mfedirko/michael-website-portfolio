@@ -27,7 +27,7 @@
 
             <div id="learning" class="scrolling-anchor">.</div>
             <h4 id="learningHeading" class="section-heading">Learning</h4>
-            <div id="learningContent" th:insert="~{fragments/learning.html :: content}"></div>
+            <div id="learningContent" hx-get="/learning?page=1" hx-swap="outerHTML" hx-target="this" hx-trigger="load"></div>
 
             <div id="contact" class="scrolling-anchor">.</div>
             <h4 id="contactHeading" class="section-heading">Contact Me</h4>

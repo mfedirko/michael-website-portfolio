@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div hx-ext="loading-states" class="card my-5" id="update-lesson-body">
+    <form id="upd-lesson-form"
+          th:hx-post="${'/admin/learning/update-form/' + id}" hx-swap="outerHTML" hx-target="#update-lesson-body"
+          data-loading-delay="200"
+          th:object="${updateLessonForm}">
+        <p th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" th:text="#{invalid.form.generic}"></p>
+        <div class="card-header">
+            <div class="form-group">
+                <input id="category" class="form-control" th:field="*{category}" type="text" placeholder="Category" />
+                <p class="small" th:if="${#fields.hasErrors('category')}" th:errorclass="error" th:errors="*{category}" />
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <input id="title" class="form-control" th:field="*{title}" type="tel" placeholder="Title" />
+                <p class="small" th:if="${#fields.hasErrors('title')}" th:errorclass="error" th:errors="*{title}" />
+            </div>
+            <div class="form-group">
+                <textarea id="description" class="form-control" th:field="*{description}" placeholder="Description"></textarea>
+                <p class="small" th:if="${#fields.hasErrors('description')}" th:errorclass="error" th:errors="*{description}" />
+            </div>
+            <button data-loading-disable type="submit" class="btn btn-primary" >
+                Submit<span data-loading>&nbsp;Processing....</span>
+            </button>
+        </div>
+    </form>
+</div>

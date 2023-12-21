@@ -9,6 +9,7 @@
               hx-post="/contact" hx-swap="outerHTML" hx-target="#contact-body"
               data-loading-delay="200"
               th:object="${contactForm}">
+            <p th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" th:text="#{invalid.form.generic}"></p>
             <div class="form-group">
                 <label for="fullName">Name</label>
                 <input id="fullName" class="form-control" th:field="*{fullName}" type="text" placeholder="Your Name" />

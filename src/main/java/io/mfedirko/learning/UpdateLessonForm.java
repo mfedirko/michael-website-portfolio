@@ -2,9 +2,7 @@ package io.mfedirko.learning;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDateTime;
@@ -14,10 +12,9 @@ import java.time.LocalDateTime;
 @Value
 @Jacksonized
 public class UpdateLessonForm {
-    @NotNull
     LocalDateTime creationTimestamp;
 
-    @NotNull
+    @With
     Long creationTimestampMillis;
 
     @NotEmpty
@@ -28,4 +25,14 @@ public class UpdateLessonForm {
 
     @NotEmpty
     String description;
+
+    public static UpdateLessonForm fromLesson(Lesson lesson) {
+        return UpdateLessonForm.builder()
+                .creationTimestampMillis(lesson.getCreationTimestampMillis())
+                .creationTimestamp(lesson.getCreationTimestamp())
+                .title(lesson.getTitle())
+                .category(lesson.getCategory())
+                .description(lesson.getDescription())
+                .build();
+    }
 }

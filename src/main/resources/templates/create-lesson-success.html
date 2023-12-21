@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div id="success-div">
+    <p class="alert alert-success">
+        Successfully created new lesson!
+    </p>
+    <a class="my-5 btn btn-primary"
+       hx-get="/admin/learning/create-form" hx-swap="outerHTML" hx-target="#success-div">
+        Create New
+    </a>
+</div>

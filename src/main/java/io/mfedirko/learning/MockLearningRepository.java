@@ -3,8 +3,10 @@ package io.mfedirko.learning;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,6 +41,17 @@ public class MockLearningRepository implements LearningRepository {
                         .description("test 123")
                         .build()
         );
+    }
+
+    @Override
+    public Lesson getLesson(long creationTimeMillis) {
+        return Lesson.builder()
+                .author("Michael Fedirko")
+                .category("Lessons from Building this Website")
+                .creationTimestamp(LocalDateTime.ofInstant(Instant.ofEpochMilli(creationTimeMillis), ZoneId.systemDefault()))
+                .title("AWS Challenges")
+                .description("I encountered some challenge")
+                .build();
     }
 
     @Override

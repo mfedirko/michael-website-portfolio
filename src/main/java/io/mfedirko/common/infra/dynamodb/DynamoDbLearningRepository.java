@@ -17,6 +17,7 @@ import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 
 import java.time.*;
 import java.util.List;
+import java.util.Optional;
 
 import static io.mfedirko.common.util.DateHelper.TZ_UTC;
 import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.sortBetween;
@@ -41,6 +42,13 @@ public class DynamoDbLearningRepository implements LearningRepository {
     }
 
     @Override
+    public Lesson getLesson(long creationTimeMillis) {
+        return Optional.ofNullable(getTable().getItem(toKey(creationTimeMillis)))
+                .map(DynamoLesson::toLesson)
+                .orElseThrow(() -> new IllegalArgumentException("No lesson exists with creationTimestampMillis " + creationTimeMillis));
+    }
+
+    @Override
     public void createLesson(CreateLessonForm req) {
         getTable().putItem(DynamoLesson.fromCreateRequest(req));
     }
@@ -59,6 +67,14 @@ public class DynamoDbLearningRepository implements LearningRepository {
         return Key.builder()
                 .partitionValue(DynamoLesson.toPartitionKey(date.toLocalDate()))
                 .sortValue(toSortKey(date))
+                .build();
+    }
+
+    private static Key toKey(long timeMillis) {
+        LocalDate date = LocalDate.ofInstant(Instant.ofEpochMilli(timeMillis), ZoneId.systemDefault());
+        return Key.builder()
+                .partitionValue(DynamoLesson.toPartitionKey(date))
+                .sortValue(timeMillis)
                 .build();
     }
 
