@@ -22,7 +22,7 @@ public class WebSecurityConfig {
                         .anyRequest().permitAll())
                 .exceptionHandling(e -> e.authenticationEntryPoint(
                         new LoginUrlAuthenticationEntryPoint("/oauth-login"))
-                        .accessDeniedHandler((request, response, ex) -> log.warn("Access denied", ex)))
+                        .accessDeniedHandler((request, response, ex) -> response.sendRedirect("/error")))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .oauth2Login(Customizer.withDefaults());
