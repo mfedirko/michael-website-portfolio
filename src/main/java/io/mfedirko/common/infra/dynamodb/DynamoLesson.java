@@ -16,8 +16,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
+import static io.mfedirko.common.util.DateHelper.TZ_LOCAL;
 import static io.mfedirko.common.util.DateHelper.TZ_UTC;
 
 @DynamoDbBean
@@ -86,11 +88,15 @@ public class DynamoLesson {
     }
 
     public static DynamoLesson fromUpdateRequest(UpdateLessonForm lesson) {
+        LocalDate localDate = LocalDate.ofInstant(
+                Instant.ofEpochMilli(lesson.getCreationTimestampMillis()),
+                TZ_UTC);
+
         return DynamoLesson.builder()
                 .description(lesson.getDescription())
                 .title(lesson.getTitle())
                 .category(lesson.getCategory())
-                .id(toPartitionKey(lesson.getCreationTimestamp().toLocalDate()))
+                .id(toPartitionKey(localDate))
                 .creationTimestampMillis(lesson.getCreationTimestampMillis())
                 .build();
     }
