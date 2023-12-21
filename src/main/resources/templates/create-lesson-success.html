@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.springframework.org/schema/security">
 
 <div id="success-div">
     <p class="alert alert-success">
         Successfully created new lesson!
     </p>
     <a class="my-5 btn btn-primary"
+       sec:authorize="hasAuthority('ADMIN')"
        hx-get="/admin/learning/create-form" hx-swap="outerHTML" hx-target="#success-div">
         Create New
     </a>

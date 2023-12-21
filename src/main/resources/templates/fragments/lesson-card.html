@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
 
 <div class="lessoncard card my-5" th:fragment="card(lesson)">
     <div class="card-header" th:text="${lesson.category}"></div>
@@ -12,6 +12,7 @@
         </p>
         <p class="card-text" th:text="${lesson.description}"></p>
         <a class="btn btn-primary"
+           sec:authorize="hasAuthority('ADMIN')"
            th:hx-get="${'/admin/learning/update-form/' + lesson.creationTimestampMillis}"
            hx-swap="outerHTML" hx-trigger="click" hx-target="closest .lessoncard">
             Update
