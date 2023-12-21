@@ -12,11 +12,6 @@ import java.time.LocalDateTime;
 @Value
 @Jacksonized
 public class UpdateLessonForm {
-    LocalDateTime creationTimestamp;
-
-    @With
-    Long creationTimestampMillis;
-
     @NotEmpty
     String category;
 
@@ -28,8 +23,6 @@ public class UpdateLessonForm {
 
     public static UpdateLessonForm fromLesson(Lesson lesson) {
         return UpdateLessonForm.builder()
-                .creationTimestampMillis(lesson.getCreationTimestampMillis())
-                .creationTimestamp(lesson.getCreationTimestamp())
                 .title(lesson.getTitle())
                 .category(lesson.getCategory())
                 .description(lesson.getDescription())

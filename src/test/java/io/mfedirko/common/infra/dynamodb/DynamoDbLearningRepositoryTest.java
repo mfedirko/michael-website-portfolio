@@ -37,11 +37,9 @@ class DynamoDbLearningRepositoryTest {
                     .category(lesson.getCategory())
                     .description("MY NEW DESCRIPTION OF LESSON!")
                     .title("MY NEW TITLE of lessoin")
-                    .creationTimestamp(lesson.getCreationTimestamp())
-                    .creationTimestampMillis(lesson.getCreationTimestampMillis())
                     .build();
 
-            repository.updateLesson(updateForm);
+            repository.updateLesson(updateForm, lesson.getCreationTimestampMillis());
 
             List<Lesson> lessons = repository.findLessons(date);
             Assertions.assertThat(lessons)

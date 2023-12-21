@@ -60,7 +60,7 @@ public class MockLearningRepository implements LearningRepository {
     }
 
     @Override
-    public void updateLesson(UpdateLessonForm lesson) {
+    public void updateLesson(UpdateLessonForm lesson, long id) {
 
     }
 

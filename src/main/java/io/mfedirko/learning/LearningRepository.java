@@ -11,7 +11,7 @@ public interface LearningRepository {
 
     void createLesson(CreateLessonForm lesson);
 
-    void updateLesson(UpdateLessonForm lesson);
+    void updateLesson(UpdateLessonForm lesson, long creationTimeMillis);
 
     void deleteLesson(long creationTimeMillis);
 }

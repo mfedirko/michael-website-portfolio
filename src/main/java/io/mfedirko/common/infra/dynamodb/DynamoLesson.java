@@ -87,9 +87,9 @@ public class DynamoLesson {
                 .build();
     }
 
-    public static DynamoLesson fromUpdateRequest(UpdateLessonForm lesson) {
+    public static DynamoLesson fromUpdateRequest(UpdateLessonForm lesson, long creationTimestampMillis) {
         LocalDate localDate = LocalDate.ofInstant(
-                Instant.ofEpochMilli(lesson.getCreationTimestampMillis()),
+                Instant.ofEpochMilli(creationTimestampMillis),
                 TZ_UTC);
 
         return DynamoLesson.builder()
@@ -97,7 +97,7 @@ public class DynamoLesson {
                 .title(lesson.getTitle())
                 .category(lesson.getCategory())
                 .id(toPartitionKey(localDate))
-                .creationTimestampMillis(lesson.getCreationTimestampMillis())
+                .creationTimestampMillis(creationTimestampMillis)
                 .build();
     }
 

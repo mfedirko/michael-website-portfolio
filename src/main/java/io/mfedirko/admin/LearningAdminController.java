@@ -45,11 +45,10 @@ public class LearningAdminController {
 
     @PostMapping("/update-form/{id}")
     public String submitUpdateLesson(@PathVariable("id") long id, @Valid UpdateLessonForm form, Errors errors, ModelMap modelMap) {
-        form = form.withCreationTimestampMillis(id);
         if (errors.hasErrors()) {
             return UPDATE_LESSON;
         }
-        repository.updateLesson(form);
+        repository.updateLesson(form, id);
         Lesson lesson = repository.getLesson(id);
         modelMap.addAttribute("lesson", lesson);
         return LESSON_CARD;
