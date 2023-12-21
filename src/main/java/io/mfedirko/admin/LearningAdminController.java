@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/learning")
 @RequiredArgsConstructor
 public class LearningAdminController {
-    public static final String CREATE_LESSON = "create-lesson";
-    public static final String CREATE_LESSON_SUCCESS = "create-lesson-success";
-    public static final String UPDATE_LESSON = "update-lesson";
+    public static final String CREATE_LESSON = "admin/create-lesson";
+    public static final String CREATE_LESSON_SUCCESS = "admin/create-lesson-success";
+    public static final String UPDATE_LESSON = "admin/update-lesson";
     public static final String LESSON_CARD = "fragments/lesson-card";
     private final LearningRepository repository;
 
