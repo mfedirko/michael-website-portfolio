@@ -54,4 +54,11 @@ public class LearningAdminController {
         modelMap.addAttribute("lesson", lesson);
         return LESSON_CARD;
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public String deleteLesson(@PathVariable("id") long id) {
+        repository.deleteLesson(id);
+        return "Deleted " + id;
+    }
 }

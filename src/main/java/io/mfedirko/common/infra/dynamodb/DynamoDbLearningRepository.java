@@ -58,6 +58,11 @@ public class DynamoDbLearningRepository implements LearningRepository {
         getTable().updateItem(DynamoLesson.fromUpdateRequest(req));
     }
 
+    @Override
+    public void deleteLesson(long creationTimeMillis) {
+        getTable().deleteItem(toKey(creationTimeMillis));
+    }
+
 
     private DynamoDbTable<DynamoLesson> getTable() {
         return enhancedClient.table(DynamoLesson.TABLE, TableSchema.fromBean(DynamoLesson.class));

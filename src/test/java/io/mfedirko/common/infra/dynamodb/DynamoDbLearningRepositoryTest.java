@@ -52,6 +52,20 @@ class DynamoDbLearningRepositoryTest {
         }
 
         @Test
+        void deleteLesson() {
+            LocalDate date = LocalDate.of(2023, 1, 1);
+            Lesson lesson = repository.findLessons(date)
+                    .get(0);
+
+            repository.deleteLesson(lesson.getCreationTimestampMillis());
+
+            List<Lesson> lessons = repository.findLessons(date);
+            Assertions.assertThat(lessons)
+                    .filteredOn(l -> l.getCreationTimestamp().equals(lesson.getCreationTimestamp()))
+                    .isEmpty();
+        }
+
+        @Test
         void createNew() {
             CreateLessonForm form = CreateLessonForm.builder()
                     .category("NEW CATEGORY")

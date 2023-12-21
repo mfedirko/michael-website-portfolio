@@ -63,4 +63,9 @@ public class MockLearningRepository implements LearningRepository {
     public void updateLesson(UpdateLessonForm lesson) {
 
     }
+
+    @Override
+    public void deleteLesson(long creationTimeMillis) {
+
+    }
 }

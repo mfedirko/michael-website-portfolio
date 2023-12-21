@@ -17,5 +17,11 @@
            hx-swap="outerHTML" hx-trigger="click" hx-target="closest .lessoncard">
             Update
         </a>
+        <a class="btn btn-primary"
+           sec:authorize="hasAuthority('ADMIN')"
+           th:hx-delete="${'/admin/learning/' + lesson.creationTimestampMillis}"
+           hx-swap="delete" hx-trigger="click" hx-target="closest .lessoncard">
+            Delete
+        </a>
     </div>
 </div>
