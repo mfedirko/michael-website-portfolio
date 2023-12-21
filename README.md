@@ -45,7 +45,10 @@ This is a full-stack developer portfolio and the source code for https://michael
 
 ![Home page middle](./docs/images/home-page-middle.png)
 
-![Contact form](./docs/images/contact-form.png)
+![Contact form](./docs/images/contact-section.png)
+
+![Admin learning](./docs/images/admin-learning.png)
+
 
 ![Admin contact history](./docs/images/admin-contact-history.png)
 
