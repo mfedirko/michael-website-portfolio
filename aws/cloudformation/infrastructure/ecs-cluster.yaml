@@ -127,6 +127,8 @@ Resources:
                         "xray:PutTraceSegments",
                         "xray:PutTelemetryRecords",
                         "dynamodb:PutItem",
+                        "dynamodb:GetItem",
+                        "dynamodb:DeleteItem",
                         "dynamodb:Query",
                         "dynamodb:Scan",
                         "dynamodb:DescribeTable"
