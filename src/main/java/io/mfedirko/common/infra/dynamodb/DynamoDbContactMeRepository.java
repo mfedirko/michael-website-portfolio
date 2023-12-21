@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import static io.mfedirko.common.util.DateHelper.TZ_UTC;
 import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.sortBetween;
 import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.sortGreaterThanOrEqualTo;
 
@@ -50,7 +51,7 @@ public class DynamoDbContactMeRepository implements ContactMeRepository {
                 .map(DynamoContactRequest::toContactHistory)
                 .toList();
     }
-    public DynamoDbTable<DynamoContactRequest> getTable() {
+    private DynamoDbTable<DynamoContactRequest> getTable() {
         return enhancedClient.table(DynamoContactRequest.TABLE, TableSchema.fromBean(DynamoContactRequest.class));
     }
 
@@ -62,7 +63,7 @@ public class DynamoDbContactMeRepository implements ContactMeRepository {
     }
 
     private static long toSortKey(LocalDateTime date) {
-        Instant instant = date.atZone(ZoneId.of("UTC")).toInstant();
+        Instant instant = date.atZone(TZ_UTC).toInstant();
         return DynamoContactRequest.toSortKey(instant);
     }
 }

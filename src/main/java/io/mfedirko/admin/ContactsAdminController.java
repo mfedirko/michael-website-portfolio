@@ -23,7 +23,7 @@ public class ContactsAdminController {
 
     @GetMapping
     public String getContactListPage(@RequestParam("page") int page, ModelMap modelMap) {
-        LocalDate date = toLocalDate(page, Clock.systemDefaultZone());
+        LocalDate date = toLocalDatePageByDay(page, Clock.systemDefaultZone());
         LocalDate endDate = date.plusDays(1);
         List<ContactHistory> contactHistory = contactMeRepository.findContactHistoryByDate(date);
         modelMap.addAttribute("history", contactHistory);

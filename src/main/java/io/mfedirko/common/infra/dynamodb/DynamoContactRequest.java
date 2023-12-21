@@ -1,6 +1,7 @@
 package io.mfedirko.common.infra.dynamodb;
 
 
+import io.mfedirko.common.util.DateHelper;
 import io.mfedirko.contactme.ContactForm;
 import io.mfedirko.contactme.ContactHistory;
 import lombok.*;
@@ -13,7 +14,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static io.mfedirko.common.util.DateHelper.TZ_LOCAL;
 import static io.mfedirko.common.util.DateHelper.inLocalTimeZone;
 
 @DynamoDbBean
@@ -85,9 +85,8 @@ public class DynamoContactRequest {
                 .fullName(fullName)
                 .email(email)
                 .messageBody(messageBody)
-                .creationTimestamp(creationTimestampMillis == null
-                        ? null
-                        : Instant.ofEpochMilli(creationTimestampMillis).atZone(TZ_LOCAL).toLocalDateTime())
+                .creationTimestamp(DateHelper.unixMillisToLocalDateTime(creationTimestampMillis))
                 .build();
     }
+
 }

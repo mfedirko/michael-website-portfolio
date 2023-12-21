@@ -10,12 +10,12 @@ import java.util.regex.Pattern;
 
 @UtilityClass
 public class DynamoContactRequests {
-    public static final List<DynamoContactRequest> CONTACT_REQUESTS_DATA;
+    public static final List<DynamoContactRequest> DATA;
 
     static {
         // convert csv with AI-generated mock data to List<DynamoContactRequest>
         BufferedReader reader = new BufferedReader(new InputStreamReader(DynamoContactRequests.class.getResourceAsStream("/contact-request.csv")));
-        CONTACT_REQUESTS_DATA = reader.lines()
+        DATA = reader.lines()
                 .skip(1)
                 .map(s -> s.split(Pattern.quote("|")))
                 .map(s -> DynamoContactRequest.builder()
