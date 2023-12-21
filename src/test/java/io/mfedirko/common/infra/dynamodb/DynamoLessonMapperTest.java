@@ -101,6 +101,54 @@ class DynamoLessonMapperTest {
             assertThat(lesson.getParsedDescription().trim())
                     .containsSubsequence("<strong>", "bold text", "</strong>");
         }
+
+        @Test
+        void inlineCodeBlock() {
+            String rawDescription = """
+                    `System.out.println("test");`
+                    """;
+
+            DynamoLesson dynamoLesson = aLesson()
+                    .description(rawDescription)
+                    .build();
+
+            Lesson lesson = mapper.toLesson(dynamoLesson);
+
+            assertThat(lesson.getParsedDescription().trim())
+                    .containsSubsequence(
+                            "<code>",
+                            "System.out.println(\"test\");",
+                            "</code>"
+                    );
+        }
+        @Test
+        void multilineCodeBlock() {
+            String rawDescription = """
+                    
+                        TargetGroupAttributes:
+                          - Key: deregistration_delay.timeout_seconds
+                            Value: 120
+                          - Key: stickiness.enabled
+                            Value: true
+                    """;
+
+            DynamoLesson dynamoLesson = aLesson()
+                    .description(rawDescription)
+                    .build();
+
+            Lesson lesson = mapper.toLesson(dynamoLesson);
+
+            assertThat(lesson.getParsedDescription().trim())
+                    .containsSubsequence(
+                            "<pre>", "TargetGroupAttributes",
+                            "- Key: deregistration_delay.timeout_seconds",
+                            "Value: 120",
+                            "- Key: stickiness.enabled",
+                            "Value: true",
+                            "</pre>"
+                    );
+        }
+
     }
 
     private static DynamoLesson.DynamoLessonBuilder aLesson() {
