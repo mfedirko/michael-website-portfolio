@@ -3,7 +3,7 @@
 <head th:insert="~{fragments/common-layout.html :: header}">
     <title>Michael Fedirko Portfolio</title>
 </head>
-<body>
+<body hx-ext="loading-states">
     <header>
         <nav th:replace="~{fragments/common-layout.html :: navbar}"></nav>
     </header>
@@ -28,11 +28,17 @@
 
             <div id="learning" class="scrolling-anchor">.</div>
             <h4 id="learningHeading" class="section-heading">Learning</h4>
-            <div id="learningContent" hx-get="/learning?page=1" hx-swap="outerHTML" hx-target="this" hx-trigger="load"></div>
+            <div id="learningContent" data-loading-target="#loading-learning"
+                 hx-get="/learning?page=1" hx-swap="outerHTML" hx-target="this" hx-trigger="load">
+                <th:block id="loading-learning" th:insert="~{fragments/loading-message.html :: message}"></th:block>
+            </div>
 
             <div id="contact" class="scrolling-anchor">.</div>
             <h4 id="contactHeading" class="section-heading">Contact Me</h4>
-            <div id="contactContent" hx-get="/contact" hx-swap="outerHTML" hx-target="this" hx-trigger="load"></div>
+            <div id="contactContent" data-loading-target="#loading-contact"
+                 hx-get="/contact" hx-swap="outerHTML" hx-target="this" hx-trigger="load">
+                <th:block id="loading-learning" th:insert="~{fragments/loading-message.html :: message}"></th:block>
+            </div>
         </div>
     </main>
     <footer th:replace="~{fragments/common-layout.html :: footer}"></footer>
