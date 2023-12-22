@@ -5,9 +5,10 @@ This is a full-stack developer portfolio and the source code for https://michael
 - Links to Resume, GitHub and LinkedIn
 - Contact Me form with validation and reCaptcha
 - Learning section contains a list of lessons learned
-- Admin page
+- Admin functionality
   - GitHub secured sign-in
-  - View history of Contact Me requests 
+  - View history of Contact Me requests
+  - Create, update and delete items in Learning section using .md syntax
 - Responsive website built using Bootstrap
 
 
