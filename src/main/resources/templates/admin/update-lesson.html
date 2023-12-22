@@ -25,6 +25,11 @@
             <button data-loading-disable type="submit" class="btn btn-primary" >
                 Submit<span data-loading>&nbsp;Processing....</span>
             </button>
+            <button data-loading-disable class="btn btn-secondary"
+                    th:hx-get="${'/admin/learning/update-cancel/' + id}"
+                    hx-trigger="click" hx-target="#update-lesson-body" hx-swap="outerHTML">
+                Cancel
+            </button>
         </div>
     </form>
 </div>

@@ -25,6 +25,11 @@
             <button data-loading-disable type="submit" class="btn btn-primary" >
                 Submit<span data-loading>&nbsp;Processing....</span>
             </button>
+            <button data-loading-disable class="btn btn-secondary"
+                hx-get="/admin/learning/create-form"
+                hx-trigger="click" hx-target="#create-lesson-body" hx-swap="delete">
+                Cancel
+            </button>
         </div>
     </form>
 </div>

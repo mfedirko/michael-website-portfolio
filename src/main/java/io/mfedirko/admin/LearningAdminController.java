@@ -55,6 +55,13 @@ public class LearningAdminController {
         return LESSON_CARD;
     }
 
+    @GetMapping("/update-cancel/{id}")
+    public String cancelUpdate(@PathVariable("id") long id, ModelMap modelMap) {
+        Lesson lesson = repository.getLesson(id);
+        modelMap.addAttribute("lesson", lesson);
+        return LESSON_CARD;
+    }
+
     @DeleteMapping("/{id}")
     @ResponseBody
     public String deleteLesson(@PathVariable("id") long id) {
