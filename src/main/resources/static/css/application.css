@@ -13,6 +13,11 @@ main {
 }
 .section-heading:not(#welcome) {
     margin-top: 100px;
+    padding-bottom: 10px;
+}
+.form-group {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .contact-container {
     margin-top: 250px;

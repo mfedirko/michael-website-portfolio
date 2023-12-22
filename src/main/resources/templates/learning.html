@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
 
 <div class="container overflow-hidden">
-    <a class="my-5 btn btn-primary"
+    <a class="btn btn-primary"
        th:if="${nextPage == 2}"
         sec:authorize="hasAuthority('ADMIN')"
         hx-get="/admin/learning/create-form" hx-swap="afterend" hx-target="this">
