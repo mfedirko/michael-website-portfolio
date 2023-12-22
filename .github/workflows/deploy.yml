@@ -62,3 +62,11 @@ jobs:
         aws cloudformation deploy --stack-name ${{ env.CFN_STACK }} --template-file aws/cloudformation/master.yaml \
           --parameter-overrides "GitCommit=$commit_hash" --no-fail-on-empty-changeset \
           --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+    - name: Cleanup Old ECR Images
+      env:
+        REPOSITORY: michael-portfolio-backend
+      run: |
+        hash=`git rev-parse HEAD`
+        img_tags_delete=$(aws ecr list-images --repository-name ${{ env.REPOSITORY }} --output=text | grep -v $hash |  awk '{print "imageTag=" $3}' | xargs)
+        aws ecr batch-delete-image --repository-name ${{ env.REPOSITORY }} --image-ids "$img_tags_delete"
+
