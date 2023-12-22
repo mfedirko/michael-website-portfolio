@@ -5,9 +5,10 @@
     <a class="btn btn-primary"
        th:if="${nextPage == 2}"
         sec:authorize="hasAuthority('ADMIN')"
-        hx-get="/admin/learning/create-form" hx-swap="afterend" hx-target="this">
+        hx-get="/admin/learning/create-form" hx-swap="innerHTML" hx-target="#create-form-container">
         Create New
     </a>
+    <div id="create-form-container"></div>
     <th:block th:each="lesson : ${lessons}" th:insert="~{fragments/lesson-card.html :: card(${lesson})}"></th:block>
     <p th:if="${lessons?.empty && nextPage == 2}">No data was found.</p>
 </div>
