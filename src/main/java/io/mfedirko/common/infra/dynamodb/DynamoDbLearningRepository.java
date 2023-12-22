@@ -7,6 +7,9 @@ import io.mfedirko.learning.Lesson;
 import io.mfedirko.learning.UpdateLessonForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
@@ -26,12 +29,15 @@ import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.so
 @RequiredArgsConstructor
 @Profile("!mock")
 @Slf4j
+@CacheConfig(cacheNames = "lessons")
 public class DynamoDbLearningRepository implements LearningRepository {
     private final DynamoDbEnhancedClient enhancedClient;
     private final DynamoLessonMapper lessonMapper;
 
     @Override
+    @Cacheable
     public List<Lesson> findLessons(LocalDate date) {
+        log.warn("Called findLessons for {}", date);
         PageIterable<DynamoLesson> result = getTable().query(k -> k.scanIndexForward(false)
                 .queryConditional(sortBetween(
                         toKey(DateHelper.toUtcStartOfYear(date)),
@@ -50,6 +56,7 @@ public class DynamoDbLearningRepository implements LearningRepository {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public long createLesson(CreateLessonForm req) {
         DynamoLesson item = DynamoLesson.fromCreateRequest(req);
         getTable().putItem(item);
@@ -57,12 +64,14 @@ public class DynamoDbLearningRepository implements LearningRepository {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void updateLesson(UpdateLessonForm req, long creationTimestampMillis) {
         Lesson original = getLesson(creationTimestampMillis);
         getTable().updateItem(DynamoLesson.fromUpdateRequest(req, original, creationTimestampMillis));
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void deleteLesson(long creationTimeMillis) {
         getTable().deleteItem(toKey(creationTimeMillis));
     }
