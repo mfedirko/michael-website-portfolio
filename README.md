@@ -1,16 +1,14 @@
 This is a full-stack developer portfolio and the source code for https://michaelfedirko.com.
 
 ## Main Features
-- About, Skills and Interests on single page with scroll navigation
-- Links to Resume, GitHub and LinkedIn
+- Single page with scroll navigation. Responsive website built using Bootstrap
 - Contact Me form with validation and reCaptcha
-- Learning section contains a list of lessons learned
+- Learning section contains a list of lessons learned editable by admin in .md syntax
+- Links to Resume, GitHub and LinkedIn
 - Admin functionality
   - GitHub secured sign-in
   - View history of Contact Me requests
   - Create, update and delete items in Learning section using .md syntax
-- Responsive website built using Bootstrap
-
 
 ## Technologies Used
 - Java 17
@@ -23,21 +21,23 @@ This is a full-stack developer portfolio and the source code for https://michael
 - Deployed in AWS
   - [Cloudformation](./aws/cloudformation/master.yaml) Infrastructure as Code 
   - [ECS Fargate](./aws/cloudformation/infrastructure/ecs-cluster.yaml) runs the [application service](./aws/cloudformation/services/server-backend/service.yaml)
-  - ECR stores Docker image for the application
+  - ECR stores Docker images for the application
   - [ALB balances load](./aws/cloudformation/infrastructure/load-balancers.yaml) across ECS tasks
-  - [DynamoDB tables](./aws/cloudformation/infrastructure/dynamodb.yaml)
+  - [DynamoDB tables](./aws/cloudformation/infrastructure/dynamodb.yaml) store Learning and Contact Me data
   - [VPC endpoints](./aws/cloudformation/infrastructure/vpc.yaml) allow traffic from private subnet going to S3/DynamoDB/ECR/CloudWatch to stay within AWS
 
 ## Local Development
 #### Initial Setup
 1. Install JDK 17 or higher (if using Intellij, you can [download a JDK within the IDE](https://www.jetbrains.com/guide/java/tips/download-jdk/))
 2. Install [Docker and Docker Desktop](https://docs.docker.com/get-docker/)
-3. Install [Node.js and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 #### Development
 1. Run the main class `src/main/java/io.mfedirko/Application.java`
-   1. **VM Options:** `-Dspring.profiles.active=local -Dspring.devtools.restart.enabled=true`
-2. Restart and live reload should be triggered by recompiling/rebuilding Java classes and by saving static files 
+   1. **VM Options:** 
+      1. `-Dspring.profiles.active=local`
+      2. `-Drecaptcha.secret-key=` (value from [Google reCaptcha account](https://www.google.com/recaptcha/about/))
+      3. `-Dspring.security.oauth2.client.registration.github.client-id=$val -Dspring.security.oauth2.client.registration.github.client-secret=$val2` (values from [Github OAuth app](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app))
+2. Restart or live reload should be triggered by rebuild project/recompile, depending on if the recompiled files contain Java classes or only static files 
 ([docs](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools.livereload))
 
 ## Screenshots
@@ -48,8 +48,9 @@ This is a full-stack developer portfolio and the source code for https://michael
 
 ![Contact form](./docs/images/contact-section.png)
 
-![Admin learning](./docs/images/admin-learning.png)
+![Learning](./docs/images/learning.png)
 
+![Admin Learning](./docs/images/admin-learning.png)
 
 ![Admin contact history](./docs/images/admin-contact-history.png)
 
