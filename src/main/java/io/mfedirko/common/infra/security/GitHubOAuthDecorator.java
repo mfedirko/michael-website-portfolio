@@ -14,6 +14,7 @@ import java.util.Collection;
 class GitHubOAuthDecorator implements OAuthProviderDecorator {
     public static final String SITE_ADMIN_LOGIN = "mfedirko";
     public static final String SITE_ADMIN_HTML_URL = "https://github.com/mfedirko";
+    public static final int SITE_ADMIN_ID = 29769908;
     public static final String GITHUB_CLIENT_REGISTRATION_ID = "github";
 
     @Override
@@ -37,7 +38,8 @@ class GitHubOAuthDecorator implements OAuthProviderDecorator {
     }
 
     private boolean isSiteAdmin(OAuth2User oAuth2User) {
-        return SITE_ADMIN_LOGIN.equals(oAuth2User.getAttribute("login"))
+        return SITE_ADMIN_ID == (int)oAuth2User.getAttribute("id") &&
+                SITE_ADMIN_LOGIN.equals(oAuth2User.getAttribute("login"))
                 && SITE_ADMIN_HTML_URL.equals(oAuth2User.getAttribute("html_url"));
     }
 }
