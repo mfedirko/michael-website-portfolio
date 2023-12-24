@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Custom OAuth 2.0 user details service delegating to <tt>OAuthProviderAuthorizer</tt>
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
