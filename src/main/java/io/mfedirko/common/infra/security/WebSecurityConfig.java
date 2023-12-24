@@ -30,7 +30,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public GitHubOAuthDecorator gitHubUserDecorator() {
-        return new GitHubOAuthDecorator();
+    public GitHubAuthorizer gitHubUserDecorator() {
+        return new GitHubAuthorizer();
     }
 }

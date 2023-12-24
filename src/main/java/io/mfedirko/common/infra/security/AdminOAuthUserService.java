@@ -16,12 +16,12 @@ import java.util.List;
 public class AdminOAuthUserService extends DefaultOAuth2UserService {
     public static final String ADMIN_ROLE = "ADMIN";
 
-    private final List<OAuthProviderDecorator> providerDecorators;
+    private final List<OAuthProviderAuthorizer> providerAuthorizers;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User user = super.loadUser(userRequest);
-        return providerDecorators.stream()
+        return providerAuthorizers.stream()
                 .filter(dec -> dec.supports(userRequest))
                 .findFirst().map(dec -> dec.decorate(user))
                 .orElse(user);

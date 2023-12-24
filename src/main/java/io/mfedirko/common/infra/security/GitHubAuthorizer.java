@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Slf4j
-class GitHubOAuthDecorator implements OAuthProviderDecorator {
+class GitHubAuthorizer implements OAuthProviderAuthorizer {
     public static final String SITE_ADMIN_LOGIN = "mfedirko";
     public static final String SITE_ADMIN_HTML_URL = "https://github.com/mfedirko";
     public static final int SITE_ADMIN_ID = 29769908;
