@@ -11,7 +11,9 @@
     <div id="login-container" class="section-heading container d-flex justify-content-center">
         <div>
             <h4>Please log in to continue</h4>
-            <a class="btn btn-dark" href="/oauth2/authorization/github">Login with Github</a>
+            <a th:each="provider : ${providers}" class="btn btn-dark"
+               th:href="${'/oauth2/authorization/' + provider}"
+               th:text="${'Login with ' + provider}"></a>
         </div>
     </div>
 </main>

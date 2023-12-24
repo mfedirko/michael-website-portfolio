@@ -29,6 +29,7 @@
         <aws.java.sdk.version>2.20.63</aws.java.sdk.version>
         <assertj-core.version>3.24.2</assertj-core.version>
         <txtmark.version>0.13</txtmark.version>
+        <wiremock-standalone.version>3.0.1</wiremock-standalone.version>
     </properties>
 
     <dependencyManagement>
@@ -160,7 +161,12 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>${wiremock-standalone.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

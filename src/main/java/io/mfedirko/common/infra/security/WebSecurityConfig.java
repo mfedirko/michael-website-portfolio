@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
-import static io.mfedirko.common.infra.security.AdminOauthUserService.ADMIN_ROLE;
+import static io.mfedirko.common.infra.security.AdminOAuthUserService.ADMIN_ROLE;
 
 @Configuration
 @Slf4j
@@ -27,5 +27,10 @@ public class WebSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .oauth2Login(Customizer.withDefaults());
         return http.build();
+    }
+
+    @Bean
+    public GitHubOAuthDecorator gitHubUserDecorator() {
+        return new GitHubOAuthDecorator();
     }
 }

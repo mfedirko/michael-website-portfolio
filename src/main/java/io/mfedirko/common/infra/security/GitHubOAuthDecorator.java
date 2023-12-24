@@ -3,36 +3,34 @@ package io.mfedirko.common.infra.security;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Service
 @Slf4j
-public class AdminOauthUserService extends DefaultOAuth2UserService {
-    // only one site admin
+class GitHubOAuthDecorator implements OAuthProviderDecorator {
     public static final String SITE_ADMIN_LOGIN = "mfedirko";
     public static final String SITE_ADMIN_HTML_URL = "https://github.com/mfedirko";
-    public static final String ADMIN_ROLE = "ADMIN";
+    public static final String GITHUB_CLIENT_REGISTRATION_ID = "github";
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(userRequest);
-        log.info("User logged in with OAuth: {}", (Object)oAuth2User.getAttribute("login"));
-        return new DefaultOAuth2User(getAuthorities(oAuth2User), oAuth2User.getAttributes(), "login");
+    public boolean supports(OAuth2UserRequest request) {
+        return GITHUB_CLIENT_REGISTRATION_ID.equals(request.getClientRegistration().getRegistrationId());
+    }
+
+    @Override
+    public OAuth2User decorate(OAuth2User user) {
+        return new DefaultOAuth2User(getAuthorities(user), user.getAttributes(), "login");
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(OAuth2User oAuth2User) {
         Collection<GrantedAuthority> authorities = new ArrayList<>(oAuth2User.getAuthorities());
         if (isSiteAdmin(oAuth2User)) {
-            authorities.add(new SimpleGrantedAuthority(ADMIN_ROLE));
-            log.info("Site admin access granted to user: {}", oAuth2User);
+            authorities.add(new SimpleGrantedAuthority(AdminOAuthUserService.ADMIN_ROLE));
+            log.info("Site admin access granted to GitHub user {}: {}", oAuth2User.getAttribute("name"), oAuth2User.getAuthorities());
         }
 
         return authorities;
