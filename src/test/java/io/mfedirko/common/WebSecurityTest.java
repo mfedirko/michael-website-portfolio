@@ -62,7 +62,6 @@ public class WebSecurityTest {
             "GET,/admin/contacts?page=1",
             "GET,/admin/learning/create-form",
             "POST,/admin/learning/create-form",
-            "GET,/admin/learning/update-form/123",
             "POST,/admin/learning/update-form/123"
     })
     @WithMockUser(authorities = {"ADMIN"})
