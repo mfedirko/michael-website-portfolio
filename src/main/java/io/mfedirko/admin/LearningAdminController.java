@@ -32,9 +32,7 @@ public class LearningAdminController {
             return CREATE_LESSON;
         }
         long id = repository.createLesson(createLessonForm);
-        Lesson lesson = repository.getLesson(id);
-        modelMap.addAttribute("lesson", lesson);
-        return LESSON_CARD;
+        return lessonCard(modelMap, id);
     }
 
     @GetMapping("/update-form/{id}")
@@ -50,16 +48,12 @@ public class LearningAdminController {
             return UPDATE_LESSON;
         }
         repository.updateLesson(form, id);
-        Lesson lesson = repository.getLesson(id);
-        modelMap.addAttribute("lesson", lesson);
-        return LESSON_CARD;
+        return lessonCard(modelMap, id);
     }
 
     @GetMapping("/update-cancel/{id}")
     public String cancelUpdate(@PathVariable("id") long id, ModelMap modelMap) {
-        Lesson lesson = repository.getLesson(id);
-        modelMap.addAttribute("lesson", lesson);
-        return LESSON_CARD;
+        return lessonCard(modelMap, id);
     }
 
     @DeleteMapping("/{id}")
@@ -67,5 +61,11 @@ public class LearningAdminController {
     public String deleteLesson(@PathVariable("id") long id) {
         repository.deleteLesson(id);
         return "Deleted " + id;
+    }
+
+    private String lessonCard(ModelMap modelMap, long id) {
+        Lesson lesson = repository.getLesson(id);
+        modelMap.addAttribute("lesson", lesson);
+        return LESSON_CARD;
     }
 }

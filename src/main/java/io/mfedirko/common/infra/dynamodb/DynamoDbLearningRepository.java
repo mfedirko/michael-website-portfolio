@@ -37,7 +37,7 @@ public class DynamoDbLearningRepository implements LearningRepository {
     @Override
     @Cacheable
     public List<Lesson> findLessons(LocalDate date) {
-        log.warn("Called findLessons for {}", date);
+        log.debug("Called findLessons for {}", date);
         PageIterable<DynamoLesson> result = getTable().query(k -> k.scanIndexForward(false)
                 .queryConditional(sortBetween(
                         toKey(DateHelper.toUtcStartOfYear(date)),
