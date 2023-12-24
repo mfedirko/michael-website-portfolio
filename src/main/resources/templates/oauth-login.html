@@ -8,12 +8,14 @@
     <nav th:replace="~{fragments/common-layout.html :: navbar}"></nav>
 </header>
 <main>
-    <div id="login-container" class="section-heading container d-flex justify-content-center">
+    <div id="login-container" class="section-heading d-flex align-items-center justify-content-center">
         <div>
             <h4>Please log in to continue</h4>
-            <a th:each="provider : ${providers}" class="btn btn-dark"
-               th:href="${'/oauth2/authorization/' + provider}"
-               th:text="${'Login with ' + provider}"></a>
+            <div th:each="provider : ${providers}">
+                <a class="btn btn-dark my-3"
+                   th:href="${'/oauth2/authorization/' + provider}"
+                   th:text="${'Login with ' + provider}"></a>
+            </div>
         </div>
     </div>
 </main>

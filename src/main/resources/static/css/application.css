@@ -66,7 +66,7 @@ main {
 }
 
 #login-container {
-    margin-top: 150px;
+    height: 100vh;
 }
 
 .container:not(.center) {
