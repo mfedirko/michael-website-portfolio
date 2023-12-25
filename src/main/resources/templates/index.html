@@ -37,7 +37,7 @@
             <h4 id="contactHeading" class="section-heading">Contact Me</h4>
             <div id="contactContent" data-loading-target="#loading-contact"
                  hx-get="/contact" hx-swap="outerHTML" hx-target="this" hx-trigger="load">
-                <th:block id="loading-learning" th:insert="~{fragments/loading-message.html :: message}"></th:block>
+                <th:block id="loading-contact" th:insert="~{fragments/loading-message.html :: message}"></th:block>
             </div>
         </div>
     </main>

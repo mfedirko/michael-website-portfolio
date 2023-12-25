@@ -12,6 +12,11 @@ main {
     margin-right: 55px;
 }
 
+#personal-photo {
+    height: 500px;
+    width: 500px;
+}
+
 @media screen and (max-width: 397px) {
     .section-heading:not(#welcome) {
         margin-top: 220px;
