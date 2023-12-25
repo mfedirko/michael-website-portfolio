@@ -23,12 +23,6 @@ Parameters:
   S3Bucket:
     Type: String
     Default: 'michael-portfolio-us-east-1'
-  GithubRepoName:
-    Type: String
-    Default: 'mfedirko/michael-website-portfolio'
-  OpenIdThumbprint:
-    Type: String
-    Default: '6938fd4d98bab03faadb97b34396831e3780aea1'
   BackendServiceName:
     Type: String
     Default: 'michael-portfolio-api'

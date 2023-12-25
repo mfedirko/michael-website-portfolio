@@ -56,3 +56,7 @@ Outputs:
   ContactRequestsTable:
     Description: A reference to the DynamoDB table Contact-Requests
     Value: !Ref ContactRequestsTable
+
+  LessonTable:
+    Description: A reference to the DynamoDB table Lesson
+    Value: !Ref LessonTable
