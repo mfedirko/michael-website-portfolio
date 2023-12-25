@@ -32,8 +32,11 @@ This is a full-stack developer portfolio and the source code for https://michael
 2. Install [Docker and Docker Desktop](https://docs.docker.com/get-docker/)
 
 #### Development
-1. Run the main class `src/main/java/io.mfedirko/Application.java`
-   1. **VM Options:** 
+1. Run the main class `src/main/java/io.mfedirko/Application.java` 
+   1. **Alternatively**: 
+      1) run `./mvnw spring-boot:run` or 
+      2) build a JAR using `./mvnw clean package` and run it using `java -jar`) 
+   2. **VM Options:** 
       1. `-Dspring.profiles.active=local`
       2. `-Drecaptcha.secret-key=` (value from [Google reCaptcha account](https://www.google.com/recaptcha/about/))
       3. `-Dspring.security.oauth2.client.registration.github.client-id=$val -Dspring.security.oauth2.client.registration.github.client-secret=$val2` (values from [Github OAuth app](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app))
@@ -58,6 +61,8 @@ This is a full-stack developer portfolio and the source code for https://michael
 Thank you to the following open source projects and authors. 
 Their guides and examples were a great help while working on this project. 
 - [Sascha Möllering - AWS Samples](https://github.com/aws-samples/reactive-refarch-cloudformation/tree/master)
+- [Vincenzo Racca - Integration tests for DynamoDB with Spring Boot, Testcontainers, and Localstack](https://www.vincenzoracca.com/en/blog/framework/spring/testcontainers-localstack/)
+- Maintainers of Spring Boot, Thymeleaf, Bootstrap, Bootswatch, HTMX and other open source technologies  
 
 ## Feature Backlog
 - Improve mobile compatibility
