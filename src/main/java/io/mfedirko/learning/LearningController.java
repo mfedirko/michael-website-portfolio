@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Clock;
-import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 
 @Controller
@@ -20,8 +20,8 @@ public class LearningController {
 
     @GetMapping
     public String getLearningPage(@RequestParam("page") int page, ModelMap modelMap) {
-        LocalDate date = DateHelper.toLocalDatePageByYear(page, Clock.systemDefaultZone());
-        List<Lesson> lessons = learningRepository.findLessons(date);
+        Year year = DateHelper.toLocalYearByPage(page, Clock.systemDefaultZone());
+        List<Lesson> lessons = learningRepository.findLessons(year);
         modelMap.addAttribute("lessons", lessons);
         modelMap.addAttribute("nextPage", page + 1);
         return "learning";

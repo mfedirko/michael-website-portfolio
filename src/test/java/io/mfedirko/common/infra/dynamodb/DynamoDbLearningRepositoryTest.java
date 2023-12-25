@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 
 import static io.mfedirko.RepositoryTestHelpers.sortedDescending;
@@ -30,8 +30,8 @@ class DynamoDbLearningRepositoryTest {
     class SaveLessons {
         @Test
         void updateExisting() {
-            LocalDate date = LocalDate.of(2023, 1, 1);
-            Lesson lesson = repository.findLessons(date)
+            Year year = Year.of(2023);
+            Lesson lesson = repository.findLessons(year)
                     .get(0);
             UpdateLessonForm updateForm = UpdateLessonForm.builder()
                     .category(lesson.getCategory())
@@ -41,7 +41,7 @@ class DynamoDbLearningRepositoryTest {
 
             repository.updateLesson(updateForm, lesson.getCreationTimestampMillis());
 
-            List<Lesson> lessons = repository.findLessons(date);
+            List<Lesson> lessons = repository.findLessons(year);
             Assertions.assertThat(lessons)
                     .filteredOn(l -> l.getCreationTimestamp().equals(lesson.getCreationTimestamp()))
                     .hasSize(1)
@@ -51,8 +51,8 @@ class DynamoDbLearningRepositoryTest {
 
         @Test
         void updateMergesOldFields() {
-            LocalDate date = LocalDate.of(2023, 1, 1);
-            Lesson lesson = repository.findLessons(date)
+            Year year = Year.of(2023);
+            Lesson lesson = repository.findLessons(year)
                     .get(0);
             Assertions.assertThat(lesson.getAuthor()).isNotEmpty();
 
@@ -62,7 +62,7 @@ class DynamoDbLearningRepositoryTest {
 
             repository.updateLesson(updateForm, lesson.getCreationTimestampMillis());
 
-            List<Lesson> lessons = repository.findLessons(date);
+            List<Lesson> lessons = repository.findLessons(year);
             Assertions.assertThat(lessons)
                     .filteredOn(l -> l.getCreationTimestamp().equals(lesson.getCreationTimestamp()))
                     .hasSize(1)
@@ -73,13 +73,13 @@ class DynamoDbLearningRepositoryTest {
 
         @Test
         void deleteLesson() {
-            LocalDate date = LocalDate.of(2023, 1, 1);
-            Lesson lesson = repository.findLessons(date)
+            Year year = Year.of(2023);
+            Lesson lesson = repository.findLessons(year)
                     .get(0);
 
             repository.deleteLesson(lesson.getCreationTimestampMillis());
 
-            List<Lesson> lessons = repository.findLessons(date);
+            List<Lesson> lessons = repository.findLessons(year);
             Assertions.assertThat(lessons)
                     .filteredOn(l -> l.getCreationTimestamp().equals(lesson.getCreationTimestamp()))
                     .isEmpty();
@@ -95,7 +95,7 @@ class DynamoDbLearningRepositoryTest {
 
             repository.createLesson(form);
 
-            List<Lesson> lessons = repository.findLessons(LocalDate.now());
+            List<Lesson> lessons = repository.findLessons(Year.now());
             Assertions.assertThat(lessons)
                     .filteredOn(l -> l.getCategory().equals(form.getCategory())
                         && l.getDescription().equals(form.getDescription())
@@ -108,37 +108,33 @@ class DynamoDbLearningRepositoryTest {
     class FindLessons {
         @ParameterizedTest
         @ValueSource(strings = {
-                "2023-12-14",
-                "2022-05-09"
+                "2023",
+                "2022"
         })
-        void withinRange(LocalDate date) {
-            List<Lesson> lessons = repository.findLessons(date);
+        void withinRange(Year year) {
+            List<Lesson> lessons = repository.findLessons(year);
 
             Assertions.assertThat(lessons).isNotEmpty();
         }
 
         @ParameterizedTest
         @ValueSource(strings = {
-                "2023-12-14",
-                "2022-05-09",
-                "2022-11-23",
-                "2023-01-01",
+                "2023",
+                "2022"
         })
-        void withinRangeOfYear(LocalDate date) {
-            List<Lesson> lessons = repository.findLessons(date);
+        void withinRangeOfYear(Year year) {
+            List<Lesson> lessons = repository.findLessons(year);
 
-            Assertions.assertThat(lessons).isNotEmpty().are(withinYear(date.getYear(), Lesson::getCreationTimestamp));
+            Assertions.assertThat(lessons).isNotEmpty().are(withinYear(year.getValue(), Lesson::getCreationTimestamp));
         }
 
         @ParameterizedTest
         @ValueSource(strings = {
-                "2023-12-14",
-                "2022-05-09",
-                "2022-11-23",
-                "2023-01-01",
+                "2023",
+                "2022"
         })
-        void sortedDescendingByTimestamp(LocalDate date) {
-            List<Lesson> lessons = repository.findLessons(date);
+        void sortedDescendingByTimestamp(Year year) {
+            List<Lesson> lessons = repository.findLessons(year);
 
             Assertions.assertThat(lessons).is(sortedDescending(Lesson::getCreationTimestamp));
         }

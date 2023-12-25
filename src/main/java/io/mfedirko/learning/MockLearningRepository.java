@@ -4,10 +4,7 @@ import com.github.rjeschke.txtmark.Processor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,9 +17,10 @@ public class MockLearningRepository implements LearningRepository {
     private final List<Lesson> lessons = new ArrayList<>();
 
     @Override
-    public List<Lesson> findLessons(LocalDate date) {
+    public List<Lesson> findLessons(Year date) {
+        LocalDateTime startOfYear = date.atMonthDay(MonthDay.of(Month.JANUARY,1)).atStartOfDay();
         return lessons.stream()
-                .filter(l -> l.getCreationTimestamp().isAfter(date.atStartOfDay()))
+                .filter(l -> l.getCreationTimestamp().isAfter(startOfYear))
                 .sorted(Comparator.comparing(Lesson::getCreationTimestamp))
                 .collect(Collectors.toList());
     }

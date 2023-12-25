@@ -36,12 +36,12 @@ public class DynamoDbLearningRepository implements LearningRepository {
 
     @Override
     @Cacheable
-    public List<Lesson> findLessons(LocalDate date) {
-        log.debug("Called findLessons for {}", date);
+    public List<Lesson> findLessons(Year year) {
+        log.debug("Called findLessons for {}", year);
         PageIterable<DynamoLesson> result = getTable().query(k -> k.scanIndexForward(false)
                 .queryConditional(sortBetween(
-                        toKey(DateHelper.toUtcStartOfYear(date)),
-                        toKey(DateHelper.toUtcEndOfYear(date))))
+                        toKey(DateHelper.toUtcStartOfYear(year)),
+                        toKey(DateHelper.toUtcEndOfYear(year))))
                 .build());
         return result.items().stream()
                 .map(lessonMapper::toLesson)

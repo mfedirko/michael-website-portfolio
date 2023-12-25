@@ -14,8 +14,8 @@ public class DateHelper {
         return LocalDate.now(clock).minusDays(page - 1);
     }
 
-    public static LocalDate toLocalDatePageByYear(int page /* 1-indexed */, Clock clock) {
-        return LocalDate.now(clock).minusYears(page - 1);
+    public static Year toLocalYearByPage(int page /* 1-indexed */, Clock clock) {
+        return Year.now(clock).minusYears(page - 1);
     }
 
     public static LocalDateTime toUtcStartOfDay(LocalDate date) {
@@ -28,15 +28,17 @@ public class DateHelper {
                 .withZoneSameInstant(TZ_UTC).toLocalDateTime();
     }
 
-    public static LocalDateTime toUtcStartOfYear(LocalDate date) {
-        return date.atStartOfDay()
+    public static LocalDateTime toUtcStartOfYear(Year year) {
+        return year.atMonthDay(MonthDay.of(Month.JANUARY, 1))
+                .atStartOfDay()
                 .withMonth(1).withDayOfMonth(1)
                 .atZone(TZ_LOCAL)
                 .withZoneSameInstant(TZ_UTC).toLocalDateTime();
     }
 
-    public static LocalDateTime toUtcEndOfYear(LocalDate date) {
-        return date.atTime(23,59,59)
+    public static LocalDateTime toUtcEndOfYear(Year year) {
+        return year.atMonthDay(MonthDay.of(Month.DECEMBER, 31))
+                .atTime(23,59,59)
                 .withMonth(12).withDayOfMonth(31)
                 .atZone(TZ_LOCAL)
                 .withZoneSameInstant(TZ_UTC).toLocalDateTime();
