@@ -9,9 +9,9 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 
 @Configuration
-public open class DynamoDbConfig {
+class DynamoDbConfig {
     @Bean
-    public fun dynamoDbClient(): DynamoDbClient {
+    fun dynamoDbClient(): DynamoDbClient {
         val credentialsProvider: AwsCredentialsProvider = DefaultCredentialsProvider.create()
         return DynamoDbClient.builder()
             .region(Region.US_EAST_1)
@@ -20,7 +20,7 @@ public open class DynamoDbConfig {
     }
 
     @Bean
-    public fun dynamoDbEnhancedClient(dynamoDbClient: DynamoDbClient): DynamoDbEnhancedClient {
+    fun dynamoDbEnhancedClient(dynamoDbClient: DynamoDbClient): DynamoDbEnhancedClient {
         return DynamoDbEnhancedClient.builder()
             .dynamoDbClient(dynamoDbClient)
             .build()
