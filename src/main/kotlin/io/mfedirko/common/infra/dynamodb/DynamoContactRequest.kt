@@ -11,33 +11,34 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 import java.time.Instant
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.properties.Delegates
 
 @DynamoDbBean
 class DynamoContactRequest {
     @get:DynamoDbAttribute(ID)
     @get:DynamoDbPartitionKey
-    var id: String? = null
+    var id: String by Delegates.notNull()
 
     @get:DynamoDbAttribute(CREATION_TIMESTAMP)
     @get:DynamoDbSortKey
     var creationTimestampMillis // unix epoch timestamp in milliseconds
-            : Long? = null
+            : Long by Delegates.notNull()
 
     @get:DynamoDbAttribute(FULL_NAME)
-    var fullName: String? = null
+    var fullName: String by Delegates.notNull()
 
     @get:DynamoDbAttribute(EMAIL)
-    var email: String? = null
+    var email: String by Delegates.notNull()
 
     @get:DynamoDbAttribute(MESSAGE_BODY)
-    var messageBody: String? = null
+    var messageBody: String by Delegates.notNull()
 
     fun toContactHistory(): ContactHistory {
         return ContactHistory().apply {
             fullName = this@DynamoContactRequest.fullName
             email = this@DynamoContactRequest.email
             messageBody = this@DynamoContactRequest.messageBody
-            creationTimestamp = Dates.unixMillisToLocalDateTime(this@DynamoContactRequest.creationTimestampMillis!!)
+            creationTimestamp = Dates.unixMillisToLocalDateTime(this@DynamoContactRequest.creationTimestampMillis)
 
         }
     }
@@ -52,9 +53,9 @@ class DynamoContactRequest {
 
         fun from(form: ContactForm): DynamoContactRequest {
             return DynamoContactRequest().apply {
-                fullName = form.fullName
-                email = form.email
-                messageBody = form.messageBody
+                fullName = form.fullName!!
+                email = form.email!!
+                messageBody = form.messageBody!!
                 id = toPartitionKey(LocalDate.now())
                 creationTimestampMillis = toSortKey(Instant.now())
             }

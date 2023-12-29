@@ -10,12 +10,12 @@ object DynamoLessonMapper {
         val mdParsedDescription = Processor.process(rawDescription)
         return Lesson().apply {
             parsedDescription = mdParsedDescription
-            description = rawDescription!!
-            title = dynamoLesson.title!!
-            category = dynamoLesson.category!!
-            author = dynamoLesson.author!!
-            creationTimestampMillis = dynamoLesson.creationTimestampMillis!!
-            creationTimestamp = Dates.unixMillisToLocalDateTime(dynamoLesson.creationTimestampMillis!!)
+            description = rawDescription
+            title = dynamoLesson.title
+            category = dynamoLesson.category
+            author = dynamoLesson.author
+            creationTimestampMillis = dynamoLesson.creationTimestampMillis
+            creationTimestamp = Dates.unixMillisToLocalDateTime(dynamoLesson.creationTimestampMillis)
         }
     }
 }

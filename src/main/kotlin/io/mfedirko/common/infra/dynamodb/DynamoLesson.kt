@@ -10,29 +10,30 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
 import java.time.Instant
 import java.time.LocalDate
+import kotlin.properties.Delegates
 
 @DynamoDbBean
 class DynamoLesson {
     @get:DynamoDbAttribute(ID)
     @get:DynamoDbPartitionKey
-    var id: String? = null
+    var id: String by Delegates.notNull()
 
     @get:DynamoDbAttribute(CREATION_TIMESTAMP)
     @get:DynamoDbSortKey
     var creationTimestampMillis // unix epoch timestamp in milliseconds
-            : Long? = null
+            : Long by Delegates.notNull()
 
     @get:DynamoDbAttribute(AUTHOR)
-    var author: String? = null
+    var author: String by Delegates.notNull()
 
     @get:DynamoDbAttribute(CATEGORY)
-    var category: String? = null
+    var category: String by Delegates.notNull()
 
     @get:DynamoDbAttribute(TITLE)
-    var title: String? = null
+    var title: String by Delegates.notNull()
 
     @get:DynamoDbAttribute(DESCRIPTION)
-    var description: String? = null
+    var description: String by Delegates.notNull()
 
     companion object {
         const val TABLE = "Lesson"
@@ -50,9 +51,9 @@ class DynamoLesson {
             )
             return DynamoLesson().apply {
                 author = original.author
-                description = update.description
-                title = update.title
-                category = update.category
+                description = update.description!!
+                title = update.title!!
+                category = update.category!!
                 id = toPartitionKey(localDate)
                 this.creationTimestampMillis = creationTimestampMillis
             }
@@ -60,9 +61,9 @@ class DynamoLesson {
 
         fun fromCreateRequest(lesson: CreateLessonForm): DynamoLesson {
             return DynamoLesson().apply {
-                description = lesson.description
-                title = lesson.title
-                category = lesson.category
+                description = lesson.description!!
+                title = lesson.title!!
+                category = lesson.category!!
                 author = DEFAULT_AUTHOR
                 id = toPartitionKey(LocalDate.now())
                 creationTimestampMillis = toSortKey(Instant.now())

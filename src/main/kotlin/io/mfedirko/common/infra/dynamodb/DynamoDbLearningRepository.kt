@@ -63,7 +63,7 @@ class DynamoDbLearningRepository(
     override fun createLesson(lesson: CreateLessonForm): Long {
         val item = DynamoLesson.fromCreateRequest(lesson)
         table.putItem(item)
-        return item.creationTimestampMillis!!
+        return item.creationTimestampMillis
     }
 
     @CacheEvict(allEntries = true)
