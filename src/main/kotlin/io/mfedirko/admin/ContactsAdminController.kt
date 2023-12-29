@@ -17,12 +17,12 @@ class ContactsAdminController(
 ) {
     @GetMapping
     fun getContactListPage(@RequestParam("page") page: Int, modelMap: ModelMap): String {
-        val date = toLocalDatePageByDay(page, Clock.systemDefaultZone())
-        val endDate = date.plusDays(1)
-        val contactHistory = contactMeRepository.findContactHistoryByDate(date)
+        val startDate = toLocalDatePageByDay(page, Clock.systemDefaultZone())
+        val endDate = startDate.plusDays(1)
+        val contactHistory = contactMeRepository.findContactHistoryByDate(startDate)
         modelMap.addAttribute("history", contactHistory)
-        modelMap.addAttribute("startDate", toDate(date))
-        modelMap.addAttribute("endDate", toDate(endDate))
+        modelMap.addAttribute("startDate", startDate.toDate())
+        modelMap.addAttribute("endDate", endDate.toDate())
         modelMap.addAttribute("nextPage", page + 1)
         return "admin/contact-history-table"
     }

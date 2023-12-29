@@ -1,6 +1,8 @@
 package io.mfedirko.common.infra.dynamodb
 
 import io.mfedirko.common.util.DateHelper
+import io.mfedirko.common.util.DateHelper.toUtcEndOfYear
+import io.mfedirko.common.util.DateHelper.toUtcStartOfYear
 import io.mfedirko.common.util.logger
 import io.mfedirko.learning.CreateLessonForm
 import io.mfedirko.learning.LearningRepository
@@ -15,6 +17,7 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
+import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest
 import java.time.*
@@ -24,8 +27,7 @@ import java.util.*
 @Profile("!mock")
 @CacheConfig(cacheNames = ["lessons"])
 class DynamoDbLearningRepository(
-    private val enhancedClient: DynamoDbEnhancedClient,
-    private val lessonMapper: DynamoLessonMapper,
+    private val enhancedClient: DynamoDbEnhancedClient
 ) : LearningRepository {
     private val log = logger()
 
@@ -35,24 +37,25 @@ class DynamoDbLearningRepository(
     @Cacheable
     override fun findLessons(year: Year): List<Lesson> {
         log.debug("Called findLessons for $year")
-        val result = table.query { k: QueryEnhancedRequest.Builder ->
+        val result: PageIterable<DynamoLesson>? = table.query { k: QueryEnhancedRequest.Builder ->
             k.scanIndexForward(false)
                 .queryConditional(
                     QueryConditional.sortBetween(
-                        toKey(DateHelper.toUtcStartOfYear(year)),
-                        toKey(DateHelper.toUtcEndOfYear(year))
+                        toKey(year.toUtcStartOfYear()),
+                        toKey(year.toUtcEndOfYear())
                     )
                 )
                 .build()
         }
-        return result.items()
-            .map { lessonMapper.toLesson(it) }
-            .toList()
+        return result?.items()
+            ?.map { DynamoLessonMapper.toLesson(it) }
+            ?.toList()
+            ?: emptyList()
     }
 
     override fun getLesson(creationTimeMillis: Long): Lesson {
         return table.getItem(toKey(creationTimeMillis))
-            ?.let { lessonMapper.toLesson(it) }
+            ?.let { DynamoLessonMapper.toLesson(it) }
             ?: throw IllegalArgumentException("No lesson exists with creationTimestampMillis $creationTimeMillis")
     }
 

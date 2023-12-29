@@ -3,10 +3,8 @@ package io.mfedirko.common.infra.dynamodb
 import com.github.rjeschke.txtmark.Processor
 import io.mfedirko.common.util.DateHelper
 import io.mfedirko.learning.Lesson
-import org.springframework.stereotype.Component
 
-@Component
-class DynamoLessonMapper {
+object DynamoLessonMapper {
     fun toLesson(dynamoLesson: DynamoLesson): Lesson {
         val rawDescription = dynamoLesson.description
         val mdParsedDescription = Processor.process(rawDescription)

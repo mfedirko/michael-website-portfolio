@@ -1,8 +1,5 @@
 package io.mfedirko.common.infra.dynamodb
 
-import io.mfedirko.common.infra.dynamodb.DynamoContactRequest.Companion.from
-import io.mfedirko.common.infra.dynamodb.DynamoContactRequest.Companion.toPartitionKey
-import io.mfedirko.common.infra.dynamodb.DynamoContactRequest.Companion.toSortKey
 import io.mfedirko.common.util.DateHelper.TZ_UTC
 import io.mfedirko.common.util.DateHelper.toUtcEndOfDay
 import io.mfedirko.common.util.DateHelper.toUtcStartOfDay
@@ -16,6 +13,7 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
+import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest
 import java.time.LocalDate
@@ -38,41 +36,39 @@ class DynamoDbContactMeRepository(
         )
 
     override fun save(form: ContactForm) {
-        table.putItem(from(form))
+        table.putItem(DynamoContactRequest.from(form))
     }
 
     override fun findContactHistoryByDate(date: LocalDate): List<ContactHistory> {
-        val result = table.query { query: QueryEnhancedRequest.Builder ->
+        val result: PageIterable<DynamoContactRequest>? = table.query { query: QueryEnhancedRequest.Builder ->
             query.scanIndexForward(false)
                 .queryConditional(
                     QueryConditional.sortBetween(
-                        toKey(toUtcStartOfDay(date)),
-                        toKey(toUtcEndOfDay(date))
+                        toKey(date.toUtcStartOfDay()),
+                        toKey(date.toUtcEndOfDay())
                     )
                 )
                 .build()
         }
-        if (result == null) {
-            log.warn("DynamoDB returned null for date $date")
-            return emptyList()
-        }
-        return result.items()
-            .map { it.toContactHistory() }
-            .toList()
+
+        return result?.items()
+            ?.map { it.toContactHistory() }
+            ?.toList()
+            ?: emptyList()
     }
 
 
     companion object {
         private fun toKey(date: LocalDateTime): Key {
             return Key.builder()
-                .partitionValue(toPartitionKey(date.toLocalDate()))
+                .partitionValue(DynamoContactRequest.toPartitionKey(date.toLocalDate()))
                 .sortValue(toSortKey(date))
                 .build()
         }
 
         private fun toSortKey(date: LocalDateTime): Long {
             val instant = date.atZone(TZ_UTC).toInstant()
-            return toSortKey(instant)
+            return DynamoContactRequest.toSortKey(instant)
         }
     }
 }

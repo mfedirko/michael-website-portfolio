@@ -1,6 +1,7 @@
 package io.mfedirko.common.infra.dynamodb
 
 import io.mfedirko.common.util.DateHelper
+import io.mfedirko.common.util.DateHelper.inLocalTimeZone
 import io.mfedirko.contactme.ContactForm
 import io.mfedirko.contactme.ContactHistory
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
@@ -64,7 +65,7 @@ class DynamoContactRequest {
         }
 
         fun toPartitionKey(now: LocalDate): String { // partition by day (in local time zone)
-            return DateHelper.inLocalTimeZone(now).format(DateTimeFormatter.ISO_LOCAL_DATE)
+            return now.inLocalTimeZone().format(DateTimeFormatter.ISO_LOCAL_DATE)
         }
     }
 }

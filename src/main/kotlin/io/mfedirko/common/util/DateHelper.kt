@@ -15,38 +15,38 @@ object DateHelper {
         return Year.now(clock).minusYears((page - 1).toLong())
     }
 
-    fun toUtcStartOfDay(date: LocalDate): LocalDateTime {
-        return date.atStartOfDay(TZ_LOCAL)
+    fun LocalDate.toUtcStartOfDay(): LocalDateTime {
+        return this.atStartOfDay(TZ_LOCAL)
             .withZoneSameInstant(TZ_UTC).toLocalDateTime()
     }
 
-    fun toUtcEndOfDay(date: LocalDate): LocalDateTime {
-        return date.atTime(23, 59, 59).atZone(TZ_LOCAL)
+    fun LocalDate.toUtcEndOfDay(): LocalDateTime {
+        return this.atTime(23, 59, 59).atZone(TZ_LOCAL)
             .withZoneSameInstant(TZ_UTC).toLocalDateTime()
     }
 
-    fun toUtcStartOfYear(year: Year): LocalDateTime {
-        return year.atMonthDay(MonthDay.of(Month.JANUARY, 1))
+    fun Year.toUtcStartOfYear(): LocalDateTime {
+        return this.atMonthDay(MonthDay.of(Month.JANUARY, 1))
             .atStartOfDay()
             .withMonth(1).withDayOfMonth(1)
             .atZone(TZ_LOCAL)
             .withZoneSameInstant(TZ_UTC).toLocalDateTime()
     }
 
-    fun toUtcEndOfYear(year: Year): LocalDateTime {
-        return year.atMonthDay(MonthDay.of(Month.DECEMBER, 31))
+    fun Year.toUtcEndOfYear(): LocalDateTime {
+        return this.atMonthDay(MonthDay.of(Month.DECEMBER, 31))
             .atTime(23, 59, 59)
             .withMonth(12).withDayOfMonth(31)
             .atZone(TZ_LOCAL)
             .withZoneSameInstant(TZ_UTC).toLocalDateTime()
     }
 
-    fun inLocalTimeZone(date: LocalDate): LocalDate {
-        return date.atStartOfDay(TZ_LOCAL).toLocalDate()
+    fun LocalDate.inLocalTimeZone(): LocalDate {
+        return this.atStartOfDay(TZ_LOCAL).toLocalDate()
     }
 
-    fun toDate(date: LocalDate): Date {
-        return Date.from(date.atStartOfDay(TZ_LOCAL).toInstant())
+    fun LocalDate.toDate(): Date {
+        return Date.from(this.atStartOfDay(TZ_LOCAL).toInstant())
     }
 
     fun unixMillisToLocalDateTime(creationTimestampMillis: Long): LocalDateTime {

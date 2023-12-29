@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class DynamoLessonMapperTest {
-    var mapper = DynamoLessonMapper()
 
     @Test
     fun allFieldsPopulated() {
         val dynamoLesson = DynamoLessons.DATA!![0]
-        val lesson = mapper.toLesson(dynamoLesson)
+        val lesson = DynamoLessonMapper.toLesson(dynamoLesson)
         Assertions.assertThat(lesson)
             .hasNoNullFieldsOrProperties()
             .usingRecursiveComparison().ignoringFields(
@@ -29,7 +28,7 @@ internal class DynamoLessonMapperTest {
                 .apply {
                     description = rawDescription
                 }
-            val lesson = mapper.toLesson(dynamoLesson)
+            val lesson = DynamoLessonMapper.toLesson(dynamoLesson)
             Assertions.assertThat(lesson.parsedDescription.trim { it <= ' ' })
                 .isEqualTo("<p>$rawDescription</p>")
         }
@@ -46,7 +45,7 @@ internal class DynamoLessonMapperTest {
                 .apply {
                     description = rawDescription
                 }
-            val lesson = mapper.toLesson(dynamoLesson)
+            val lesson = DynamoLessonMapper.toLesson(dynamoLesson)
             Assertions.assertThat(lesson.parsedDescription.trim { it <= ' ' })
                 .containsSubsequence(
                     "<h1>", "first",
@@ -67,7 +66,7 @@ internal class DynamoLessonMapperTest {
                 .apply {
                     description = rawDescription
                 }
-            val lesson = mapper.toLesson(dynamoLesson)
+            val lesson = DynamoLessonMapper.toLesson(dynamoLesson)
             Assertions.assertThat(lesson.parsedDescription.trim { it <= ' ' })
                 .containsSubsequence(
                     "<ul>",
@@ -87,7 +86,7 @@ internal class DynamoLessonMapperTest {
                 .apply {
                     description = rawDescription
                 }
-            val lesson = mapper.toLesson(dynamoLesson)
+            val lesson = DynamoLessonMapper.toLesson(dynamoLesson)
             Assertions.assertThat(lesson.parsedDescription.trim { it <= ' ' })
                 .containsSubsequence("<strong>", "bold text", "</strong>")
         }
@@ -101,7 +100,7 @@ internal class DynamoLessonMapperTest {
                 .apply {
                     description = rawDescription
                 }
-            val lesson = mapper.toLesson(dynamoLesson)
+            val lesson = DynamoLessonMapper.toLesson(dynamoLesson)
             Assertions.assertThat(lesson.parsedDescription.trim { it <= ' ' })
                 .containsSubsequence(
                     "<code>",
@@ -122,7 +121,7 @@ internal class DynamoLessonMapperTest {
             val dynamoLesson: DynamoLesson = aLesson().apply {
                 description = rawDescription
             }
-            val lesson = mapper.toLesson(dynamoLesson)
+            val lesson = DynamoLessonMapper.toLesson(dynamoLesson)
             Assertions.assertThat(lesson.parsedDescription.trim { it <= ' ' })
                 .containsSubsequence(
                     "<pre>", "TargetGroupAttributes",

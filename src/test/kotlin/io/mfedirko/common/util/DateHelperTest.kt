@@ -26,7 +26,7 @@ internal class DateHelperTest {
         "2023-01-01,2023-01-01T06:00:00"
     )
     fun toUtcStartRange(input: LocalDate, expected: LocalDateTime) {
-        val ldt = toUtcStartOfDay(input)
+        val ldt = input.toUtcStartOfDay()
         Assertions.assertEquals(expected, ldt)
     }
 
@@ -38,7 +38,7 @@ internal class DateHelperTest {
         "2023-01-01,2023-01-02T05:59:59"
     )
     fun toUtcEndRange(input: LocalDate, expected: LocalDateTime) {
-        val ldt = toUtcEndOfDay(input)
+        val ldt = input.toUtcEndOfDay()
         Assertions.assertEquals(expected, ldt)
     }
 }
