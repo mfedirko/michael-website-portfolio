@@ -3,7 +3,7 @@ package io.mfedirko.common.util
 import java.time.*
 import java.util.*
 
-object DateHelper {
+object Dates {
     val TZ_LOCAL: ZoneId = ZoneId.of("America/Chicago")
     val TZ_UTC: ZoneId = ZoneId.of("UTC")
 
@@ -41,13 +41,9 @@ object DateHelper {
             .withZoneSameInstant(TZ_UTC).toLocalDateTime()
     }
 
-    fun LocalDate.inLocalTimeZone(): LocalDate {
-        return this.atStartOfDay(TZ_LOCAL).toLocalDate()
-    }
+    fun LocalDate.inLocalTimeZone(): LocalDate = this.atStartOfDay(TZ_LOCAL).toLocalDate()
 
-    fun LocalDate.toDate(): Date {
-        return Date.from(this.atStartOfDay(TZ_LOCAL).toInstant())
-    }
+    fun LocalDate.toDate(): Date = Date.from(this.atStartOfDay(TZ_LOCAL).toInstant())
 
     fun unixMillisToLocalDateTime(creationTimestampMillis: Long): LocalDateTime {
         return Instant.ofEpochMilli(creationTimestampMillis).atZone(

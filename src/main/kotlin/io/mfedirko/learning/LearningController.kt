@@ -1,6 +1,6 @@
 package io.mfedirko.learning
 
-import io.mfedirko.common.util.DateHelper
+import io.mfedirko.common.util.Dates
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,7 +15,7 @@ class LearningController(
 ) {
     @GetMapping
     fun getLearningPage(@RequestParam("page") page: Int, modelMap: ModelMap): String {
-        val year = DateHelper.toLocalYearByPage(page, Clock.systemDefaultZone())
+        val year = Dates.toLocalYearByPage(page, Clock.systemDefaultZone())
         val lessons = learningRepository.findLessons(year)
         modelMap.addAttribute("lessons", lessons)
         modelMap.addAttribute("nextPage", page + 1)

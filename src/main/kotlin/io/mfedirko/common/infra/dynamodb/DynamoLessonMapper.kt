@@ -1,7 +1,7 @@
 package io.mfedirko.common.infra.dynamodb
 
 import com.github.rjeschke.txtmark.Processor
-import io.mfedirko.common.util.DateHelper
+import io.mfedirko.common.util.Dates
 import io.mfedirko.learning.Lesson
 
 object DynamoLessonMapper {
@@ -15,7 +15,7 @@ object DynamoLessonMapper {
             category = dynamoLesson.category!!
             author = dynamoLesson.author!!
             creationTimestampMillis = dynamoLesson.creationTimestampMillis!!
-            creationTimestamp = DateHelper.unixMillisToLocalDateTime(dynamoLesson.creationTimestampMillis!!)
+            creationTimestamp = Dates.unixMillisToLocalDateTime(dynamoLesson.creationTimestampMillis!!)
         }
     }
 }

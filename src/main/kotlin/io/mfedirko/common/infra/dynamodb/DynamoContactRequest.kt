@@ -1,7 +1,7 @@
 package io.mfedirko.common.infra.dynamodb
 
-import io.mfedirko.common.util.DateHelper
-import io.mfedirko.common.util.DateHelper.inLocalTimeZone
+import io.mfedirko.common.util.Dates
+import io.mfedirko.common.util.Dates.inLocalTimeZone
 import io.mfedirko.contactme.ContactForm
 import io.mfedirko.contactme.ContactHistory
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
@@ -37,7 +37,7 @@ class DynamoContactRequest {
             fullName = this@DynamoContactRequest.fullName
             email = this@DynamoContactRequest.email
             messageBody = this@DynamoContactRequest.messageBody
-            creationTimestamp = DateHelper.unixMillisToLocalDateTime(this@DynamoContactRequest.creationTimestampMillis!!)
+            creationTimestamp = Dates.unixMillisToLocalDateTime(this@DynamoContactRequest.creationTimestampMillis!!)
 
         }
     }

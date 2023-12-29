@@ -1,14 +1,14 @@
 package io.mfedirko.common.util
 
-import io.mfedirko.common.util.DateHelper.toLocalDatePageByDay
-import io.mfedirko.common.util.DateHelper.toUtcEndOfDay
-import io.mfedirko.common.util.DateHelper.toUtcStartOfDay
+import io.mfedirko.common.util.Dates.toLocalDatePageByDay
+import io.mfedirko.common.util.Dates.toUtcEndOfDay
+import io.mfedirko.common.util.Dates.toUtcStartOfDay
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.time.*
 
-internal class DateHelperTest {
+internal class DatesTest {
     private var MAY_18_2023_CST: Clock = Clock.fixed(Instant.ofEpochMilli(1684462557000L), ZoneId.of("US/Eastern"))
 
     @ParameterizedTest

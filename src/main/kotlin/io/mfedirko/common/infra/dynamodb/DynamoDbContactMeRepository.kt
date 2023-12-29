@@ -1,9 +1,9 @@
 package io.mfedirko.common.infra.dynamodb
 
-import io.mfedirko.common.util.DateHelper.TZ_UTC
-import io.mfedirko.common.util.DateHelper.toUtcEndOfDay
-import io.mfedirko.common.util.DateHelper.toUtcStartOfDay
-import io.mfedirko.common.util.logger
+import io.mfedirko.common.util.Dates.TZ_UTC
+import io.mfedirko.common.util.Dates.toUtcEndOfDay
+import io.mfedirko.common.util.Dates.toUtcStartOfDay
+import io.mfedirko.common.util.Logging.logger
 import io.mfedirko.contactme.ContactForm
 import io.mfedirko.contactme.ContactHistory
 import io.mfedirko.contactme.ContactMeRepository

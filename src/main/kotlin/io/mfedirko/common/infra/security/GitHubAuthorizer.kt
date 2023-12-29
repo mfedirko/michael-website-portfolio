@@ -1,6 +1,6 @@
 package io.mfedirko.common.infra.security
 
-import io.mfedirko.common.util.logger
+import io.mfedirko.common.util.Logging.logger
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest

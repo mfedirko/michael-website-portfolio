@@ -1,9 +1,9 @@
 package io.mfedirko.common.infra.dynamodb
 
-import io.mfedirko.common.util.DateHelper
-import io.mfedirko.common.util.DateHelper.toUtcEndOfYear
-import io.mfedirko.common.util.DateHelper.toUtcStartOfYear
-import io.mfedirko.common.util.logger
+import io.mfedirko.common.util.Dates
+import io.mfedirko.common.util.Dates.toUtcEndOfYear
+import io.mfedirko.common.util.Dates.toUtcStartOfYear
+import io.mfedirko.common.util.Logging.logger
 import io.mfedirko.learning.CreateLessonForm
 import io.mfedirko.learning.LearningRepository
 import io.mfedirko.learning.Lesson
@@ -95,7 +95,7 @@ class DynamoDbLearningRepository(
         }
 
         private fun toSortKey(date: LocalDateTime): Long {
-            val instant = date.atZone(DateHelper.TZ_UTC).toInstant()
+            val instant = date.atZone(Dates.TZ_UTC).toInstant()
             return DynamoLesson.toSortKey(instant)
         }
     }

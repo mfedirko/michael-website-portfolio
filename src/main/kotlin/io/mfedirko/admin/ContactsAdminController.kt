@@ -1,7 +1,7 @@
 package io.mfedirko.admin
 
-import io.mfedirko.common.util.DateHelper.toDate
-import io.mfedirko.common.util.DateHelper.toLocalDatePageByDay
+import io.mfedirko.common.util.Dates.toDate
+import io.mfedirko.common.util.Dates.toLocalDatePageByDay
 import io.mfedirko.contactme.ContactMeRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap

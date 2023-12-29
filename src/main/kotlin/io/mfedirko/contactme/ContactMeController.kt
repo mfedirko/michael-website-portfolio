@@ -1,6 +1,6 @@
 package io.mfedirko.contactme
 
-import io.mfedirko.common.util.logger
+import io.mfedirko.common.util.Logging.logger
 import jakarta.validation.Valid
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap

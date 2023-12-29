@@ -1,6 +1,6 @@
 package io.mfedirko.common.infra.dynamodb
 
-import io.mfedirko.common.util.DateHelper
+import io.mfedirko.common.util.Dates
 import io.mfedirko.learning.CreateLessonForm
 import io.mfedirko.learning.Lesson
 import io.mfedirko.learning.UpdateLessonForm
@@ -46,7 +46,7 @@ class DynamoLesson {
         fun fromUpdateRequest(update: UpdateLessonForm, original: Lesson, creationTimestampMillis: Long): DynamoLesson {
             val localDate = LocalDate.ofInstant(
                 Instant.ofEpochMilli(creationTimestampMillis),
-                DateHelper.TZ_UTC
+                Dates.TZ_UTC
             )
             return DynamoLesson().apply {
                 author = original.author

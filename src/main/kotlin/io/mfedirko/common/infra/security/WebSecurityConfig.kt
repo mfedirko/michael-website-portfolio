@@ -24,10 +24,9 @@ class WebSecurityConfig {
                     .requestMatchers("/admin/**").hasAuthority(AdminOAuthUserService.ADMIN_ROLE)
                     .anyRequest().permitAll()
             }
-            .exceptionHandling { e: ExceptionHandlingConfigurer<HttpSecurity?> ->
-                e.authenticationEntryPoint(
-                    LoginUrlAuthenticationEntryPoint("/oauth-login")
-                )
+            .exceptionHandling {
+                it
+                    .authenticationEntryPoint(LoginUrlAuthenticationEntryPoint("/oauth-login"))
                     .accessDeniedHandler { _: HttpServletRequest?, response: HttpServletResponse, _: AccessDeniedException? ->
                         response.sendRedirect(
                             "/error"
