@@ -6,10 +6,10 @@ import io.mfedirko.common.infra.dynamodb.DynamoContactRequest.Companion.toSortKe
 import io.mfedirko.common.util.DateHelper.TZ_UTC
 import io.mfedirko.common.util.DateHelper.toUtcEndOfDay
 import io.mfedirko.common.util.DateHelper.toUtcStartOfDay
+import io.mfedirko.common.util.logger
 import io.mfedirko.contactme.ContactForm
 import io.mfedirko.contactme.ContactHistory
 import io.mfedirko.contactme.ContactMeRepository
-import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
@@ -28,7 +28,7 @@ class DynamoDbContactMeRepository(
     private val enhancedClient: DynamoDbEnhancedClient
 
 ) : ContactMeRepository {
-    private val log = LoggerFactory.getLogger(this::class.java)
+    private val log = logger()
 
     private val table: DynamoDbTable<DynamoContactRequest>
         get() = enhancedClient.table(

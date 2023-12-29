@@ -1,11 +1,11 @@
 package io.mfedirko.common.infra.dynamodb
 
 import io.mfedirko.common.util.DateHelper
+import io.mfedirko.common.util.logger
 import io.mfedirko.learning.CreateLessonForm
 import io.mfedirko.learning.LearningRepository
 import io.mfedirko.learning.Lesson
 import io.mfedirko.learning.UpdateLessonForm
-import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -27,7 +27,7 @@ class DynamoDbLearningRepository(
     private val enhancedClient: DynamoDbEnhancedClient,
     private val lessonMapper: DynamoLessonMapper,
 ) : LearningRepository {
-    private val log = LoggerFactory.getLogger(this::class.java)
+    private val log = logger()
 
     private val table: DynamoDbTable<DynamoLesson>
         get() = enhancedClient.table(DynamoLesson.TABLE, TableSchema.fromBean(DynamoLesson::class.java))

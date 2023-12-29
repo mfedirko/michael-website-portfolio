@@ -1,7 +1,7 @@
 package io.mfedirko.contactme
 
+import io.mfedirko.common.util.logger
 import jakarta.validation.Valid
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.validation.Errors
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 class ContactMeController(
     private val repository: ContactMeRepository
 ){
-    private val log = LoggerFactory.getLogger(this::class.java)
+    private val log = logger()
 
     @GetMapping
     fun getPage(modelMap: ModelMap): String {

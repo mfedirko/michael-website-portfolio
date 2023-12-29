@@ -1,6 +1,6 @@
 package io.mfedirko.common.infra.security
 
-import org.slf4j.LoggerFactory
+import io.mfedirko.common.util.logger
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User
  * For a GitHub OAuth 2.0 login, check if the user should be granted additional admin authorities
  */
 class GitHubAuthorizer : OAuthProviderAuthorizer {
-    private val log = LoggerFactory.getLogger(this::class.java)
+    private val log = logger()
 
     override fun supports(request: OAuth2UserRequest): Boolean {
         return GITHUB_CLIENT_REGISTRATION_ID == request.clientRegistration.registrationId
