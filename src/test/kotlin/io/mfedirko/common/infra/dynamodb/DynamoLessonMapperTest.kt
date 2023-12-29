@@ -14,7 +14,7 @@ internal class DynamoLessonMapperTest {
         Assertions.assertThat(lesson)
             .hasNoNullFieldsOrProperties()
             .usingRecursiveComparison().ignoringFields(
-                "id", "creationTimestamp", "parsedDescription"
+                "id", "creationTimestamp", "creationTimestampMillis", "parsedDescription"
             ).ignoringFieldsMatchingRegexes(".*delegate")
             .isEqualTo(dynamoLesson)
     }
