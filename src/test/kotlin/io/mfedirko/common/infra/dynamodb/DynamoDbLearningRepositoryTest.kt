@@ -1,7 +1,7 @@
 package io.mfedirko.common.infra.dynamodb
 
 import io.mfedirko.DynamoDbTestConfiguration
-import io.mfedirko.RepositoryTestConditions
+import io.mfedirko.RepositoryTestConditions.sortedDescending
 import io.mfedirko.RepositoryTestConditions.withinYear
 import io.mfedirko.learning.CreateLessonForm
 import io.mfedirko.learning.Lesson
@@ -107,7 +107,7 @@ internal class DynamoDbLearningRepositoryTest {
         fun sortedDescendingByTimestamp(year: Year) {
             val lessons = repository.findLessons(year)
             Assertions.assertThat(lessons)
-                .`is`(RepositoryTestConditions.sortedDescending { it.creationTimestamp })
+                .`is`(sortedDescending { it.creationTimestamp })
         }
     }
 }

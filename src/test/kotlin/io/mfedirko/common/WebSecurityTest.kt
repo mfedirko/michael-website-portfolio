@@ -24,7 +24,7 @@ import org.springframework.web.context.WebApplicationContext
 class WebSecurityTest {
     @Autowired
     private lateinit var context: WebApplicationContext
-    private var mockMvc: MockMvc? = null
+    private lateinit var mockMvc: MockMvc
 
     @BeforeEach
     fun setup() {
@@ -46,7 +46,7 @@ class WebSecurityTest {
         Exception::class
     )
     fun whenPublicPage_thenAnyUserCanAccess(httpMethod: HttpMethod, endpoint: String) {
-        mockMvc!!.perform(MockMvcRequestBuilders.request(httpMethod, endpoint))
+        mockMvc.perform(MockMvcRequestBuilders.request(httpMethod, endpoint))
             .andExpect(MockMvcResultMatchers.status().`is`(Matchers.oneOf(200, 404)))
     }
 
@@ -63,7 +63,7 @@ class WebSecurityTest {
         Exception::class
     )
     fun whenLoggedInUser_andValidRole_andSecureEndpoint_then200(httpMethod: HttpMethod, endpoint: String) {
-        mockMvc!!.perform(MockMvcRequestBuilders.request(httpMethod, endpoint))
+        mockMvc.perform(MockMvcRequestBuilders.request(httpMethod, endpoint))
             .andExpect(MockMvcResultMatchers.status().`is`(200))
     }
 
@@ -81,7 +81,7 @@ class WebSecurityTest {
         Exception::class
     )
     fun whenUnauthenticatedUser_andSecureEndpoint_thenRedirectLogin(httpMethod: HttpMethod, endpoint: String) {
-        mockMvc!!.perform(MockMvcRequestBuilders.request(httpMethod, endpoint))
+        mockMvc.perform(MockMvcRequestBuilders.request(httpMethod, endpoint))
             .andExpect(MockMvcResultMatchers.status().`is`(302))
             .andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/oauth-login"))
     }
@@ -101,7 +101,7 @@ class WebSecurityTest {
         Exception::class
     )
     fun whenLoggedInUser_andWrongRole_andSecureEndpoint_thenRedirectError(httpMethod: HttpMethod, endpoint: String) {
-        mockMvc!!.perform(MockMvcRequestBuilders.request(httpMethod, endpoint))
+        mockMvc.perform(MockMvcRequestBuilders.request(httpMethod, endpoint))
             .andExpect(MockMvcResultMatchers.status().`is`(302))
             .andExpect(MockMvcResultMatchers.redirectedUrl("/error"))
     }
