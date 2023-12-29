@@ -36,7 +36,7 @@ class DynamoDbLearningRepository(
 
     @Cacheable
     override fun findLessons(year: Year): List<Lesson> {
-        log.debug("Called findLessons for $year")
+        log.debug("Called findLessons for {}", year)
         val result: PageIterable<DynamoLesson>? = table.query { k: QueryEnhancedRequest.Builder ->
             k.scanIndexForward(false)
                 .queryConditional(
