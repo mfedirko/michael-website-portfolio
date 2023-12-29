@@ -17,7 +17,7 @@ class RecaptchaClient(
         this.restTemplate = restTemplate.build()
     }
 
-    fun isValidCaptcha(captcha: String?): Boolean {
+    fun isValidCaptcha(captcha: String): Boolean {
         return try {
             val response = restTemplate.postForEntity(
                 UriComponentsBuilder.fromHttpUrl("https://www.google.com/recaptcha/api/siteverify")

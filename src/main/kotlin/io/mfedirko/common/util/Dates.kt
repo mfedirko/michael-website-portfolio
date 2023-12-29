@@ -46,8 +46,6 @@ object Dates {
     fun LocalDate.toDate(): Date = Date.from(this.atStartOfDay(TZ_LOCAL).toInstant())
 
     fun unixMillisToLocalDateTime(creationTimestampMillis: Long): LocalDateTime {
-        return Instant.ofEpochMilli(creationTimestampMillis).atZone(
-            TZ_LOCAL
-        ).toLocalDateTime()
+        return Instant.ofEpochMilli(creationTimestampMillis).atZone(TZ_LOCAL).toLocalDateTime()
     }
 }

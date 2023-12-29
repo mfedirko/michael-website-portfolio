@@ -18,20 +18,15 @@ class WebSecurityConfig {
     @Bean
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http
-            .authorizeHttpRequests {
-                it
-                    .requestMatchers("/admin/**").hasAuthority(AdminOAuthUserService.ADMIN_ROLE)
+        http.authorizeHttpRequests {
+                it.requestMatchers("/admin/**").hasAuthority(AdminOAuthUserService.ADMIN_ROLE)
                     .anyRequest().permitAll()
             }
             .exceptionHandling {
-                it
-                    .authenticationEntryPoint(LoginUrlAuthenticationEntryPoint("/oauth-login"))
-                    .accessDeniedHandler { _: HttpServletRequest?, response: HttpServletResponse, _: AccessDeniedException? ->
-                        response.sendRedirect(
-                            "/error"
-                        )
-                    }
+                it.authenticationEntryPoint(LoginUrlAuthenticationEntryPoint("/oauth-login"))
+                  .accessDeniedHandler { _: HttpServletRequest?, response: HttpServletResponse, _: AccessDeniedException? ->
+                    response.sendRedirect("/error")
+                  }
             }
             .csrf { it.disable() }
             .formLogin { it.disable() }

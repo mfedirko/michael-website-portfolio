@@ -35,9 +35,11 @@ class GitHubAuthorizer : OAuthProviderAuthorizer {
     }
 
     private fun isSiteAdmin(oAuth2User: OAuth2User): Boolean {
-        return SITE_ADMIN_ID == oAuth2User.getAttribute("id")
-                && SITE_ADMIN_LOGIN == oAuth2User.getAttribute("login")
-                && SITE_ADMIN_HTML_URL == oAuth2User.getAttribute("html_url")
+        return with(oAuth2User) {
+            SITE_ADMIN_ID == getAttribute("id")
+                && SITE_ADMIN_LOGIN == getAttribute("login")
+                && SITE_ADMIN_HTML_URL == getAttribute("html_url")
+        }
     }
 
     companion object {
