@@ -20,10 +20,12 @@ class ContactsAdminController(
         val startDate = toLocalDatePageByDay(page, Clock.systemDefaultZone())
         val endDate = startDate.plusDays(1)
         val contactHistory = contactMeRepository.findContactHistoryByDate(startDate)
-        modelMap.addAttribute("history", contactHistory)
-        modelMap.addAttribute("startDate", startDate.toDate())
-        modelMap.addAttribute("endDate", endDate.toDate())
-        modelMap.addAttribute("nextPage", page + 1)
+        with(modelMap) {
+            addAttribute("history", contactHistory)
+            addAttribute("startDate", startDate.toDate())
+            addAttribute("endDate", endDate.toDate())
+            addAttribute("nextPage", page + 1)
+        }
         return "admin/contact-history-table"
     }
 }

@@ -17,8 +17,10 @@ class LearningController(
     fun getLearningPage(@RequestParam("page") page: Int, modelMap: ModelMap): String {
         val year = Dates.toLocalYearByPage(page, Clock.systemDefaultZone())
         val lessons = learningRepository.findLessons(year)
-        modelMap.addAttribute("lessons", lessons)
-        modelMap.addAttribute("nextPage", page + 1)
+        with(modelMap) {
+            addAttribute("lessons", lessons)
+            addAttribute("nextPage", page + 1)
+        }
         return "learning"
     }
 }
