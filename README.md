@@ -11,7 +11,7 @@ This is a full-stack developer portfolio and the source code for https://michael
   - Create, update and delete items in Learning section using .md syntax
 
 ## Technologies Used
-- Java 17
+- [Kotlin 1.8.x](https://kotlinlang.org/) 
 - [Spring Boot 3.x](https://spring.io/projects/spring-boot)
 - [Thymeleaf](https://www.thymeleaf.org/) - server-side template engine with good Spring Boot compatibility
 - [HTMX](https://htmx.org/) - modern website features without JavaScript
@@ -29,7 +29,8 @@ This is a full-stack developer portfolio and the source code for https://michael
 ## Local Development
 #### Initial Setup
 1. Install JDK 17 or higher (if using Intellij, you can [download a JDK within the IDE](https://www.jetbrains.com/guide/java/tips/download-jdk/))
-2. Install [Docker and Docker Desktop](https://docs.docker.com/get-docker/)
+2. Install Kotlin 1.8 or higher (if using Intellij, you can enable the [Kotlin plugin](https://plugins.jetbrains.com/plugin/6954-kotlin))
+3. Install [Docker and Docker Desktop](https://docs.docker.com/get-docker/)
 
 #### Development
 1. Run the main class `src/main/java/io.mfedirko/Application.java` 
