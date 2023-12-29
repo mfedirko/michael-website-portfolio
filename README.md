@@ -33,7 +33,7 @@ This is a full-stack developer portfolio and the source code for https://michael
 3. Install [Docker and Docker Desktop](https://docs.docker.com/get-docker/)
 
 #### Development
-1. Run the main class `src/main/java/io.mfedirko/Application.java` 
+1. Run the main class `src/main/kotlin/io/mfedirko/Application.kt` 
    1. **Alternatively**: 
       1) run `./mvnw spring-boot:run` or 
       2) build a JAR using `./mvnw clean package` and run it using `java -jar`) 
