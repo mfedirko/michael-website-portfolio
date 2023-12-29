@@ -6,7 +6,6 @@ import java.io.InputStreamReader
 import java.util.regex.Pattern
 
 object DynamoContactRequests {
-    @JvmField
     var DATA: List<DynamoContactRequest>? = null
 
     init {

@@ -3,7 +3,6 @@ package io.mfedirko.contactme
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
-import java.util.stream.Collectors
 
 @Repository
 @Profile("mock")
@@ -14,13 +13,13 @@ class MockContactMeRepository : ContactMeRepository {
     }
 
     fun findAllContactHistory(): List<ContactHistory> {
-        return requests.stream().map { form: ContactForm ->
+        return requests.map {
             ContactHistory().apply {
-                fullName = form.fullName
-                email = form.email
-                messageBody = form.messageBody
+                fullName = it.fullName
+                email = it.email
+                messageBody = it.messageBody
             }
-        }.collect(Collectors.toList())
+        }.toList()
     }
 
     override fun findContactHistoryByDate(date: LocalDate): List<ContactHistory> {

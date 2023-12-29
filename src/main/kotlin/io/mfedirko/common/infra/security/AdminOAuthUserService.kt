@@ -15,10 +15,12 @@ class AdminOAuthUserService(private val providerAuthorizers: List<OAuthProviderA
     @Throws(OAuth2AuthenticationException::class)
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val user = super.loadUser(userRequest)
-        return providerAuthorizers.stream()
-            .filter { dec: OAuthProviderAuthorizer -> dec.supports(userRequest) }
-            .findFirst().map { dec: OAuthProviderAuthorizer -> dec.decorate(user) }
-            .orElse(user)
+        return providerAuthorizers
+            .firstOrNull { it.supports(userRequest) }
+            ?.decorate(user)
+            ?: user
+
+
     }
 
     companion object {

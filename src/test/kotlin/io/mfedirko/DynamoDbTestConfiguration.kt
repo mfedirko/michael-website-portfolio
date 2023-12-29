@@ -48,13 +48,12 @@ class DynamoDbTestConfiguration {
 
     private fun <T> initDynamoTable(clazz: Class<T>, name: String, data: Collection<T>?) {
         val table = dynamoDb.table(name, TableSchema.fromBean(clazz))
-        table.createTable { t: CreateTableEnhancedRequest.Builder ->
-            t
-                .provisionedThroughput { prov: ProvisionedThroughput.Builder ->
-                    prov.readCapacityUnits(1L).writeCapacityUnits(1L)
-                }
+        table.createTable {
+            it.provisionedThroughput {
+                    prov: ProvisionedThroughput.Builder -> prov.readCapacityUnits(1L).writeCapacityUnits(1L)
+            }
         }
-        data!!.forEach(Consumer { item: T -> table.putItem(item) })
+        data!!.forEach { table.putItem(it) }
     }
 
     @TestConfiguration
@@ -74,7 +73,7 @@ class DynamoDbTestConfiguration {
                 .withServices(LocalStackContainer.Service.DYNAMODB)
                 .withNetworkAliases("localstack")
                 .withNetwork(
-                    Network.builder().createNetworkCmdModifier { cmd: CreateNetworkCmd -> cmd.withName("test-net") }
+                    Network.builder().createNetworkCmdModifier { it.withName("test-net") }
                         .build())
 
             init {

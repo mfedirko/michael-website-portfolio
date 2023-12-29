@@ -4,7 +4,6 @@ import com.github.rjeschke.txtmark.Processor
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository
 import java.time.*
-import java.util.stream.Collectors
 
 @Repository
 @Profile("mock")
@@ -12,17 +11,14 @@ class MockLearningRepository : LearningRepository {
     private val lessons: MutableList<Lesson> = ArrayList()
     override fun findLessons(year: Year): List<Lesson> {
         val startOfYear = year.atMonthDay(MonthDay.of(Month.JANUARY, 1)).atStartOfDay()
-        return lessons.stream()
-            .filter { l: Lesson -> l.creationTimestamp.isAfter(startOfYear) }
-            .sorted(Comparator.comparing(Lesson::creationTimestamp))
-            .collect(Collectors.toList())
+        return lessons
+            .filter { it.creationTimestamp.isAfter(startOfYear) }
+            .sortedWith(compareBy { it.creationTimestamp })
+            .toList()
     }
 
     override fun getLesson(creationTimeMillis: Long): Lesson {
-        return lessons.stream()
-            .filter { l: Lesson -> l.creationTimestampMillis == creationTimeMillis }
-            .findFirst()
-            .orElseThrow { IllegalArgumentException("Lesson not found!") }
+        return lessons.first { it.creationTimestampMillis == creationTimeMillis }
     }
 
     override fun createLesson(lesson: CreateLessonForm): Long {
@@ -55,6 +51,6 @@ class MockLearningRepository : LearningRepository {
     }
 
     override fun deleteLesson(creationTimeMillis: Long) {
-        lessons.removeIf { l: Lesson -> l.creationTimestampMillis == creationTimeMillis }
+        lessons.removeIf { it.creationTimestampMillis == creationTimeMillis }
     }
 }

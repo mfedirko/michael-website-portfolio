@@ -27,7 +27,7 @@ internal class DynamoDbContactMeRepositoryTest {
         val now = LocalDate.now()
         repository.save(ContactForms.aContactForm().apply { messageBody = expectedMsg })
         val history = repository.findContactHistoryByDate(now)
-        Assertions.assertThat(history).anyMatch { h: ContactHistory? -> h?.messageBody == expectedMsg }
+        Assertions.assertThat(history).anyMatch { it?.messageBody == expectedMsg }
     }
 
     @ParameterizedTest

@@ -4,13 +4,9 @@ import java.time.*
 import java.util.*
 
 object DateHelper {
-    @JvmField
     val TZ_LOCAL: ZoneId = ZoneId.of("America/Chicago")
-
-    @JvmField
     val TZ_UTC: ZoneId = ZoneId.of("UTC")
 
-    @JvmStatic
     fun toLocalDatePageByDay(page: Int /* 1-indexed */, clock: Clock?): LocalDate {
         return LocalDate.now(clock).minusDays((page - 1).toLong())
     }
@@ -19,13 +15,11 @@ object DateHelper {
         return Year.now(clock).minusYears((page - 1).toLong())
     }
 
-    @JvmStatic
     fun toUtcStartOfDay(date: LocalDate): LocalDateTime {
         return date.atStartOfDay(TZ_LOCAL)
             .withZoneSameInstant(TZ_UTC).toLocalDateTime()
     }
 
-    @JvmStatic
     fun toUtcEndOfDay(date: LocalDate): LocalDateTime {
         return date.atTime(23, 59, 59).atZone(TZ_LOCAL)
             .withZoneSameInstant(TZ_UTC).toLocalDateTime()
@@ -51,7 +45,6 @@ object DateHelper {
         return date.atStartOfDay(TZ_LOCAL).toLocalDate()
     }
 
-    @JvmStatic
     fun toDate(date: LocalDate): Date {
         return Date.from(date.atStartOfDay(TZ_LOCAL).toInstant())
     }

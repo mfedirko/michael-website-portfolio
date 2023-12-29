@@ -6,7 +6,6 @@ import java.io.InputStreamReader
 import java.util.regex.Pattern
 
 object DynamoLessons {
-    @JvmField
     var DATA: List<DynamoLesson>? = null
 
     init {

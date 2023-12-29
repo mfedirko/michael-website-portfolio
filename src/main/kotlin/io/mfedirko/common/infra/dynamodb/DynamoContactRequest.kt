@@ -48,7 +48,7 @@ class DynamoContactRequest {
         const val FULL_NAME = "full_name"
         const val EMAIL = "email"
         const val MESSAGE_BODY = "message_body"
-        @JvmStatic
+
         fun from(form: ContactForm): DynamoContactRequest {
             return DynamoContactRequest().apply {
                 fullName = form.fullName
@@ -59,12 +59,10 @@ class DynamoContactRequest {
             }
         }
 
-        @JvmStatic
         fun toSortKey(now: Instant): Long { // sort by timestamp millis
             return now.toEpochMilli()
         }
 
-        @JvmStatic
         fun toPartitionKey(now: LocalDate): String { // partition by day (in local time zone)
             return DateHelper.inLocalTimeZone(now).format(DateTimeFormatter.ISO_LOCAL_DATE)
         }

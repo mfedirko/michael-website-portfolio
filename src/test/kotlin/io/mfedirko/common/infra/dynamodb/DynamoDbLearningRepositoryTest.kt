@@ -2,6 +2,7 @@ package io.mfedirko.common.infra.dynamodb
 
 import io.mfedirko.DynamoDbTestConfiguration
 import io.mfedirko.RepositoryTestHelpers
+import io.mfedirko.RepositoryTestHelpers.withinYear
 import io.mfedirko.learning.CreateLessonForm
 import io.mfedirko.learning.Lesson
 import io.mfedirko.learning.UpdateLessonForm
@@ -35,9 +36,9 @@ internal class DynamoDbLearningRepositoryTest {
             repository.updateLesson(updateForm, lesson.creationTimestampMillis)
             val lessons = repository.findLessons(year)
             Assertions.assertThat(lessons)
-                .filteredOn { l: Lesson -> l.creationTimestamp == lesson.creationTimestamp }
+                .filteredOn { it.creationTimestamp == lesson.creationTimestamp }
                 .hasSize(1)
-                .allMatch { l: Lesson -> l.description == updateForm.description && l.title == updateForm.title }
+                .allMatch { it.description == updateForm.description && it.title == updateForm.title }
         }
 
         @Test
@@ -51,10 +52,10 @@ internal class DynamoDbLearningRepositoryTest {
             repository.updateLesson(updateForm, lesson.creationTimestampMillis)
             val lessons = repository.findLessons(year)
             Assertions.assertThat(lessons)
-                .filteredOn { l: Lesson -> l.creationTimestamp == lesson.creationTimestamp }
+                .filteredOn { it.creationTimestamp == lesson.creationTimestamp }
                 .hasSize(1)
-                .allSatisfy { l: Lesson ->
-                    Assertions.assertThat(l).hasNoNullFieldsOrProperties()
+                .allSatisfy { lsn: Lesson ->
+                    Assertions.assertThat(lsn).hasNoNullFieldsOrProperties()
                         .hasFieldOrPropertyWithValue("title", updateForm.title)
                 }
         }
@@ -66,7 +67,7 @@ internal class DynamoDbLearningRepositoryTest {
             repository.deleteLesson(lesson.creationTimestampMillis)
             val lessons = repository.findLessons(year)
             Assertions.assertThat(lessons)
-                .filteredOn { l: Lesson -> l.creationTimestamp == lesson.creationTimestamp }
+                .filteredOn { it.creationTimestamp == lesson.creationTimestamp }
                 .isEmpty()
         }
 
@@ -98,7 +99,7 @@ internal class DynamoDbLearningRepositoryTest {
         @ValueSource(strings = ["2023", "2022"])
         fun withinRangeOfYear(year: Year) {
             val lessons = repository.findLessons(year)
-            Assertions.assertThat(lessons).isNotEmpty.are(RepositoryTestHelpers.withinYear(year.value) { obj: Lesson -> obj.creationTimestamp })
+            Assertions.assertThat(lessons).isNotEmpty.are(withinYear(year.value) { it.creationTimestamp })
         }
 
         @ParameterizedTest
@@ -106,7 +107,7 @@ internal class DynamoDbLearningRepositoryTest {
         fun sortedDescendingByTimestamp(year: Year) {
             val lessons = repository.findLessons(year)
             Assertions.assertThat(lessons)
-                .`is`(RepositoryTestHelpers.sortedDescending { obj: Lesson -> obj.creationTimestamp })
+                .`is`(RepositoryTestHelpers.sortedDescending { it.creationTimestamp })
         }
     }
 }

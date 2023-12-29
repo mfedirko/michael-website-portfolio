@@ -29,6 +29,9 @@ class DynamoDbLearningRepository(
 ) : LearningRepository {
     private val log = LoggerFactory.getLogger(this::class.java)
 
+    private val table: DynamoDbTable<DynamoLesson>
+        get() = enhancedClient.table(DynamoLesson.TABLE, TableSchema.fromBean(DynamoLesson::class.java))
+
     @Cacheable
     override fun findLessons(year: Year): List<Lesson> {
         log.debug("Called findLessons for $year")
@@ -42,14 +45,14 @@ class DynamoDbLearningRepository(
                 )
                 .build()
         }
-        return result.items().stream()
-            .map { dynamoLesson: DynamoLesson -> lessonMapper.toLesson(dynamoLesson) }
+        return result.items()
+            .map { lessonMapper.toLesson(it) }
             .toList()
     }
 
-    override fun getLesson(creationTimeMillis: Long): Lesson? {
+    override fun getLesson(creationTimeMillis: Long): Lesson {
         return Optional.ofNullable(table.getItem(toKey(creationTimeMillis)))
-            .map { dynamoLesson: DynamoLesson -> lessonMapper.toLesson(dynamoLesson) }
+            .map { lessonMapper.toLesson(it) }
             .orElseThrow { IllegalArgumentException("No lesson exists with creationTimestampMillis $creationTimeMillis") }
     }
 
@@ -63,7 +66,7 @@ class DynamoDbLearningRepository(
     @CacheEvict(allEntries = true)
     override fun updateLesson(lesson: UpdateLessonForm, creationTimeMillis: Long) {
         val original = getLesson(creationTimeMillis)
-        table.updateItem(DynamoLesson.fromUpdateRequest(lesson, original!!, creationTimeMillis))
+        table.updateItem(DynamoLesson.fromUpdateRequest(lesson, original, creationTimeMillis))
     }
 
     @CacheEvict(allEntries = true)
@@ -71,8 +74,6 @@ class DynamoDbLearningRepository(
         table.deleteItem(toKey(creationTimeMillis))
     }
 
-    private val table: DynamoDbTable<DynamoLesson>
-        get() = enhancedClient.table(DynamoLesson.TABLE, TableSchema.fromBean(DynamoLesson::class.java))
 
     companion object {
         private fun toKey(date: LocalDateTime): Key {

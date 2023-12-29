@@ -34,8 +34,8 @@ class WebSecurityConfig {
                         )
                     }
             }
-            .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
-            .formLogin { obj: FormLoginConfigurer<HttpSecurity> -> obj.disable() }
+            .csrf { it.disable() }
+            .formLogin { it.disable() }
             .oauth2Login(Customizer.withDefaults())
         return http.build()
     }

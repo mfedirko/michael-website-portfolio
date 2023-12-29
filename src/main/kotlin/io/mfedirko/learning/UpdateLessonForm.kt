@@ -13,7 +13,6 @@ class UpdateLessonForm {
     var description: String? = null
 
     companion object {
-        @JvmStatic
         fun fromLesson(lesson: Lesson): UpdateLessonForm {
             return UpdateLessonForm().apply {
                 title = lesson.title

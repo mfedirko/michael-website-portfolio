@@ -75,14 +75,20 @@ class ContactFormValidationTest {
     companion object {
         private fun fieldErrors(vararg fields: String): Condition<in (MutableCollection<out ConstraintViolation<*>>)> {
             return Condition(
-                {el -> fields.all { field -> el.stream().anyMatch { it.propertyPath.toString() == field }} },
+                { violations -> fields.all {
+                        field -> violations.any { it.propertyPath.toString() == field }
+                    }
+                },
                 "Validation error on fields: $fields"
             )
         }
 
         private fun fieldError(field: String): Condition<in (MutableCollection<out ConstraintViolation<*>>)> {
             return Condition(
-                { el -> el.stream().anyMatch { it.propertyPath.toString() == field } },
+                { violations -> violations.any {
+                        it.propertyPath.toString() == field
+                    }
+                },
                 "Validation error on field: $field"
             )
         }

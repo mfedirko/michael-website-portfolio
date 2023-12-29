@@ -81,7 +81,7 @@ internal class AdminOAuthUserServiceTest {
     private fun adminAuthority(): Condition<in OAuth2User> {
         return Condition(
             { usr: OAuth2User ->
-                usr.authorities.stream().anyMatch { auth: GrantedAuthority? -> "ADMIN" == auth!!.authority }
+                usr.authorities.any { "ADMIN" == it?.authority }
             },
             "ADMIN authority on OAuth user"
         )

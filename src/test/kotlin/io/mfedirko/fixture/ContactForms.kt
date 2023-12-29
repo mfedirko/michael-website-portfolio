@@ -3,7 +3,6 @@ package io.mfedirko.fixture
 import io.mfedirko.contactme.ContactForm
 
 object ContactForms {
-    @JvmStatic
     fun aContactForm(): ContactForm {
         return ContactForm(
             fullName = "John Doe",

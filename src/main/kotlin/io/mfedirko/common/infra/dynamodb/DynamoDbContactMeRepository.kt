@@ -30,13 +30,20 @@ class DynamoDbContactMeRepository(
 ) : ContactMeRepository {
     private val log = LoggerFactory.getLogger(this::class.java)
 
+    private val table: DynamoDbTable<DynamoContactRequest>
+        get() = enhancedClient.table(
+            DynamoContactRequest.TABLE, TableSchema.fromBean(
+                DynamoContactRequest::class.java
+            )
+        )
+
     override fun save(form: ContactForm) {
         table.putItem(from(form))
     }
 
     override fun findContactHistoryByDate(date: LocalDate): List<ContactHistory> {
-        val result = table.query { k: QueryEnhancedRequest.Builder ->
-            k.scanIndexForward(false)
+        val result = table.query { query: QueryEnhancedRequest.Builder ->
+            query.scanIndexForward(false)
                 .queryConditional(
                     QueryConditional.sortBetween(
                         toKey(toUtcStartOfDay(date)),
@@ -49,17 +56,11 @@ class DynamoDbContactMeRepository(
             log.warn("DynamoDB returned null for date $date")
             return emptyList()
         }
-        return result.items().stream()
-            .map { obj: DynamoContactRequest -> obj.toContactHistory() }
+        return result.items()
+            .map { it.toContactHistory() }
             .toList()
     }
 
-    private val table: DynamoDbTable<DynamoContactRequest>
-        get() = enhancedClient.table(
-            DynamoContactRequest.TABLE, TableSchema.fromBean(
-                DynamoContactRequest::class.java
-            )
-        )
 
     companion object {
         private fun toKey(date: LocalDateTime): Key {
