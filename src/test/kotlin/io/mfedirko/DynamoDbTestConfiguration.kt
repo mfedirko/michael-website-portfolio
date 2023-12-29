@@ -70,7 +70,7 @@ class DynamoDbTestConfiguration {
         }
 
         companion object {
-            var localStack = LocalStackContainer(DockerImageName.parse("localstack/localstack:1.0.4.1.nodejs18"))
+            val localStack: LocalStackContainer = LocalStackContainer(DockerImageName.parse("localstack/localstack:1.0.4.1.nodejs18"))
                 .withServices(LocalStackContainer.Service.DYNAMODB)
                 .withNetworkAliases("localstack")
                 .withNetwork(

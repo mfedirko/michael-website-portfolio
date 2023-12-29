@@ -59,7 +59,7 @@ class ContactFormValidationTest {
             aContactForm().apply { email = ""; fullName = ""; messageBody = ""; recaptcha = "" }
         )
         Assertions.assertThat(violations)
-            .has(fieldErrors("email", "fullName", "messageBody", "recaptcha"));
+            .has(fieldErrors("email", "fullName", "messageBody", "recaptcha"))
     }
 
     private fun mockValidRecaptchaResponse() {
@@ -75,7 +75,7 @@ class ContactFormValidationTest {
     companion object {
         private fun fieldErrors(vararg fields: String): Condition<in (MutableCollection<out ConstraintViolation<*>>)> {
             return Condition(
-                {el -> fields.all { field -> el.stream().anyMatch { it -> it.propertyPath.toString() == field }} },
+                {el -> fields.all { field -> el.stream().anyMatch { it.propertyPath.toString() == field }} },
                 "Validation error on fields: $fields"
             )
         }

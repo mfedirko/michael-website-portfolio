@@ -7,7 +7,8 @@ import java.time.ZoneId
 import java.util.function.Function
 
 object RepositoryTestHelpers {
-    val TZ_CHICAGO = ZoneId.of("America/Chicago")
+    @JvmField
+    val TZ_CHICAGO: ZoneId = ZoneId.of("America/Chicago")
 
     fun <T> sortedDescending(timestampGetter: (T) -> LocalDateTime): Condition<in List<T>> {
         return Condition({ items: List<T> ->

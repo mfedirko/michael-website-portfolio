@@ -13,10 +13,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 @AutoConfigureMockMvc
 internal class LearningControllerTest {
     @Autowired
-    var mockMvc: MockMvc? = null
+    private lateinit var mockMvc: MockMvc
 
     @MockBean
-    var repository: LearningRepository? = null
+    private lateinit var repository: LearningRepository
 
     @Test
     @Throws(Exception::class)

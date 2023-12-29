@@ -4,10 +4,11 @@ import java.time.*
 import java.util.*
 
 object DateHelper {
-    val TZ_LOCAL = ZoneId.of("America/Chicago")
+    @JvmField
+    val TZ_LOCAL: ZoneId = ZoneId.of("America/Chicago")
 
     @JvmField
-    val TZ_UTC = ZoneId.of("UTC")
+    val TZ_UTC: ZoneId = ZoneId.of("UTC")
 
     @JvmStatic
     fun toLocalDatePageByDay(page: Int /* 1-indexed */, clock: Clock?): LocalDate {
