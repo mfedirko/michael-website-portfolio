@@ -1,7 +1,7 @@
 package io.mfedirko.common.infra.dynamodb
 
 import io.mfedirko.DynamoDbTestConfiguration
-import io.mfedirko.RepositoryTestHelpers
+import io.mfedirko.RepositoryTestConditions
 import io.mfedirko.contactme.ContactHistory
 import io.mfedirko.fixture.ContactForms
 import org.assertj.core.api.Assertions
@@ -35,7 +35,7 @@ internal class DynamoDbContactMeRepositoryTest {
     fun withinSingleDateRange(from: LocalDate) {
         val history = repository.findContactHistoryByDate(from)
         Assertions.assertThat(history).isNotEmpty.are(
-            RepositoryTestHelpers.withinDate(from) {
+            RepositoryTestConditions.withinDate(from) {
                 it.creationTimestamp!!
             }
         )
@@ -45,7 +45,7 @@ internal class DynamoDbContactMeRepositoryTest {
     @MethodSource("dates")
     fun sortedDescendingByTimestamp(from: LocalDate) {
         val history = repository.findContactHistoryByDate(from)
-        Assertions.assertThat(history).isNotEmpty.`is`(RepositoryTestHelpers.sortedDescending { it.creationTimestamp!! })
+        Assertions.assertThat(history).isNotEmpty.`is`(RepositoryTestConditions.sortedDescending { it.creationTimestamp!! })
     }
 
     @ParameterizedTest

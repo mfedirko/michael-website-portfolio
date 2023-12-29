@@ -76,7 +76,7 @@ class ContactFormValidationTest {
         private fun fieldErrors(vararg fields: String): Condition<in (MutableCollection<out ConstraintViolation<*>>)> {
             return Condition(
                 { violations -> fields.all {
-                        field -> violations.any { it.propertyPath.toString() == field }
+                        field -> fieldError(field).matches(violations)
                     }
                 },
                 "Validation error on fields: $fields"

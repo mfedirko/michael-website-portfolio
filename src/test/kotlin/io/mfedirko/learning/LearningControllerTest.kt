@@ -21,7 +21,7 @@ internal class LearningControllerTest {
     @Test
     @Throws(Exception::class)
     fun pageLoads() {
-        mockMvc!!.perform(MockMvcRequestBuilders.get("/learning?page=1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/learning?page=1"))
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.view().name("learning"))
             .andExpect(MockMvcResultMatchers.model().attributeExists("lessons"))
@@ -31,7 +31,7 @@ internal class LearningControllerTest {
     @Test
     @Throws(Exception::class)
     fun nextPage() {
-        mockMvc!!.perform(MockMvcRequestBuilders.get("/learning?page=3"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/learning?page=3"))
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.view().name("learning"))
             .andExpect(MockMvcResultMatchers.model().attributeExists("lessons"))
