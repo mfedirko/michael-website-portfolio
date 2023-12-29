@@ -8,11 +8,11 @@
     <nav th:replace="~{fragments/common-layout.html :: navbar}"></nav>
 </header>
 <main>
-    <div id="contact-received" class="container contact-container">
+    <div id="contact-received" class="container">
         <p>Thank you for reaching out, <span th:text="${name}"></span>.</p>
         <p>I will review your message and get back to you.</p>
 
-        <button class="btn btn-primary" hx-get="/contact" hx-swap="outerHTML" hx-target="body">Contact Again</button>
+        <button class="btn btn-primary" hx-get="/contact" hx-swap="outerHTML" hx-target="#contact-received">Contact Again</button>
     </div>
 </main>
 </body>
