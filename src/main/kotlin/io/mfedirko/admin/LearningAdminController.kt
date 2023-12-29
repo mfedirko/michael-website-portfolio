@@ -32,7 +32,7 @@ class LearningAdminController(
 
     @GetMapping("/update-form/{id}")
     fun getUpdateLessonForm(@PathVariable("id") id: Long, modelMap: ModelMap): String {
-        val lesson = repository.getLesson(id)!!
+        val lesson = repository.getLesson(id) ?: throw java.lang.IllegalArgumentException("No lesson found with id $id")
         modelMap.addAttribute("updateLessonForm", fromLesson(lesson))
         return UPDATE_LESSON
     }
