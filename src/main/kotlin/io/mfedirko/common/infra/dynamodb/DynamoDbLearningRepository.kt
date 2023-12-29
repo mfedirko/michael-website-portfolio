@@ -51,9 +51,9 @@ class DynamoDbLearningRepository(
     }
 
     override fun getLesson(creationTimeMillis: Long): Lesson {
-        return Optional.ofNullable(table.getItem(toKey(creationTimeMillis)))
-            .map { lessonMapper.toLesson(it) }
-            .orElseThrow { IllegalArgumentException("No lesson exists with creationTimestampMillis $creationTimeMillis") }
+        return table.getItem(toKey(creationTimeMillis))
+            ?.let { lessonMapper.toLesson(it) }
+            ?: throw IllegalArgumentException("No lesson exists with creationTimestampMillis $creationTimeMillis")
     }
 
     @CacheEvict(allEntries = true)
