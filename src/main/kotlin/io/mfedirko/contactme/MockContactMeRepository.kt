@@ -15,9 +15,9 @@ class MockContactMeRepository : ContactMeRepository {
     fun findAllContactHistory(): List<ContactHistory> {
         return requests.map {
             ContactHistory().apply {
-                fullName = it.fullName
-                email = it.email
-                messageBody = it.messageBody
+                fullName = it.fullName!!
+                email = it.email!!
+                messageBody = it.messageBody!!
             }
         }.toList()
     }
