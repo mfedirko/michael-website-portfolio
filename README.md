@@ -18,13 +18,9 @@ This is a full-stack developer portfolio and the source code for https://michael
 - [Bootstrap](https://getbootstrap.com/) - modern JS and CSS framework
 - [Bootswatch](https://bootswatch.com/) - enhanced styles on top of default Bootstrap
 - CI/CD using [Github Actions](./.github/workflows)
-- Deployed in AWS
-  - [Cloudformation](./aws/cloudformation/master.yaml) Infrastructure as Code 
-  - [ECS Fargate](./aws/cloudformation/infrastructure/ecs-cluster.yaml) runs the [application service](./aws/cloudformation/services/server-backend/service.yaml)
-  - ECR stores Docker images for the application
-  - [ALB balances load](./aws/cloudformation/infrastructure/load-balancers.yaml) across ECS tasks
-  - [DynamoDB tables](./aws/cloudformation/infrastructure/dynamodb.yaml) store Learning and Contact Me data
-  - [VPC endpoints](./aws/cloudformation/infrastructure/vpc.yaml) allow traffic from private subnet going to S3/DynamoDB/ECR/CloudWatch to stay within AWS
+- Deployment 
+  - (current) - [Back4app](https://www.back4app.com/)
+  - (old) - [AWS](./aws/cloudformation/master.yaml)
 
 ## Local Development
 #### Initial Setup
