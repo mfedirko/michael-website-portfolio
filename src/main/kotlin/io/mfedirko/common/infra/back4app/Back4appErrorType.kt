@@ -54,6 +54,10 @@ enum class Back4appErrorType(val code: Int, val description: String) {
     ServiceUnavailable(2, "There is a problem with the parameters used to construct this query. This could be an invalid field name or an invalid field type for a specific constraint. Check error message for more details."),
     ClientDisconnected(4, "An invalid field name. Keys are case-sensitive. They must start with a letter, and a-zA-Z0-9_ are the only valid characters. Some field names may be reserved. Check error message for more details");
 
+    override fun toString(): String {
+        return "$name($code: $description)"
+    }
+
     companion object {
         fun fromCode(code: Int): Back4appErrorType? {
             return values().firstOrNull { it.code == code }

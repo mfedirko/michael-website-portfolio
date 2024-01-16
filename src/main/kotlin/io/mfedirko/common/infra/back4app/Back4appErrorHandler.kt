@@ -6,17 +6,20 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.mfedirko.common.util.Logging.logger
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.web.client.DefaultResponseErrorHandler
+import java.io.InputStreamReader
 
 internal class Back4appErrorHandler: DefaultResponseErrorHandler() {
     private val log = logger()
     private val objectMapper = ObjectMapper()
 
     override fun handleError(response: ClientHttpResponse) {
+        var rawResp: String? = null
         try {
-            val error = objectMapper.readValue(response.body, ErrorResponse::class.java)
+            rawResp = InputStreamReader(response.body).readText()
+            val error = objectMapper.readValue(rawResp, ErrorResponse::class.java)
             log.error("Back4app error status: {} response: {}", response.statusCode, error)
         } catch (ex: Exception) {
-            log.error("Could not parse Back4app error response {}", response, ex)
+            log.error("Could not parse Back4app error response {}", rawResp ?: response.statusCode, ex)
         }
         super.handleError(response)
     }
