@@ -13,13 +13,13 @@
         <p class="card-text"><span th:utext="${lesson.parsedDescription}"></span></p>
         <a class="btn btn-primary"
            sec:authorize="hasAuthority('ADMIN')"
-           th:hx-get="${'/admin/learning/update-form/' + lesson.creationTimestampMillis}"
+           th:hx-get="${'/admin/learning/update-form/' + lesson.id}"
            hx-swap="outerHTML" hx-trigger="click" hx-target="closest .lessoncard">
             Update
         </a>
         <a class="btn btn-primary"
            sec:authorize="hasAuthority('ADMIN')"
-           th:hx-delete="${'/admin/learning/' + lesson.creationTimestampMillis}"
+           th:hx-delete="${'/admin/learning/' + lesson.id}"
            hx-swap="delete" hx-trigger="click" hx-target="closest .lessoncard">
             Delete
         </a>

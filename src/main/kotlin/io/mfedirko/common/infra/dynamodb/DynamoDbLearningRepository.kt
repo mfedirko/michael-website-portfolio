@@ -9,8 +9,6 @@ import io.mfedirko.learning.LearningRepository
 import io.mfedirko.learning.Lesson
 import io.mfedirko.learning.UpdateLessonForm
 import org.springframework.cache.annotation.CacheConfig
-import org.springframework.cache.annotation.CacheEvict
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
@@ -24,7 +22,7 @@ import java.time.*
 import java.util.*
 
 @Repository
-@Profile("!mock")
+@Profile("aws")
 @CacheConfig(cacheNames = ["lessons"])
 class DynamoDbLearningRepository(
     private val enhancedClient: DynamoDbEnhancedClient
@@ -34,7 +32,6 @@ class DynamoDbLearningRepository(
     private val table: DynamoDbTable<DynamoLesson>
         get() = enhancedClient.table(DynamoLesson.TABLE, TableSchema.fromBean(DynamoLesson::class.java))
 
-    @Cacheable
     override fun findLessons(year: Year): List<Lesson> {
         log.debug("Called findLessons for {}", year)
         val result: PageIterable<DynamoLesson>? = table.query { k: QueryEnhancedRequest.Builder ->
@@ -53,28 +50,28 @@ class DynamoDbLearningRepository(
             ?: emptyList()
     }
 
-    override fun getLesson(creationTimeMillis: Long): Lesson {
-        return table.getItem(toKey(creationTimeMillis))
+    override fun getLesson(id: Any): Lesson {
+        id as Long
+        return table.getItem(toKey(id))
             ?.let { DynamoLessonMapper.toLesson(it) }
-            ?: throw IllegalArgumentException("No lesson exists with creationTimestampMillis $creationTimeMillis")
+            ?: throw IllegalArgumentException("No lesson exists with creationTimestampMillis $id")
     }
 
-    @CacheEvict(allEntries = true)
     override fun createLesson(lesson: CreateLessonForm): Long {
         val item = DynamoLesson.fromCreateRequest(lesson)
         table.putItem(item)
         return item.creationTimestampMillis
     }
 
-    @CacheEvict(allEntries = true)
-    override fun updateLesson(lesson: UpdateLessonForm, creationTimeMillis: Long) {
-        val original = getLesson(creationTimeMillis)
-        table.updateItem(DynamoLesson.fromUpdateRequest(lesson, original, creationTimeMillis))
+    override fun updateLesson(lesson: UpdateLessonForm, id: Any) {
+        id as Long
+        val original = getLesson(id)
+        table.updateItem(DynamoLesson.fromUpdateRequest(lesson, original, id))
     }
 
-    @CacheEvict(allEntries = true)
-    override fun deleteLesson(creationTimeMillis: Long) {
-        table.deleteItem(toKey(creationTimeMillis))
+    override fun deleteLesson(id: Any) {
+        id as Long
+        table.deleteItem(toKey(id))
     }
 
 

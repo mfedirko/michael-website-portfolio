@@ -31,7 +31,7 @@ class LearningAdminController(
     }
 
     @GetMapping("/update-form/{id}")
-    fun getUpdateLessonForm(@PathVariable("id") id: Long, modelMap: ModelMap): String {
+    fun getUpdateLessonForm(@PathVariable("id") id: Any, modelMap: ModelMap): String {
         val lesson = repository.getLesson(id) ?: throw java.lang.IllegalArgumentException("No lesson found with id $id")
         modelMap.addAttribute("updateLessonForm", fromLesson(lesson))
         return UPDATE_LESSON
@@ -39,7 +39,7 @@ class LearningAdminController(
 
     @PostMapping("/update-form/{id}")
     fun submitUpdateLesson(
-        @PathVariable("id") id: Long,
+        @PathVariable("id") id: Any,
         @Valid form: UpdateLessonForm,
         errors: Errors,
         modelMap: ModelMap
@@ -52,18 +52,18 @@ class LearningAdminController(
     }
 
     @GetMapping("/update-cancel/{id}")
-    fun cancelUpdate(@PathVariable("id") id: Long, modelMap: ModelMap): String {
+    fun cancelUpdate(@PathVariable("id") id: Any, modelMap: ModelMap): String {
         return lessonCard(modelMap, id)
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    fun deleteLesson(@PathVariable("id") id: Long): String {
+    fun deleteLesson(@PathVariable("id") id: Any): String {
         repository.deleteLesson(id)
         return "Deleted $id"
     }
 
-    private fun lessonCard(modelMap: ModelMap, id: Long): String {
+    private fun lessonCard(modelMap: ModelMap, id: Any): String {
         val lesson = repository.getLesson(id)
         modelMap.addAttribute("lesson", lesson)
         return LESSON_CARD

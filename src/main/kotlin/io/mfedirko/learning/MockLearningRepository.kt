@@ -18,11 +18,11 @@ class MockLearningRepository : LearningRepository {
             .toList()
     }
 
-    override fun getLesson(creationTimeMillis: Long): Lesson {
-        return lessons.first { it.creationTimestampMillis == creationTimeMillis }
+    override fun getLesson(id: Any): Lesson {
+        return lessons.first { it.id == id }
     }
 
-    override fun createLesson(lesson: CreateLessonForm): Long {
+    override fun createLesson(lesson: CreateLessonForm): Any {
         val newLesson: Lesson = Lesson().apply {
             description = lesson.description!!
             parsedDescription = Processor.process(lesson.description)
@@ -30,14 +30,14 @@ class MockLearningRepository : LearningRepository {
             title = lesson.title!!
             author = "Michael Fedirko"
             creationTimestamp = LocalDateTime.now()
-            creationTimestampMillis = Instant.now().toEpochMilli()
+            id = Instant.now().toEpochMilli()
         }
         lessons.add(newLesson)
-        return newLesson.creationTimestampMillis
+        return newLesson.id
     }
 
-    override fun updateLesson(lesson: UpdateLessonForm, creationTimeMillis: Long) {
-        val oldLesson = getLesson(creationTimeMillis)
+    override fun updateLesson(lesson: UpdateLessonForm, id: Any) {
+        val oldLesson = getLesson(id)
         val newLesson: Lesson = Lesson().apply {
             parsedDescription = Processor.process(lesson.description)
             description = lesson.description!!
@@ -45,13 +45,13 @@ class MockLearningRepository : LearningRepository {
             title = lesson.title!!
             author = oldLesson.author
             creationTimestamp = LocalDateTime.now()
-            creationTimestampMillis = Instant.now().toEpochMilli()
+            this.id = Instant.now().toEpochMilli()
         }
-        deleteLesson(creationTimeMillis)
+        deleteLesson(id)
         lessons.add(newLesson)
     }
 
-    override fun deleteLesson(creationTimeMillis: Long) {
-        lessons.removeIf { it.creationTimestampMillis == creationTimeMillis }
+    override fun deleteLesson(id: Any) {
+        lessons.removeIf { it.id == id }
     }
 }

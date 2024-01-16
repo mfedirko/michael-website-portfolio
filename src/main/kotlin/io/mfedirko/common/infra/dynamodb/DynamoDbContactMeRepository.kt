@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Repository
-@Profile("!mock")
+@Profile("aws")
 class DynamoDbContactMeRepository(
     private val enhancedClient: DynamoDbEnhancedClient
 

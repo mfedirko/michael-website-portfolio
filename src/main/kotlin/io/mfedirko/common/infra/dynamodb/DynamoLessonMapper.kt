@@ -14,7 +14,7 @@ object DynamoLessonMapper {
             title = dynamoLesson.title
             category = dynamoLesson.category
             author = dynamoLesson.author
-            creationTimestampMillis = dynamoLesson.creationTimestampMillis
+            id = dynamoLesson.creationTimestampMillis
             creationTimestamp = Dates.unixMillisToLocalDateTime(dynamoLesson.creationTimestampMillis)
         }
     }

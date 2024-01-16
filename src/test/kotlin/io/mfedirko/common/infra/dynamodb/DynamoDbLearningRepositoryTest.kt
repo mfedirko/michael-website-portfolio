@@ -33,7 +33,7 @@ internal class DynamoDbLearningRepositoryTest {
                 description = "MY NEW DESCRIPTION OF LESSON!"
                 title = "MY NEW TITLE of lessoin"
             }
-            repository.updateLesson(updateForm, lesson.creationTimestampMillis)
+            repository.updateLesson(updateForm, lesson.id)
             val lessons = repository.findLessons(year)
             Assertions.assertThat(lessons)
                 .filteredOn { it.creationTimestamp == lesson.creationTimestamp }
@@ -49,7 +49,7 @@ internal class DynamoDbLearningRepositoryTest {
             val updateForm = UpdateLessonForm.fromLesson(lesson).apply {
                 title = "MY NEW TITLE of lessoin"
             }
-            repository.updateLesson(updateForm, lesson.creationTimestampMillis)
+            repository.updateLesson(updateForm, lesson.id)
             val lessons = repository.findLessons(year)
             Assertions.assertThat(lessons)
                 .filteredOn { it.creationTimestamp == lesson.creationTimestamp }
@@ -64,7 +64,7 @@ internal class DynamoDbLearningRepositoryTest {
         fun deleteLesson() {
             val year = Year.of(2023)
             val lesson = repository.findLessons(year)[0]
-            repository.deleteLesson(lesson.creationTimestampMillis)
+            repository.deleteLesson(lesson.id)
             val lessons = repository.findLessons(year)
             Assertions.assertThat(lessons)
                 .filteredOn { it.creationTimestamp == lesson.creationTimestamp }
