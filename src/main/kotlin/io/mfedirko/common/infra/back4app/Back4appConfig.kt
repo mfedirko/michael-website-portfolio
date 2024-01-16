@@ -12,7 +12,8 @@ import org.springframework.http.client.ClientHttpRequestInterceptor
 @Profile("back4app")
 internal class Back4appConfig(
     @param:Value("\${back4app.application-id}") private val appId: String,
-    @param:Value("\${back4app.rest-api-key}") private val restApiKey: String
+    @param:Value("\${back4app.rest-api-key}") private val restApiKey: String,
+    @param:Value("\${back4app.root-uri}") private val rootUri: String
 ) {
     @Bean(name = ["back4appTemplate"])
     fun back4appRestTemplateBuilder(): RestTemplateBuilder {
@@ -24,7 +25,7 @@ internal class Back4appConfig(
                 }
                 execution.execute(request, body)
             })
-        }).rootUri("https://parseapi.back4app.com")
+        }).rootUri(rootUri)
           .errorHandler(Back4appErrorHandler())
     }
 }
