@@ -1,4 +1,5 @@
 FROM eclipse-temurin:17-jdk-jammy
+EXPOSE 8080
 
 WORKDIR /app
 
@@ -8,5 +9,6 @@ COPY src ./src
 RUN mkdir -p ./target
 RUN ./mvnw clean package
 RUN mv ./target/*.jar ./application.jar
+
 
 CMD ["java", "-jar", "application.jar"]
