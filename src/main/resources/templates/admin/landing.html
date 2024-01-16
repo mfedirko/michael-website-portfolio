@@ -13,7 +13,9 @@
         <div id="contacthistory" class="scrolling-anchor">.</div>
         <h4 id="contacthistoryHeading" class="section-heading">Contact History</h4>
         <div id="contacthistoryContent"
-             hx-get="/admin/contacts?page=1" hx-swap="outerHTML" hx-target="this" hx-trigger="load"></div>
+             hx-get="/admin/contacts?page=1" hx-swap="outerHTML" hx-target="this" hx-trigger="load">
+            <th:block th:insert="~{fragments/loading-message.html :: message}"></th:block>
+        </div>
     </div>
 </main>
 </body>
