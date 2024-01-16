@@ -1,9 +1,6 @@
-package io.mfedirko
+package io.mfedirko.common.infra.dynamodb
 
-import com.github.dockerjava.api.command.CreateNetworkCmd
-import io.mfedirko.DynamoDbTestConfiguration.LocalStackConfiguration
-import io.mfedirko.common.infra.dynamodb.DynamoContactRequest
-import io.mfedirko.common.infra.dynamodb.DynamoLesson
+import io.mfedirko.common.infra.dynamodb.DynamoDbTestConfiguration.LocalStackConfiguration
 import io.mfedirko.fixture.DynamoContactRequests
 import io.mfedirko.fixture.DynamoLessons
 import jakarta.annotation.PostConstruct
@@ -20,15 +17,13 @@ import org.testcontainers.utility.DockerImageName
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
-import software.amazon.awssdk.enhanced.dynamodb.model.CreateTableEnhancedRequest
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.ProvisionedThroughput
-import java.util.function.Consumer
 
 @TestConfiguration
 @TestPropertySource
-@Import(LocalStackConfiguration::class)
+@Import(LocalStackConfiguration::class, DynamoDbConfig::class)
 @ActiveProfiles("aws")
 class DynamoDbTestConfiguration {
     @Autowired
@@ -50,12 +45,16 @@ class DynamoDbTestConfiguration {
 
     private fun <T> initDynamoTable(clazz: Class<T>, name: String, data: Collection<T>?) {
         val table = dynamoDb.table(name, TableSchema.fromBean(clazz))
-        table.createTable {
-            it.provisionedThroughput {
-                    prov: ProvisionedThroughput.Builder -> prov.readCapacityUnits(1L).writeCapacityUnits(1L)
+        try {
+            table.describeTable().table() // table already exists if no exception
+        } catch (ex: Exception) { // table does not exist - create and populate
+            table.createTable {
+                it.provisionedThroughput { prov: ProvisionedThroughput.Builder ->
+                    prov.readCapacityUnits(1L).writeCapacityUnits(1L)
+                }
             }
+            data!!.forEach { table.putItem(it) }
         }
-        data!!.forEach { table.putItem(it) }
     }
 
     @TestConfiguration

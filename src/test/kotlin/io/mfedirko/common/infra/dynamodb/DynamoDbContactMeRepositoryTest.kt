@@ -1,6 +1,5 @@
 package io.mfedirko.common.infra.dynamodb
 
-import io.mfedirko.DynamoDbTestConfiguration
 import io.mfedirko.RepositoryTestConditions.sortedDescending
 import io.mfedirko.RepositoryTestConditions.withinDate
 import io.mfedirko.contactme.ContactHistory
@@ -13,11 +12,15 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDate
 import java.util.stream.Stream
 
-@SpringBootTest
-@Import(DynamoDbTestConfiguration::class)
+@SpringBootTest(classes = [
+    DynamoDbTestConfiguration::class,
+    DynamoDbContactMeRepository::class
+])
+@ActiveProfiles("aws")
 internal class DynamoDbContactMeRepositoryTest {
     @Autowired
     private lateinit var repository: DynamoDbContactMeRepository

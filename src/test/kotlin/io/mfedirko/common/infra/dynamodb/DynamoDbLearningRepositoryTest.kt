@@ -1,6 +1,5 @@
 package io.mfedirko.common.infra.dynamodb
 
-import io.mfedirko.DynamoDbTestConfiguration
 import io.mfedirko.RepositoryTestConditions.sortedDescending
 import io.mfedirko.RepositoryTestConditions.withinYear
 import io.mfedirko.learning.CreateLessonForm
@@ -14,10 +13,14 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.ActiveProfiles
 import java.time.Year
 
-@SpringBootTest
-@Import(DynamoDbTestConfiguration::class)
+@SpringBootTest(classes = [
+    DynamoDbTestConfiguration::class,
+    DynamoDbLearningRepository::class
+])
+@ActiveProfiles("aws")
 internal class DynamoDbLearningRepositoryTest {
     @Autowired
     private lateinit var repository: DynamoDbLearningRepository
