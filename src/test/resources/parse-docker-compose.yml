@@ -1,0 +1,25 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:13.2-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
+    ports:
+      - "5432:5432"
+
+  parse:
+    image: parseplatform/parse-server
+    environment:
+      - PARSE_SERVER_APPLICATION_ID=parse
+      - PARSE_SERVER_MASTER_KEY=parse@master123!
+      - PARSE_SERVER_DATABASE_URI=postgres://postgres:password@postgres/postgres
+      - PARSE_SERVER_MOUNT_PATH=/parse
+    ports:
+      - '1337:1337'
+    entrypoint: ["/bin/sh", "-c", "sleep 5;  node ./bin/parse-server"]
+    depends_on:
+      - postgres
