@@ -1,7 +1,9 @@
 package io.mfedirko.common.infra.back4app
 
+import io.mfedirko.common.infra.back4app.Back4appQueryUtil.OrderDir.DESC
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.between
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.equals
+import io.mfedirko.common.infra.back4app.Back4appQueryUtil.orderBy
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.where
 import io.mfedirko.common.util.Dates.toUtcEndOfYear
 import io.mfedirko.common.util.Dates.toUtcStartOfYear
@@ -32,11 +34,12 @@ class Back4appLearningRepository(
 
     override fun findLessons(year: Year): List<Lesson> {
         val resp = restTemplate.getForEntity(
-            "/classes/Lesson?where={where}",
+            "/classes/Lesson?where={where}&order={order}",
             LessonResults::class.java,
             where(
                 between("createdAt", year.toUtcStartOfYear(), year.toUtcEndOfYear())
-            )
+            ),
+            orderBy("updatedAt" to DESC)
         )
         return resp.body?.results?.map {
             it.toLesson()

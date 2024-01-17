@@ -83,6 +83,18 @@ internal class Back4appLearningRepositoryTest {
             assertEquals(createForm.title, results.title)
             assertEquals(createForm.description, results.description)
         }
+
+        @Test
+        fun sortedDescByTimeCreated() {
+            val second = CreateLessonForm().apply { category = "cat"; title = "second"; description = "my test desc 2" }
+            val third = CreateLessonForm().apply { category = "cat"; title = "third"; description = "my test desc 3" }
+            repository.createLesson(second)
+            repository.createLesson(third)
+
+            val results = repository.findLessons(Year.now())
+
+            assertEquals(listOf("third", "second"), results.map { it.title }.take(2))
+        }
     }
 
     @Nested

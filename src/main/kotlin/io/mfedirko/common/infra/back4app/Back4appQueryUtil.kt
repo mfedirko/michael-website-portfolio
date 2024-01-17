@@ -18,6 +18,14 @@ object Back4appQueryUtil {
         )
     }
 
+    fun orderBy(vararg fieldAndDirs: Pair<String, OrderDir>): String {
+        return fieldAndDirs.fold("") { acc, pair ->
+            val (field, dir) = pair
+            if (acc.isBlank()) "${dir.symbol}${field}"
+            else "${acc},${dir.symbol}${field}"
+        }
+    }
+
     fun <T> equals(field: String, value: T): Map<String, Any> {
         return mapOf(
             field to value as Any
@@ -26,5 +34,9 @@ object Back4appQueryUtil {
 
     private fun Map<String, Any>.toJson(): String {
         return objectMapper.writeValueAsString(this)
+    }
+
+    enum class OrderDir(val symbol: String) {
+        ASC("+"), DESC("-")
     }
 }

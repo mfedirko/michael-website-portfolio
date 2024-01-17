@@ -1,7 +1,9 @@
 package io.mfedirko.common.infra.back4app
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.mfedirko.common.infra.back4app.Back4appQueryUtil.OrderDir
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.between
+import io.mfedirko.common.infra.back4app.Back4appQueryUtil.orderBy
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.where
 import io.mfedirko.common.util.Dates.toUtcEndOfDay
 import io.mfedirko.common.util.Dates.toUtcStartOfDay
@@ -31,11 +33,12 @@ class Back4appContactMeRepository(
 
     override fun findContactHistoryByDate(date: LocalDate): List<ContactHistory> {
         val resp = restTemplate.getForEntity(
-            "/classes/ContactRequest?where={where}",
+            "/classes/ContactRequest?where={where}&order={order}",
             ContactResults::class.java,
             where(
                 between("createdAt", date.toUtcStartOfDay(), date.toUtcEndOfDay())
-            )
+            ),
+            orderBy("updatedAt" to OrderDir.DESC)
         )
         return resp.body?.results?.map {
             it.toContactHistory()
