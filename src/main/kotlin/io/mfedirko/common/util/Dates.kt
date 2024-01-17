@@ -55,6 +55,8 @@ object Dates {
 
     fun ZonedDateTime.inLocalTimeZone(): LocalDateTime = this.withZoneSameInstant(TZ_LOCAL).toLocalDateTime()
 
+    fun LocalDateTime.inUtcTimeZone(): LocalDateTime = this.atZone(TZ_LOCAL).withZoneSameInstant(TZ_UTC).toLocalDateTime()
+
     fun unixMillisToLocalDateTime(creationTimestampMillis: Long): LocalDateTime {
         return Instant.ofEpochMilli(creationTimestampMillis).atZone(TZ_LOCAL).toLocalDateTime()
     }

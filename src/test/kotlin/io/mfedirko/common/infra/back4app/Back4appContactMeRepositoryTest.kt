@@ -54,7 +54,6 @@ internal class Back4appContactMeRepositoryTest {
             val results = repository.findContactHistoryByDate(LocalDate.now())
 
             repository.update(*results.map { it.apply {
-                status = ContactHistory.Status.NOTIFIED
                 fullName = "test full name"
                 email = "testing@email.edu"
             } }.toTypedArray())
@@ -62,7 +61,6 @@ internal class Back4appContactMeRepositoryTest {
             val updated = repository.findContactHistoryByDate(LocalDate.now())
             assertAll(updated.map { hist ->
                 Executable {
-                    assertEquals(ContactHistory.Status.NOTIFIED, hist.status)
                     assertEquals("testing@email.edu", hist.email)
                     assertEquals("test full name", hist.fullName)
                 }
@@ -88,10 +86,6 @@ internal class Back4appContactMeRepositoryTest {
 
         }
 
-        @Test
-        fun statuses() {
-
-        }
 
         @Test
         fun orderBy() {

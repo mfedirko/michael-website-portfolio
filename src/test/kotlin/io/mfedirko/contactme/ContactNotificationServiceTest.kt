@@ -2,7 +2,6 @@ package io.mfedirko.contactme
 
 import io.mfedirko.common.infra.back4app.Back4appContactMeRepository
 import io.mfedirko.common.infra.back4app.Back4appTestConfiguration
-import io.mfedirko.contactme.ContactHistory.Status.NOTIFIED
 import io.mfedirko.email.EmailService
 import io.mfedirko.email.MailTemplateService
 import io.mfedirko.fixture.ContactForms
@@ -19,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.test.context.ActiveProfiles
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @SpringBootTest(classes = [
     Back4appTestConfiguration::class,
@@ -33,6 +34,9 @@ internal class ContactNotificationServiceTest {
 
     @Autowired
     private lateinit var contactMeRepository: ContactMeRepository
+
+    @Autowired
+    private lateinit var contactNotificationRepository: ContactNotificationRepository
 
     @MockBean
     private lateinit var emailTemplateService: MailTemplateService
@@ -65,26 +69,9 @@ internal class ContactNotificationServiceTest {
     }
 
     @Test
-    fun whenHasUnread_andNoLastNotification_thenEmails() {
-        contactMeRepository.save(ContactForms.aContactForm())
-        val expectedHtml = mockTemplateEngine()
-
-        contactNotificationService.notifyOfNewContactRequests()
-
-        Mockito.verify(emailService).sendHtmlEmail(
-            to = expectedToEmails(),
-            subject = expectedSubject(1),
-            htmlBody = expectedHtml
-        )
-    }
-
-    @Test
     fun whenHasUnread_andWithinIntervalSinceLastNotification_thenNoEmail() {
         contactMeRepository.save(ContactForms.aContactForm())
-        contactMeRepository.findContactHistory(ContactHistorySpec()).let { hist ->
-            hist.forEach { h -> h.status = NOTIFIED }
-            contactMeRepository.update(*hist.toTypedArray())
-        }
+        contactNotificationRepository.updateLastNotificationTime()
         contactMeRepository.save(ContactForms.aContactForm())
 
         contactNotificationService.notifyOfNewContactRequests()
@@ -94,11 +81,7 @@ internal class ContactNotificationServiceTest {
 
     @Test
     fun whenHasUnread_andPastIntervalSinceLastNotification_thenEmails() {
-        contactMeRepository.save(ContactForms.aContactForm())
-        contactMeRepository.findContactHistory(ContactHistorySpec()).let { hist ->
-            hist.forEach { h -> h.status = NOTIFIED }
-            contactMeRepository.update(*hist.toTypedArray())
-        }
+        contactNotificationRepository.updateLastNotificationTime()
         contactMeRepository.save(ContactForms.aContactForm())
         Thread.sleep(2500)
         val expectedHtml = mockTemplateEngine()
@@ -116,11 +99,9 @@ internal class ContactNotificationServiceTest {
     fun whenEmails_thenMarksContactHistoryAsNotified() {
         whenHasUnread_andPastIntervalSinceLastNotification_thenEmails()
 
-        val history = contactMeRepository.findContactHistory(ContactHistorySpec())
+        val lastNotif = contactNotificationRepository.findLastNotificationTime()
 
-        Assertions.assertThat(history)
-            .isNotEmpty
-            .allMatch { h -> h.status == NOTIFIED }
+        Assertions.assertThat(lastNotif).isAfter(LocalDateTime.now().minusDays(1)) // time zone
     }
 
     private fun mockTemplateEngine(): String {

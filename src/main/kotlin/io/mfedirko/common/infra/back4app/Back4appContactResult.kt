@@ -14,7 +14,6 @@ class Back4appContactResult {
     var fullName: String by Delegates.notNull()
     var email: String by Delegates.notNull()
     var messageBody: String by Delegates.notNull()
-    var status: String by Delegates.notNull()
 
     fun toContactHistory(): ContactHistory {
         return ContactHistory().apply {
@@ -23,7 +22,6 @@ class Back4appContactResult {
             this.email = this@Back4appContactResult.email
             this.fullName = this@Back4appContactResult.fullName
             this.messageBody = this@Back4appContactResult.messageBody
-            this.status = ContactHistory.Status.valueOf(this@Back4appContactResult.status)
         }
     }
 
@@ -33,6 +31,5 @@ class Back4appContactResult {
         const val FULL_NAME = "fullName"
         const val EMAIL = "email"
         const val MESSAGE_BODY = "messageBody"
-        const val STATUS = "status"
     }
 }

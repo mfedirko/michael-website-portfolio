@@ -16,3 +16,10 @@ CREATE TABLE IF NOT EXISTS Lesson (
     category VARCHAR,
     description VARCHAR
 );
+
+CREATE TABLE IF NOT EXISTS ContactNotification (
+    objectId VARCHAR PRIMARY KEY,
+    createdAt TIMESTAMP NOT NULL,
+    updatedAt TIMESTAMP NOT NULL,
+    notificationCount INTEGER
+);

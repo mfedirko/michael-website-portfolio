@@ -1,9 +1,9 @@
 package io.mfedirko.contactme
 
 import io.mfedirko.common.OrderDir
+import io.mfedirko.common.util.Dates.TZ_LOCAL
+import io.mfedirko.common.util.Dates.TZ_UTC
 import io.mfedirko.common.util.Logging.logger
-import io.mfedirko.contactme.ContactHistory.Status.NOTIFIED
-import io.mfedirko.contactme.ContactHistory.Status.UNREAD
 import io.mfedirko.email.EmailService
 import io.mfedirko.email.MailTemplateService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -17,6 +17,7 @@ import kotlin.time.toKotlinDuration
 @EnableConfigurationProperties(ContactMeProperties::class)
 class ContactNotificationService(
     private val contactMeRepository: ContactMeRepository,
+    private val contactNotificationRepository: ContactNotificationRepository,
     private val emailService: EmailService,
     private val templateService: MailTemplateService,
     private val contactMeProperties: ContactMeProperties
@@ -38,22 +39,17 @@ class ContactNotificationService(
             subject = "${unreadContacts.size} new contact requests",
             htmlBody = html
         )
-        contactMeRepository.update(*unreadContacts.map { it.apply { status = NOTIFIED } }.toTypedArray())
+        contactNotificationRepository.updateLastNotificationTime()
     }
 
     private fun findContactRequestsToNotify(): Pair<List<ContactHistory>, String> {
-        val lastNotification = contactMeRepository.findContactHistory(ContactHistorySpec().apply {
-            status = arrayOf(NOTIFIED)
-            orderBy = arrayOf(ContactHistorySpec.OrderBy.UPDATE_TIMESTAMP to OrderDir.DESC)
-        }, limit = 1).firstOrNull()?.creationTimestamp
-            ?: LocalDateTime.ofEpochSecond(0L, 0, ZoneOffset.UTC)
+        val lastNotification = contactNotificationRepository.findLastNotificationTime()
         val hasIntervalPassed = lastNotification < LocalDateTime.now().minusSeconds(contactMeProperties.notificationInterval.toKotlinDuration().inWholeSeconds)
         if (!hasIntervalPassed) {
             return emptyList<ContactHistory>() to "Minimum notification interval has not passed (last notification at $lastNotification)"
         }
 
         val unreadContactHistory = contactMeRepository.findContactHistory(ContactHistorySpec().apply {
-            status = arrayOf(UNREAD)
             startDate = lastNotification
         })
         return unreadContactHistory to "${unreadContactHistory.size} unread contact requests found"

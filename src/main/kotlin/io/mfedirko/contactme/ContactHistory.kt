@@ -9,17 +9,5 @@ class ContactHistory {
     var fullName: String by Delegates.notNull()
     var email: String by Delegates.notNull()
     var messageBody: String by Delegates.notNull()
-    var status: Status by Delegates.notNull()
 
-    enum class Status {
-        /**
-         * Initial status after submitting contact form
-         */
-        UNREAD,
-
-        /**
-         * Notification has been sent for this contact request
-         */
-        NOTIFIED
-    }
 }

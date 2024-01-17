@@ -1,6 +1,5 @@
 package io.mfedirko.contactme
 
-import io.mfedirko.contactme.ContactHistory.Status
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
@@ -19,7 +18,6 @@ class MockContactMeRepository : ContactMeRepository {
                 ?.let {
                     it.fullName = hist.fullName
                     it.email = hist.email
-                    it.status = hist.status
                     it.messageBody = hist.messageBody
                 }
                 ?: requests.add(hist)

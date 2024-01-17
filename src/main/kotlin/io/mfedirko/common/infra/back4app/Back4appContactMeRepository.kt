@@ -4,16 +4,14 @@ import io.mfedirko.common.OrderDir
 import io.mfedirko.common.infra.back4app.Back4appContactResult.Companion.CREATED_AT
 import io.mfedirko.common.infra.back4app.Back4appContactResult.Companion.UPDATED_AT
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.between
-import io.mfedirko.common.infra.back4app.Back4appQueryUtil.`in`
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.orderBy
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.where
+import io.mfedirko.common.util.Dates.inLocalTimeZone
+import io.mfedirko.common.util.Dates.inUtcTimeZone
 import io.mfedirko.common.util.Dates.toUtcEndOfDay
 import io.mfedirko.common.util.Dates.toUtcStartOfDay
-import io.mfedirko.contactme.ContactForm
-import io.mfedirko.contactme.ContactHistory
-import io.mfedirko.contactme.ContactHistorySpec
+import io.mfedirko.contactme.*
 import io.mfedirko.contactme.ContactHistorySpec.OrderBy.*
-import io.mfedirko.contactme.ContactMeRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
@@ -21,13 +19,15 @@ import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository
 import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Repository
 @Profile("back4app")
 class Back4appContactMeRepository(
     @Qualifier("back4appTemplate") restTemplateBuilder: RestTemplateBuilder,
     @Value("\${back4app.rate-limit-per-second}") private val rateLimitPerSec: Int
-) : ContactMeRepository {
+) : ContactMeRepository, ContactNotificationRepository {
     private val restTemplate: RestTemplate
     init {
         restTemplate = restTemplateBuilder.build()
@@ -61,10 +61,37 @@ class Back4appContactMeRepository(
         } ?: listOf()
     }
 
+    override fun findLastNotificationTime(): LocalDateTime {
+        return findLastContactNotification()?.updatedAt?.inLocalTimeZone()
+            ?: LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC)
+    }
+
+    private fun findLastContactNotification() = restTemplate.getForEntity(
+            "/classes/ContactNotification",
+            ContactNotificationResults::class.java
+        ).body?.results?.firstOrNull()
+
+    override fun updateLastNotificationTime() {
+        val lastNotification = findLastContactNotification()
+        if (lastNotification == null) {
+            restTemplate.postForLocation(
+                "/classes/ContactNotification",
+                Back4appContactNotification(0)
+            )
+        } else {
+            restTemplate.put(
+                "/classes/ContactNotification/{id}",
+                Back4appContactNotification(lastNotification.notificationCount + 1),
+                lastNotification.objectId
+            )
+        }
+    }
+
     private fun ContactHistorySpec.toWhere(): String {
         return where(
-            status.firstOrNull()?.let { `in`(Back4appContactResult.STATUS, status) } ?: mapOf(),
-            between(CREATED_AT, (startDate ?: LocalDate.ofEpochDay(0)).toString(), (endDate ?: LocalDate.now().plusDays(1)).toString())
+            between(CREATED_AT,
+                (startDate?.inUtcTimeZone() ?: LocalDate.ofEpochDay(0)).toString(),
+                (endDate?.inUtcTimeZone() ?: LocalDate.now().plusDays(1)).toString())
         )
     }
 
@@ -79,7 +106,6 @@ class Back4appContactMeRepository(
                     UPDATE_TIMESTAMP -> UPDATED_AT
                     EMAIL -> Back4appContactResult.EMAIL
                     FULL_NAME -> Back4appContactResult.FULL_NAME
-                    STATUS -> Back4appContactResult.STATUS
                 }
                 fieldName to dir
             }.toTypedArray()
@@ -101,6 +127,7 @@ class Back4appContactMeRepository(
 
     }
 
+    internal class ContactNotificationResults: Back4appResults<Back4appContactNotificationResult>()
 
     internal class ContactResults: Back4appResults<Back4appContactResult>()
 }
