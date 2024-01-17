@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Contact Requests</title>
+</head>
+<body>
+    <div class="container center">
+        <h2 th:text="${count + ' Unread Contact Requests'}"></h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Timestamp</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Message</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="contact : ${history}">
+                <td th:text="${contact.creationTimestamp + ' CT'}"></td>
+                <td th:text="${contact.fullName}"></td>
+                <td th:text="${contact.email}"></td>
+                <td th:text="${contact.messageBody}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <p th:if="${history.size() < count}" th:text="${'and ' + (count - history.size()) + ' more...'}"></p>
+    </div>
+</body>
+</html>

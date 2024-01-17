@@ -2,14 +2,13 @@ package io.mfedirko.common.infra.security
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer
-import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer
-import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
 
@@ -32,6 +31,14 @@ class WebSecurityConfig {
             .formLogin { it.disable() }
             .oauth2Login(Customizer.withDefaults())
         return http.build()
+    }
+
+    @Bean
+    fun webhookAuthorizerFilter(@Value("\${back4app.webhook-key}") webhookKey: String): FilterRegistrationBean<ParseWebhookAuthorizerFilter> {
+        return FilterRegistrationBean<ParseWebhookAuthorizerFilter>().apply {
+            filter = ParseWebhookAuthorizerFilter(webhookKey)
+            urlPatterns = listOf("/webhooks/*")
+        }
     }
 
     @Bean

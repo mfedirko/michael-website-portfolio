@@ -25,3 +25,13 @@ constructor(
     @field:Length(max = 300)
     var messageBody: String?
 )
+{
+    fun toContactHistory(): ContactHistory {
+        return ContactHistory().apply {
+            fullName = this@ContactForm.fullName!!
+            email = this@ContactForm.email!!
+            messageBody = this@ContactForm.messageBody!!
+            status = ContactHistory.Status.UNREAD
+        }
+    }
+}
