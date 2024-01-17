@@ -27,7 +27,7 @@ import java.time.ZoneOffset
 class Back4appContactMeRepository(
     @Qualifier("back4appTemplate") restTemplateBuilder: RestTemplateBuilder,
     @Value("\${back4app.rate-limit-per-second}") private val rateLimitPerSec: Int
-) : ContactMeRepository, ContactNotificationRepository {
+) : ContactMeRepository {
     private val restTemplate: RestTemplate
     init {
         restTemplate = restTemplateBuilder.build()
@@ -61,31 +61,6 @@ class Back4appContactMeRepository(
         } ?: listOf()
     }
 
-    override fun findLastNotificationTime(): LocalDateTime {
-        return findLastContactNotification()?.updatedAt?.inLocalTimeZone()
-            ?: LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC)
-    }
-
-    private fun findLastContactNotification() = restTemplate.getForEntity(
-            "/classes/ContactNotification",
-            ContactNotificationResults::class.java
-        ).body?.results?.firstOrNull()
-
-    override fun updateLastNotificationTime() {
-        val lastNotification = findLastContactNotification()
-        if (lastNotification == null) {
-            restTemplate.postForLocation(
-                "/classes/ContactNotification",
-                Back4appContactNotification(0)
-            )
-        } else {
-            restTemplate.put(
-                "/classes/ContactNotification/{id}",
-                Back4appContactNotification(lastNotification.notificationCount + 1),
-                lastNotification.objectId
-            )
-        }
-    }
 
     private fun ContactHistorySpec.toWhere(): String {
         return where(
@@ -126,8 +101,6 @@ class Back4appContactMeRepository(
         } ?: listOf()
 
     }
-
-    internal class ContactNotificationResults: Back4appResults<Back4appContactNotificationResult>()
 
     internal class ContactResults: Back4appResults<Back4appContactResult>()
 }

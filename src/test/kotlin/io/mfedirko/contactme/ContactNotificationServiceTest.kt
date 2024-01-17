@@ -1,6 +1,7 @@
 package io.mfedirko.contactme
 
 import io.mfedirko.common.infra.back4app.Back4appContactMeRepository
+import io.mfedirko.common.infra.back4app.Back4appContactNotificationRepository
 import io.mfedirko.common.infra.back4app.Back4appTestConfiguration
 import io.mfedirko.email.EmailService
 import io.mfedirko.email.MailTemplateService
@@ -24,6 +25,7 @@ import java.time.ZoneOffset
 @SpringBootTest(classes = [
     Back4appTestConfiguration::class,
     Back4appContactMeRepository::class,
+    Back4appContactNotificationRepository::class,
     ContactNotificationService::class
 ])
 @ActiveProfiles("back4app")
