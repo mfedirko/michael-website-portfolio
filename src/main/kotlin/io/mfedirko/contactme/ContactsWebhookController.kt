@@ -3,6 +3,7 @@ package io.mfedirko.contactme
 import io.mfedirko.common.util.Logging.logger
 import io.mfedirko.contactme.ContactNotificationService
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -14,7 +15,7 @@ class ContactsWebhookController(
 ) {
     private val log = logger()
 
-    @GetMapping
+    @PostMapping
     fun onContactRequested(@RequestParam("params", required = false) params: Map<String, Any>?): String {
         log.info("Called /contacts webhook with params: {}", params)
         contactNotificationService.notifyOfNewContactRequests()

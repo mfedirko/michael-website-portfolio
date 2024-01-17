@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -38,13 +39,13 @@ internal class ContactsWebhookControllerTest {
 
     @Test
     fun whenInvalidWebhookKey_then403() {
-        mockMvc.perform(get("/webhooks/contacts"))
+        mockMvc.perform(post("/webhooks/contacts"))
             .andExpect(status().`is`(403))
     }
 
     @Test
     fun whenValidWebhookKey_then200() {
-        mockMvc.perform(get("/webhooks/contacts")
+        mockMvc.perform(post("/webhooks/contacts")
                 .header("X-Parse-Webhook-Key", "testkey"))
             .andExpect(status().isOk)
         Mockito.verify(contactNotificationService).notifyOfNewContactRequests()
