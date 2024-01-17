@@ -20,7 +20,7 @@ This is a full-stack developer portfolio and the source code for https://michael
 - CI/CD using [Github Actions](./.github/workflows)
 - Deployment 
   - (current) - [Back4app](https://www.back4app.com/)
-  - (old) - [AWS](./aws/cloudformation/master.yaml)
+  - (old) - AWS
 
 ## Local Development
 #### Initial Setup
