@@ -1,6 +1,7 @@
 package io.mfedirko.contactme
 
 import io.mfedirko.common.infra.RecaptchaClient
+import io.mfedirko.common.validation.ReCaptchaValidator
 import io.mfedirko.fixture.ContactForms.aContactForm
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validator
@@ -9,10 +10,14 @@ import org.assertj.core.api.Condition
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 
-@SpringBootTest
+@SpringBootTest(classes = [
+    ReCaptchaValidator::class,
+    ValidationAutoConfiguration::class
+])
 class ContactFormValidationTest {
     @Autowired
     private lateinit var validator: Validator

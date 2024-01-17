@@ -7,7 +7,10 @@ import org.assertj.core.api.Condition
 import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.oauth2.client.registration.ClientRegistration
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
@@ -16,7 +19,8 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod
 import org.springframework.security.oauth2.core.OAuth2AccessToken
 import org.springframework.security.oauth2.core.user.OAuth2User
 
-@SpringBootTest
+@WebMvcTest(controllers = [OAuthLoginController::class])
+@Import(WebSecurityConfig::class, AdminOAuthUserService::class)
 @WireMockTest(httpPort = 8111)
 internal class AdminOAuthUserServiceTest {
     @Autowired
