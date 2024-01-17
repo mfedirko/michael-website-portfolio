@@ -1,16 +1,21 @@
 package io.mfedirko.common.infra.back4app
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.mfedirko.common.infra.back4app.Back4appQueryUtil.OrderDir
+import io.mfedirko.common.OrderDir
+import io.mfedirko.common.infra.back4app.Back4appContactResult.Companion.CREATED_AT
+import io.mfedirko.common.infra.back4app.Back4appContactResult.Companion.UPDATED_AT
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.between
+import io.mfedirko.common.infra.back4app.Back4appQueryUtil.`in`
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.orderBy
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.where
 import io.mfedirko.common.util.Dates.toUtcEndOfDay
 import io.mfedirko.common.util.Dates.toUtcStartOfDay
 import io.mfedirko.contactme.ContactForm
 import io.mfedirko.contactme.ContactHistory
+import io.mfedirko.contactme.ContactHistorySpec
+import io.mfedirko.contactme.ContactHistorySpec.OrderBy.*
 import io.mfedirko.contactme.ContactMeRepository
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository
@@ -20,7 +25,8 @@ import java.time.LocalDate
 @Repository
 @Profile("back4app")
 class Back4appContactMeRepository(
-    @Qualifier("back4appTemplate") restTemplateBuilder: RestTemplateBuilder
+    @Qualifier("back4appTemplate") restTemplateBuilder: RestTemplateBuilder,
+    @Value("\${back4app.rate-limit-per-second}") private val rateLimitPerSec: Int
 ) : ContactMeRepository {
     private val restTemplate: RestTemplate
     init {
@@ -31,14 +37,63 @@ class Back4appContactMeRepository(
         restTemplate.postForEntity("/classes/ContactRequest", Back4appContactForm(form), String::class.java)
     }
 
+    override fun update(vararg contactHistory: ContactHistory) {
+        val batches = contactHistory.toList().chunked(rateLimitPerSec)
+        batches.forEachIndexed { i, batch ->
+            batch.forEach { hist ->
+                restTemplate.put("/classes/ContactRequest/{id}", Back4appContactForm(hist), hist.id)
+            }
+            if (i < batches.size - 1) Thread.sleep(1100) // rate limit on Parse API
+        }
+    }
+
+    override fun findContactHistory(spec: ContactHistorySpec, limit: Int, offset: Int): List<ContactHistory> {
+        val resp = restTemplate.getForEntity(
+            "/classes/ContactRequest?where={where}&order={order}&limit={limit}&skip={skip}",
+            ContactResults::class.java,
+            spec.toWhere(),
+            spec.toOrderBy(),
+            limit,
+            offset
+        )
+        return resp.body?.results?.map {
+            it.toContactHistory()
+        } ?: listOf()
+    }
+
+    private fun ContactHistorySpec.toWhere(): String {
+        return where(
+            status.firstOrNull()?.let { `in`(Back4appContactResult.STATUS, status) } ?: mapOf(),
+            between(CREATED_AT, (startDate ?: LocalDate.ofEpochDay(0)).toString(), (endDate ?: LocalDate.now().plusDays(1)).toString())
+        )
+    }
+
+    private fun ContactHistorySpec.toOrderBy(): String {
+        val sortBy = if (this.orderBy.isEmpty())
+                        arrayOf(UPDATE_TIMESTAMP to OrderDir.DESC)
+                     else this.orderBy
+        return orderBy(
+            *sortBy.map { (field, dir) ->
+                val fieldName = when(field) {
+                    CREATION_TIMESTAMP -> CREATED_AT
+                    UPDATE_TIMESTAMP -> UPDATED_AT
+                    EMAIL -> Back4appContactResult.EMAIL
+                    FULL_NAME -> Back4appContactResult.FULL_NAME
+                    STATUS -> Back4appContactResult.STATUS
+                }
+                fieldName to dir
+            }.toTypedArray()
+        )
+    }
+
     override fun findContactHistoryByDate(date: LocalDate): List<ContactHistory> {
         val resp = restTemplate.getForEntity(
             "/classes/ContactRequest?where={where}&order={order}",
             ContactResults::class.java,
             where(
-                between("createdAt", date.toUtcStartOfDay(), date.toUtcEndOfDay())
+                between(CREATED_AT, date.toUtcStartOfDay(), date.toUtcEndOfDay())
             ),
-            orderBy("updatedAt" to OrderDir.DESC)
+            orderBy(UPDATED_AT to OrderDir.DESC)
         )
         return resp.body?.results?.map {
             it.toContactHistory()
@@ -48,5 +103,4 @@ class Back4appContactMeRepository(
 
 
     internal class ContactResults: Back4appResults<Back4appContactResult>()
-
 }

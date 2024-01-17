@@ -6,6 +6,7 @@ import java.time.Year
 
 interface LearningRepository {
     @Cacheable
+    @Deprecated("See findLessons in PaginatedLearningRepository")
     fun findLessons(year: Year): List<Lesson>
     fun getLesson(id: Any): Lesson?
     @CacheEvict(allEntries = true)

@@ -1,6 +1,6 @@
 package io.mfedirko.common.infra.back4app
 
-import io.mfedirko.common.infra.back4app.Back4appQueryUtil.OrderDir.DESC
+import io.mfedirko.common.OrderDir.DESC
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.between
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.equals
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.orderBy
