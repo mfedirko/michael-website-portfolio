@@ -6,8 +6,9 @@
     <div class="card-body">
         <h5 class="card-title" th:text="${lesson.title}"></h5>
         <p class="small text-muted">
-            by
+            Created by
             <span th:text="${lesson.author}"></span>
+            at
             <span th:text="${lesson.creationTimestamp + ' CT'}"></span>
         </p>
         <p class="card-text"><span th:utext="${lesson.parsedDescription}"></span></p>
@@ -20,6 +21,7 @@
         <a class="btn btn-primary"
            sec:authorize="hasAuthority('ADMIN')"
            th:hx-delete="${'/admin/learning/' + lesson.id}"
+           th:hx-confirm="${'Are you sure you want to delete &quot;' + lesson.title + '&quot;?'}"
            hx-swap="delete" hx-trigger="click" hx-target="closest .lessoncard">
             Delete
         </a>
