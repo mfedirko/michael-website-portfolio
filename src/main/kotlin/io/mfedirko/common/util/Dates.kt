@@ -15,6 +15,14 @@ object Dates {
         return Year.now(clock).minusYears((page - 1).toLong())
     }
 
+    fun pageToLimitOffset(page: Int, pageSize: Int = 20): Pair<Int, Int> {
+        return pageSize to (page - 1) * pageSize
+    }
+
+    fun limitOffsetToPage(limit: Int, offset: Int): Int {
+        return (offset / limit) + 1
+    }
+
     fun LocalDate.toUtcStartOfDay(): LocalDateTime {
         return this.atStartOfDay(TZ_LOCAL)
             .withZoneSameInstant(TZ_UTC).toLocalDateTime()

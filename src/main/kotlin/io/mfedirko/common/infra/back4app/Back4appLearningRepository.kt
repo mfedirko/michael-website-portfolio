@@ -7,10 +7,7 @@ import io.mfedirko.common.infra.back4app.Back4appQueryUtil.orderBy
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.where
 import io.mfedirko.common.util.Dates.toUtcEndOfYear
 import io.mfedirko.common.util.Dates.toUtcStartOfYear
-import io.mfedirko.learning.CreateLessonForm
-import io.mfedirko.learning.LearningRepository
-import io.mfedirko.learning.Lesson
-import io.mfedirko.learning.UpdateLessonForm
+import io.mfedirko.learning.*
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.cache.annotation.CacheConfig
@@ -26,10 +23,23 @@ import java.time.Year
 @CacheConfig(cacheNames = ["lessons"])
 class Back4appLearningRepository(
     @Qualifier("back4appTemplate") restTemplateBuilder: RestTemplateBuilder
-) : LearningRepository {
+) : PaginatedLearningRepository {
     private val restTemplate: RestTemplate
     init {
         restTemplate = restTemplateBuilder.build()
+    }
+
+    override fun findLessons(limit: Int, offset: Int): List<Lesson> {
+        val resp = restTemplate.getForEntity(
+            "/classes/Lesson?limit={limit}&skip={skip}&order={order}",
+            LessonResults::class.java,
+            limit,
+            offset,
+            orderBy("updatedAt" to DESC)
+        )
+        return resp.body?.results?.map {
+            it.toLesson()
+        } ?: listOf()
     }
 
     override fun findLessons(year: Year): List<Lesson> {

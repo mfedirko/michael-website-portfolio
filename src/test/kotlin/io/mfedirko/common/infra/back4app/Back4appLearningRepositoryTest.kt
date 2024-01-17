@@ -61,6 +61,13 @@ internal class Back4appLearningRepositoryTest {
     @Nested
     internal inner class FindCreatedLesson : BaseTest() {
         @Test
+        fun findByPagination() {
+            val results = repository.findLessons(20, 0)
+
+            assertEquals(1, results.size)
+        }
+
+        @Test
         fun findByYear() {
             val results = repository.findLessons(Year.now())
 
@@ -91,9 +98,9 @@ internal class Back4appLearningRepositoryTest {
             repository.createLesson(second)
             repository.createLesson(third)
 
-            val results = repository.findLessons(Year.now())
+            val results = repository.findLessons(2, 0)
 
-            assertEquals(listOf("third", "second"), results.map { it.title }.take(2))
+            assertEquals(listOf("third", "second"), results.map { it.title })
         }
     }
 

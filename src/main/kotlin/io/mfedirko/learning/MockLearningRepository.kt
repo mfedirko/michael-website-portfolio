@@ -8,8 +8,17 @@ import java.time.*
 
 @Repository
 @Profile("mock")
-class MockLearningRepository : LearningRepository {
+class MockLearningRepository : PaginatedLearningRepository {
     private val lessons: MutableList<Lesson> = ArrayList()
+
+    override fun findLessons(limit: Int, offset: Int): List<Lesson> {
+        return lessons
+            .sortedWith(compareBy { it.creationTimestamp })
+            .drop(offset)
+            .take(limit)
+            .toList()
+    }
+
     override fun findLessons(year: Year): List<Lesson> {
         val startOfYear = year.toUtcStartOfYear()
         return lessons
