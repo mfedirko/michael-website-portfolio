@@ -45,12 +45,12 @@ class Back4appContactNotificationRepository(
         if (lastNotification == null) {
             restTemplate.postForLocation(
                 "/classes/ContactNotification",
-                Back4appContactNotification(0)
+                Back4appContactNotification()
             )
         } else {
             restTemplate.put(
                 "/classes/ContactNotification/{id}",
-                Back4appContactNotification(lastNotification.notificationCount + 1),
+                Back4appContactNotification(),
                 lastNotification.objectId
             )
         }
