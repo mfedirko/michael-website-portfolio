@@ -1,13 +1,13 @@
-package io.mfedirko.contactme
+package io.mfedirko.contactme.notification
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.bind.ConstructorBinding
 
 @ConfigurationProperties(prefix = "contactme")
-data class ContactMeProperties
+class ContactMeProperties
 @ConstructorBinding
 constructor(
-    val notificationInterval: java.time.Duration,
-    val toEmail: String,
-    val fromEmail: String
-)
+   notificationInterval: java.time.Duration,
+   toEmail: String,
+   fromEmail: String
+) : NotificationPreference(notificationInterval, toEmail, fromEmail)

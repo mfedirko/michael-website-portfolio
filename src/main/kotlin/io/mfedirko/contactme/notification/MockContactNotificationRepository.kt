@@ -9,6 +9,7 @@ import java.time.ZoneOffset
 @Profile("mock")
 class MockContactNotificationRepository : ContactNotificationRepository {
     private var lastNotificationTime: LocalDateTime = LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC)
+    private var notificationPreference: NotificationPreference? = null
 
     override fun findLastNotificationTime(): LocalDateTime {
         return lastNotificationTime
@@ -16,5 +17,13 @@ class MockContactNotificationRepository : ContactNotificationRepository {
 
     override fun updateLastNotificationTime() {
         lastNotificationTime = LocalDateTime.now()
+    }
+
+    override fun getNotificationPreference(): NotificationPreference? {
+        return notificationPreference
+    }
+
+    override fun updateNotificationPreference(notificationPreference: NotificationPreference) {
+        this.notificationPreference = notificationPreference
     }
 }

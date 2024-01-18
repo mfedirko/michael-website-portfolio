@@ -51,7 +51,6 @@ internal class ContactNotificationServiceTest {
         contactNotificationService.notifyOfNewContactRequests()
 
         Mockito.verify(emailService).sendHtmlEmail(
-            to = expectedToEmails(),
             subject = expectedSubject(1),
             htmlBody = expectedHtml
         )
@@ -64,6 +63,5 @@ internal class ContactNotificationServiceTest {
         return expectedHtml
     }
 
-    private fun expectedToEmails() = arrayOf("michael@gmail.com")
     private fun expectedSubject(countUnread: Int) = "$countUnread new contact requests"
 }

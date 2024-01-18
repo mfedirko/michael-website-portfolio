@@ -5,24 +5,18 @@ import io.mfedirko.common.infra.back4app.Back4appContactNotificationRepository
 import io.mfedirko.common.infra.back4app.Back4appTestConfiguration
 import io.mfedirko.contactme.ContactHistorySpec
 import io.mfedirko.contactme.ContactMeRepository
-import io.mfedirko.email.EmailService
-import io.mfedirko.email.MailTemplateService
 import io.mfedirko.fixture.ContactForms
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
 
 @SpringBootTest(classes = [
     Back4appTestConfiguration::class,
