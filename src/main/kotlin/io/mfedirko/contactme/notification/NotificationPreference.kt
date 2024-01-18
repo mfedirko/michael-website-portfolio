@@ -7,12 +7,21 @@ import java.time.Duration
 open class NotificationPreference
 @JsonCreator
 constructor(
+    /**
+     * Limits how often notifications are sent regarding contact requests
+     */
     @JsonProperty("notificationInterval")
     val notificationInterval: Duration,
 
+    /**
+     * Email address to which notification emails are sent
+     */
     @JsonProperty("toEmail")
     val toEmail: String,
 
+    /**
+     * Email address which will appear as the sender/from address in notification emails
+     */
     @JsonProperty("fromEmail")
     val fromEmail: String
 ) {

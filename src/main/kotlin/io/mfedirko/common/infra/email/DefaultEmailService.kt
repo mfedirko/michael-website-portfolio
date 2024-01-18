@@ -20,7 +20,7 @@ class DefaultEmailService(
         log.info("Sending email '{}'", subject)
         val mimeMessage: MimeMessage = mailSender.createMimeMessage()
         val notificationPreference = notificationRepository.getNotificationPreference()
-            ?: error("Notification preferences are required in order to send email")
+            ?: error("Notification preferences must be set in order to send emails")
         MimeMessageHelper(mimeMessage, false, "UTF-8").apply {
             setSubject(subject)
             setFrom(notificationPreference.fromEmail)

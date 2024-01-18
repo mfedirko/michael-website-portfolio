@@ -9,8 +9,9 @@
         <p th:if="${success}" data-loading-class="d-no" class="alert alert-success" th:text="#{preferences.notification.update-success}"></p>
         <p th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" th:text="#{invalid.form.generic}"></p>
         <div class="form-group">
-            <label for="notificationInterval">Notification Interval</label>
+            <label for="notificationInterval">Contact Request Notification Interval</label>
             <input id="notificationInterval" class="form-control" th:field="*{notificationInterval}" type="text" placeholder="Notification Interval" />
+            <small id="intervalHelp" class="form-text text-muted" th:text="#{preferences.notification.interval.help-text}"></small>
             <p class="small" th:if="${#fields.hasErrors('notificationInterval')}" th:errorclass="error" th:errors="*{notificationInterval}" />
         </div>
         <div class="form-group">
