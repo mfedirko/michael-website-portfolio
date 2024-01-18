@@ -3,6 +3,7 @@ package io.mfedirko.common
 import io.mfedirko.common.infra.security.WebSecurityConfig
 import io.mfedirko.contactme.ContactMeRepository
 import io.mfedirko.contactme.notification.ContactNotificationService
+import io.mfedirko.contactme.notification.NotificationPreferenceRepository
 import io.mfedirko.learning.PaginatedLearningRepository
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.BeforeEach
@@ -39,7 +40,8 @@ class WebSecurityTest {
     private lateinit var learningRepository: PaginatedLearningRepository
     @MockBean
     private lateinit var contactNotificationService: ContactNotificationService
-
+    @MockBean
+    private lateinit var notificationPreferenceRepository: NotificationPreferenceRepository
 
     @BeforeEach
     fun setup() {
@@ -71,7 +73,9 @@ class WebSecurityTest {
         "GET,/admin/contacts?page=1",
         "GET,/admin/learning/create-form",
         "POST,/admin/learning/create-form",
-        "POST,/admin/learning/update-form/123"
+        "POST,/admin/learning/update-form/123",
+        "GET,/admin/preferences",
+        "GET,/admin/preferences/notification"
     ])
     @WithMockUser(authorities = ["ADMIN"])
     @Throws(
@@ -90,7 +94,10 @@ class WebSecurityTest {
         "POST,/admin/learning/create-form",
         "GET,/admin/learning/update-form/123",
         "POST,/admin/learning/update-form/123",
-        "GET,/admin/any/other/endpoint"
+        "GET,/admin/any/other/endpoint",
+        "GET,/admin/preferences",
+        "GET,/admin/preferences/notification",
+        "POST,/admin/preferences/notification"
     ])
     @Throws(
         Exception::class
@@ -109,7 +116,10 @@ class WebSecurityTest {
         "POST,/admin/learning/create-form",
         "GET,/admin/learning/update-form/123",
         "POST,/admin/learning/update-form/123",
-        "GET,/admin/any/other/endpoint"
+        "GET,/admin/any/other/endpoint",
+        "GET,/admin/preferences",
+        "GET,/admin/preferences/notification",
+        "POST,/admin/preferences/notification"
     ])
     @WithMockUser(authorities = ["OAUTH_USER"])
     @Throws(

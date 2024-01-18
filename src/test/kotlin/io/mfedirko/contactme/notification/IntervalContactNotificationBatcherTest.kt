@@ -9,6 +9,7 @@ import io.mfedirko.fixture.ContactForms
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
@@ -17,14 +18,14 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.test.context.ActiveProfiles
+import java.time.Duration
 
 @SpringBootTest(classes = [
     Back4appTestConfiguration::class,
     Back4appContactMeRepository::class,
     Back4appContactNotificationRepository::class,
     IntervalContactNotificationBatcher::class
-],
-properties = ["contactme.notification-interval=PT1S"])
+])
 @ActiveProfiles("back4app")
 @ExtendWith(MockitoExtension::class)
 internal class IntervalContactNotificationBatcherTest {
@@ -40,6 +41,17 @@ internal class IntervalContactNotificationBatcherTest {
     @Autowired
     @Qualifier("back4appTemplate")
     private lateinit var restTemplateBuilder: RestTemplateBuilder
+
+    @BeforeEach
+    fun setup() {
+        contactNotificationRepository.updateNotificationPreference(
+            NotificationPreference(
+                notificationInterval = Duration.ofSeconds(1),
+                toEmail = "test@aa",
+                fromEmail = "test2@bb"
+            )
+        )
+    }
 
     @AfterEach
     fun cleanup() {
