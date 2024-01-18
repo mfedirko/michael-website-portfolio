@@ -66,7 +66,7 @@ class Back4appContactMeRepository(
         return where(
             between(CREATED_AT,
                 (startDate?.inUtcTimeZone() ?: LocalDate.ofEpochDay(0)).toString(),
-                (endDate?.inUtcTimeZone() ?: LocalDate.now().plusDays(1)).toString())
+                (endDate?.inUtcTimeZone() ?: LocalDate.now().plusDays(2)).toString())
         )
     }
 
