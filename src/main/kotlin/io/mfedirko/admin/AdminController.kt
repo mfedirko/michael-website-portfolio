@@ -11,4 +11,9 @@ class AdminController {
     fun getAdminDashboard(): String {
         return "admin/landing"
     }
+
+    @GetMapping("/preferences")
+    fun getPreferencesPage(): String {
+        return "admin/preferences-landing"
+    }
 }

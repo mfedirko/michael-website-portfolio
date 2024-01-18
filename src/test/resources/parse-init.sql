@@ -22,3 +22,12 @@ CREATE TABLE IF NOT EXISTS ContactNotification (
     createdAt TIMESTAMP NOT NULL,
     updatedAt TIMESTAMP NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS NotificationPreference (
+    objectId VARCHAR PRIMARY KEY,
+    createdAt TIMESTAMP NOT NULL,
+    updatedAt TIMESTAMP NOT NULL,
+    notificationInterval VARCHAR,
+    toEmail VARCHAR,
+    fromEmail VARCHAR
+);

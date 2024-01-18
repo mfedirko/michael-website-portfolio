@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div hx-ext="loading-states" class="my-5" id="preferences-body">
+    <form id="notif-pref-form"
+          hx-post="/admin/preferences/notification" hx-swap="outerHTML" hx-target="#preferences-body"
+          data-loading-delay="50"
+          th:object="${notificationPreferenceForm}">
+        <p th:if="${success}" data-loading-class="d-no" class="alert alert-success" th:text="#{preferences.notification.update-success}"></p>
+        <p th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" th:text="#{invalid.form.generic}"></p>
+        <div class="form-group">
+            <label for="notificationInterval">Notification Interval</label>
+            <input id="notificationInterval" class="form-control" th:field="*{notificationInterval}" type="text" placeholder="Notification Interval" />
+            <p class="small" th:if="${#fields.hasErrors('notificationInterval')}" th:errorclass="error" th:errors="*{notificationInterval}" />
+        </div>
+        <div class="form-group">
+            <label for="fromEmail">From Email</label>
+            <input id="fromEmail" class="form-control" th:field="*{fromEmail}" type="email" placeholder="From Email" />
+            <p class="small" th:if="${#fields.hasErrors('fromEmail')}" th:errorclass="error" th:errors="*{fromEmail}" />
+        </div>
+        <div class="form-group">
+            <label for="toEmail">To Email</label>
+            <input id="toEmail" class="form-control" th:field="*{toEmail}" type="email" placeholder="To Email" />
+            <p class="small" th:if="${#fields.hasErrors('toEmail')}" th:errorclass="error" th:errors="*{toEmail}" />
+        </div>
+        <button data-loading-disable type="submit" class="btn btn-primary" >
+            Save Preferences
+        </button>
+    </form>
+</div>

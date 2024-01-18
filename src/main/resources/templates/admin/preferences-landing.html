@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/common-layout.html :: header}">
+    <title>Michael Fedirko - Admin Preferences</title>
+</head>
+<body>
+<header>
+    <nav th:replace="~{admin/fragments/admin-nav.html :: navbar}"></nav>
+</header>
+<main>
+    <div id="notifPreferences" class="scrolling-anchor">.</div>
+    <h4 id="notifPreferencesHeading" class="section-heading">Notification Preferences</h4>
+    <div id="notifPreferencesContent"
+         hx-get="/admin/preferences/notification" hx-swap="outerHTML" hx-target="this" hx-trigger="load">
+        <th:block th:insert="~{fragments/loading-message.html :: message}"></th:block>
+    </div>
+</main>
+</body>
+</html>

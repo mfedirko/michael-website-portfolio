@@ -16,5 +16,23 @@ constructor(
     @JsonProperty("fromEmail")
     val fromEmail: String
 ) {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is NotificationPreference) return false
+
+        if (notificationInterval != other.notificationInterval) return false
+        if (toEmail != other.toEmail) return false
+        if (fromEmail != other.fromEmail) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = notificationInterval.hashCode()
+        result = 31 * result + toEmail.hashCode()
+        result = 31 * result + fromEmail.hashCode()
+        return result
+    }
 }
 

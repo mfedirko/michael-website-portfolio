@@ -3,11 +3,9 @@ package io.mfedirko.common.infra.back4app
 import io.mfedirko.common.util.Dates.inLocalTimeZone
 import io.mfedirko.contactme.*
 import io.mfedirko.contactme.ContactHistorySpec.OrderBy.*
-import io.mfedirko.contactme.notification.ContactMeProperties
 import io.mfedirko.contactme.notification.ContactNotificationRepository
 import io.mfedirko.contactme.notification.NotificationPreference
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository
@@ -17,10 +15,8 @@ import java.time.ZoneOffset
 
 @Repository
 @Profile("back4app")
-@EnableConfigurationProperties(ContactMeProperties::class)
 class Back4appContactNotificationRepository(
     @Qualifier("back4appTemplate") restTemplateBuilder: RestTemplateBuilder,
-    private val notificationPreference: ContactMeProperties
 ) : ContactNotificationRepository {
     private val restTemplate: RestTemplate
     init {
@@ -54,12 +50,30 @@ class Back4appContactNotificationRepository(
     }
 
     override fun getNotificationPreference(): NotificationPreference? {
-        return notificationPreference
+        return getNotificationPreferenceBackend()?.toNotificationPreference()
     }
+
+    private fun getNotificationPreferenceBackend() = restTemplate.getForEntity(
+            "/classes/NotificationPreference",
+            NotificationPreferenceResults::class.java
+        ).body?.results?.firstOrNull()
 
     override fun updateNotificationPreference(notificationPreference: NotificationPreference) {
-        error("Not supported: update notification preferences")
+        val existingPref = getNotificationPreferenceBackend()
+        if (existingPref == null) {
+            restTemplate.postForLocation(
+                "/classes/NotificationPreference",
+                Back4appNotificationPreferenceForm(notificationPreference)
+            )
+        } else {
+            restTemplate.put(
+                "/classes/NotificationPreference/{id}",
+                Back4appNotificationPreferenceForm(notificationPreference),
+                existingPref.objectId
+            )
+        }
     }
 
+    internal class NotificationPreferenceResults: Back4appResults<Back4appNotificationPreferenceResult>()
     internal class ContactNotificationResults: Back4appResults<Back4appContactNotificationResult>()
 }
