@@ -1,8 +1,6 @@
-package io.mfedirko.contactme
+package io.mfedirko.contactme.notification
 
 import io.mfedirko.common.util.Logging.logger
-import io.mfedirko.contactme.ContactNotificationService
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam

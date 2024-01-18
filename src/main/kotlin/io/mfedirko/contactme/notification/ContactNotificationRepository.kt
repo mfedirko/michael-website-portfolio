@@ -1,4 +1,4 @@
-package io.mfedirko.contactme
+package io.mfedirko.contactme.notification
 
 import java.time.LocalDateTime
 

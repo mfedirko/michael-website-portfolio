@@ -1,12 +1,15 @@
-package io.mfedirko.contactme
+package io.mfedirko.contactme.notification
 
 import io.mfedirko.common.infra.back4app.Back4appContactMeRepository
 import io.mfedirko.common.infra.back4app.Back4appContactNotificationRepository
 import io.mfedirko.common.infra.back4app.Back4appTestConfiguration
+import io.mfedirko.contactme.ContactHistorySpec
+import io.mfedirko.contactme.ContactMeRepository
 import io.mfedirko.email.EmailService
 import io.mfedirko.email.MailTemplateService
 import io.mfedirko.fixture.ContactForms
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -20,31 +23,25 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 @SpringBootTest(classes = [
     Back4appTestConfiguration::class,
     Back4appContactMeRepository::class,
     Back4appContactNotificationRepository::class,
-    ContactNotificationService::class
-])
+    IntervalContactNotificationBatcher::class
+],
+properties = ["contactme.notification-interval=PT1S"])
 @ActiveProfiles("back4app")
 @ExtendWith(MockitoExtension::class)
-internal class ContactNotificationServiceTest {
+internal class IntervalContactNotificationBatcherTest {
     @Autowired
-    private lateinit var contactNotificationService: ContactNotificationService
+    private lateinit var batcher: IntervalContactNotificationBatcher
 
     @Autowired
     private lateinit var contactMeRepository: ContactMeRepository
 
     @Autowired
     private lateinit var contactNotificationRepository: ContactNotificationRepository
-
-    @MockBean
-    private lateinit var emailTemplateService: MailTemplateService
-
-    @MockBean
-    private lateinit var emailService: EmailService
 
     @Autowired
     @Qualifier("back4appTemplate")
@@ -64,55 +61,40 @@ internal class ContactNotificationServiceTest {
     }
 
     @Test
-    fun whenNoUnread_thenNoEmail() {
-        contactNotificationService.notifyOfNewContactRequests()
-
-        Mockito.verifyNoInteractions(emailService, emailTemplateService)
-    }
-
-    @Test
-    fun whenHasUnread_andWithinIntervalSinceLastNotification_thenNoEmail() {
-        contactMeRepository.save(ContactForms.aContactForm())
+    fun whenWithinIntervalWindow_thenEmptyBatch() {
         contactNotificationRepository.updateLastNotificationTime()
-        contactMeRepository.save(ContactForms.aContactForm())
 
-        contactNotificationService.notifyOfNewContactRequests()
+        val (batch, statusReason) = batcher.nextBatchToNotify()
 
-        Mockito.verifyNoInteractions(emailService, emailTemplateService)
+        assertThat(batch).isEmpty()
+        assertThat(statusReason.lowercase()).contains("notification interval")
     }
 
     @Test
-    fun whenHasUnread_andPastIntervalSinceLastNotification_thenEmails() {
+    fun whenPastIntervalWindow_thenNonEmptyBatch() {
         contactNotificationRepository.updateLastNotificationTime()
+        Thread.sleep(1500)
         contactMeRepository.save(ContactForms.aContactForm())
-        Thread.sleep(2500)
-        val expectedHtml = mockTemplateEngine()
+        contactMeRepository.save(ContactForms.aContactForm())
+        contactMeRepository.save(ContactForms.aContactForm())
 
-        contactNotificationService.notifyOfNewContactRequests()
+        val (batch, _) = batcher.nextBatchToNotify()
 
-        Mockito.verify(emailService).sendHtmlEmail(
-            to = expectedToEmails(),
-            subject = expectedSubject(1),
-            htmlBody = expectedHtml
-        )
+        assertThat(batch).hasSize(3)
     }
 
     @Test
-    fun whenEmails_thenMarksContactHistoryAsNotified() {
-        whenHasUnread_andPastIntervalSinceLastNotification_thenEmails()
+    fun whenSubsequentBatches_thenNoOverlap() {
+        Thread.sleep(1500)
+        contactMeRepository.save(ContactForms.aContactForm())
+        contactMeRepository.save(ContactForms.aContactForm())
+        val (batch1, reason1) = batcher.nextBatchToNotify()
+        Thread.sleep(1500)
+        contactMeRepository.save(ContactForms.aContactForm())
+        val (batch2, reason2) = batcher.nextBatchToNotify()
 
-        val lastNotif = contactNotificationRepository.findLastNotificationTime()
-
-        Assertions.assertThat(lastNotif).isAfter(LocalDateTime.now().minusDays(1)) // time zone
+        assertThat(batch1).hasSize(2)
+        assertThat(batch2).hasSize(1)
+        assertThat(batch1.intersect(batch2)).isEmpty()
     }
-
-    private fun mockTemplateEngine(): String {
-        val expectedHtml = "<html><body>My html</body></html>"
-        Mockito.`when`(emailTemplateService.unreadContactRequests(Mockito.anyList()))
-            .thenReturn(expectedHtml)
-        return expectedHtml
-    }
-
-    private fun expectedToEmails() = arrayOf("michael@gmail.com")
-    private fun expectedSubject(countUnread: Int) = "$countUnread new contact requests"
 }

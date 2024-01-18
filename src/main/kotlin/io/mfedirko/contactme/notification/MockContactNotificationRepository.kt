@@ -1,4 +1,4 @@
-package io.mfedirko.contactme
+package io.mfedirko.contactme.notification
 
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Repository

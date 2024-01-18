@@ -1,17 +1,9 @@
 package io.mfedirko.common.infra.back4app
 
-import io.mfedirko.common.OrderDir
-import io.mfedirko.common.infra.back4app.Back4appContactResult.Companion.CREATED_AT
-import io.mfedirko.common.infra.back4app.Back4appContactResult.Companion.UPDATED_AT
-import io.mfedirko.common.infra.back4app.Back4appQueryUtil.between
-import io.mfedirko.common.infra.back4app.Back4appQueryUtil.orderBy
-import io.mfedirko.common.infra.back4app.Back4appQueryUtil.where
 import io.mfedirko.common.util.Dates.inLocalTimeZone
-import io.mfedirko.common.util.Dates.inUtcTimeZone
-import io.mfedirko.common.util.Dates.toUtcEndOfDay
-import io.mfedirko.common.util.Dates.toUtcStartOfDay
 import io.mfedirko.contactme.*
 import io.mfedirko.contactme.ContactHistorySpec.OrderBy.*
+import io.mfedirko.contactme.notification.ContactNotificationRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Profile

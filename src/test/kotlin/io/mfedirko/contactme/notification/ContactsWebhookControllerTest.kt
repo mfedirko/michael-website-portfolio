@@ -1,8 +1,8 @@
-package io.mfedirko.contactme
+package io.mfedirko.contactme.notification
 
 import io.mfedirko.common.infra.security.ParseWebhookAuthorizerFilter
-import io.mfedirko.contactme.ContactNotificationService
-import io.mfedirko.contactme.ContactsWebhookController
+import io.mfedirko.contactme.notification.ContactNotificationService
+import io.mfedirko.contactme.notification.ContactsWebhookController
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
