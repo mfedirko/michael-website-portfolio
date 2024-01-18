@@ -6,6 +6,7 @@ import io.mfedirko.common.infra.back4app.Back4appContactResult.Companion.UPDATED
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.between
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.orderBy
 import io.mfedirko.common.infra.back4app.Back4appQueryUtil.where
+import io.mfedirko.common.util.Dates.TZ_UTC
 import io.mfedirko.common.util.Dates.inLocalTimeZone
 import io.mfedirko.common.util.Dates.inUtcTimeZone
 import io.mfedirko.common.util.Dates.toUtcEndOfDay
@@ -66,7 +67,7 @@ class Back4appContactMeRepository(
         return where(
             between(CREATED_AT,
                 (startDate?.inUtcTimeZone() ?: LocalDate.ofEpochDay(0)).toString(),
-                (endDate?.inUtcTimeZone() ?: LocalDate.now().plusDays(2)).toString())
+                (endDate?.inUtcTimeZone() ?: LocalDate.now(TZ_UTC).plusDays(2)).toString())
         )
     }
 

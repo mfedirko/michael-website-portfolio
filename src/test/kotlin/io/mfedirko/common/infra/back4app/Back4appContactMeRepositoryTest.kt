@@ -1,11 +1,9 @@
 package io.mfedirko.common.infra.back4app
 
 import io.mfedirko.common.OrderDir
-import io.mfedirko.contactme.ContactHistory
+import io.mfedirko.common.util.Dates.TZ_LOCAL
 import io.mfedirko.contactme.ContactHistorySpec
 import io.mfedirko.fixture.ContactForms
-import io.mfedirko.learning.CreateLessonForm
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -14,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDate
-import java.time.Year
+import java.time.LocalDateTime
 
 @SpringBootTest(classes = [
     Back4appTestConfiguration::class,
@@ -77,13 +75,17 @@ internal class Back4appContactMeRepositoryTest {
     @Nested
     internal inner class FindBySpec {
         @Test
-        fun startDate() {
+        fun dateRange() {
+            val form = ContactForms.aContactForm().apply { fullName = "date range" }
+            repository.save(form)
 
-        }
+            val spec = ContactHistorySpec().apply {
+                startDate = LocalDateTime.now(TZ_LOCAL).minusSeconds(5)
+                endDate = LocalDateTime.now(TZ_LOCAL).plusSeconds(5)
+            }
+            val results = repository.findContactHistory(spec)
 
-        @Test
-        fun endDate() {
-
+            assertEquals("date range", results.first().fullName)
         }
 
 

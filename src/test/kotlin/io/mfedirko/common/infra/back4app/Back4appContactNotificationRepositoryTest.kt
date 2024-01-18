@@ -1,5 +1,6 @@
 package io.mfedirko.common.infra.back4app
 
+import io.mfedirko.common.util.Dates.TZ_LOCAL
 import io.mfedirko.contactme.notification.NotificationPreference
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import java.time.Duration
+import java.time.LocalDateTime
 
 @SpringBootTest(classes = [
     Back4appTestConfiguration::class,
@@ -51,5 +53,15 @@ internal class Back4appContactNotificationRepositoryTest {
         assertThat(repository.getNotificationPreference())
             .isNotNull
             .usingRecursiveComparison().isEqualTo(form)
+    }
+
+    @Test
+    fun updateLastNotification() {
+        repository.updateLastNotificationTime()
+        val lastNotificationTime = repository.findLastNotificationTime()
+
+        assertThat(lastNotificationTime)
+            .isAfter(LocalDateTime.now(TZ_LOCAL).minusSeconds(40))
+            .isBefore(LocalDateTime.now(TZ_LOCAL).plusSeconds(40))
     }
 }
